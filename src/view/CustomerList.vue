@@ -29,7 +29,9 @@
 
         <mt-index-list>
             <mt-index-section v-for="item in cusNameGrouplist" :index="item.group">
-                <mt-cell v-for="child in item.groupChild" :title="child.datatext" @click="itemClick(child.custids)"></mt-cell>
+                <div v-for="child in item.groupChild" @click="itemClick(child.custids)">
+                    <mt-cell :title="child.datatext"></mt-cell>
+                </div>
             </mt-index-section>
         </mt-index-list>
     </div>
@@ -96,8 +98,8 @@ export default {
             this.isFilterShow = false;
         },
         // 客户列表一项点击
-        itemClick (custids) {
-            this.$router.push({path: `/customer/detail?custids=${custids}`});
+        itemClick (custIds) {
+            this.$router.push({path: `/customer/detail?custIds=${custIds}`});
         }
     }
 }

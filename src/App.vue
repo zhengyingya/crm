@@ -49,7 +49,7 @@ export default {
     },
     created () {
         const hash = document.location.hash.replace('#/', '');
-        if (['home', 'customer'].indexOf(hash) > -1) {
+        if (['home', 'customer'].indexOf(hash) > -1 || hash === '') {
             this.isTabShow = true;
         }
         else {
@@ -63,6 +63,17 @@ export default {
                 this.selected = hash;
             }
         }
+    },
+    updated () {
+        const hash = document.location.hash.replace('#/', '');
+        if (['home', 'customer'].indexOf(hash) > -1 || hash === '') {
+            this.isTabShow = true;
+        }
+        else {
+            this.isTabShow = false;
+        }
+    },
+    computed: {
     },
     watch: {
         // selected (newVal) {

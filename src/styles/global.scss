@@ -30,6 +30,13 @@ a {
     }
 }
 
+@for $i from 1 through 5
+{
+    .flex-#{$i} {
+        flex: ($i);
+    }
+}
+
 .flex-row {
     display: flex;
 }
@@ -37,9 +44,18 @@ a {
     display: flex;
     flex-direction: column;
 }
+.flex-1 {
+    flex: 1;
+}
 .height-full {
     height: 100%;
 }
 .p-ab {
     position: absolute;
+}
+.one-line {
+    overflow:hidden;
+    word-wrap: break-word;
+    white-space: nowrap;
+    text-overflow:ellipsis;
 }

@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
 import './styles/global.scss'
+// import './styles/css/mui.min.css'
 import {
     Navbar,
     Tabbar,
@@ -17,8 +18,10 @@ import {
     Field,
     Toast,
     Badge,
+    Popup,
     IndexList,
-    IndexSection
+    IndexSection,
+    InfiniteScroll
 } from 'mint-ui'
 import { DatetimePlugin } from 'vux';
 import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -34,8 +37,10 @@ import router from './router'
 
 Vue.use(Vuex);
 Vue.use(DatetimePlugin);
+Vue.use(InfiniteScroll);
 Vue.config.productionTip = false
-Vue.component('echart', ECharts)
+Vue.component('echart', ECharts);
+Vue.component(Popup.name, Popup);
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(Navbar.name, Navbar);
 Vue.component(TabItem.name, TabItem);
