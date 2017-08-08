@@ -1,0 +1,9 @@
+$baseFz: 75px;
+@function pxToRem ( $px ) {
+    // pc 端不需要使用rem;
+    @return $px / $baseFz * 1rem;
+}
+
+
+$blue: #26a2ff;
+$bg-blue: #ECF5FF;

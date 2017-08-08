@@ -1,0 +1,45 @@
+@import './common.scss';
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-size: 14px;
+}
+textarea {
+    font-family: 'Microsoft YaHei';
+}
+
+a {
+    text-decoration: none;
+}
+
+.hover-stl {
+    border: 2px solid transparent;
+    cursor: pointer;
+    &:hover {
+        border: 2px solid #f17819;
+    }
+}
+
+@for $i from 1 through 30
+{
+    .fs-#{10 + $i*2} {
+        font-size: (10 + $i*2) + px;
+    }
+}
+
+.flex-row {
+    display: flex;
+}
+.flex-cloumn {
+    display: flex;
+    flex-direction: column;
+}
+.height-full {
+    height: 100%;
+}
+.p-ab {
+    position: absolute;
+}
