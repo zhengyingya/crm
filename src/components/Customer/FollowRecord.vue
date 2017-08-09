@@ -3,7 +3,8 @@
       <div
           v-infinite-scroll="loadMore"
           :infinite-scroll-disabled="loading"
-          infinite-scroll-distance="10">
+          infinite-scroll-distance="10"
+          class="wrap">
           <div v-for="item in recordList" class="item">
                <flexbox :gutter="0" class="head">
                    <flexbox-item :span="1/6" style="color:#26a2ff;">
@@ -25,7 +26,17 @@
                    </flexbox-item>
                </flexbox>
           </div>
+          <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
+          <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
       </div>
+      <flexbox :gutter="0" class="footer">
+          <flexbox-item :span="1/2" class="btn-static">
+              格式化记录
+          </flexbox-item>
+          <flexbox-item :span="1/2" class="btn-fast">
+              快速记录
+          </flexbox-item>
+      </flexbox>
   </div>
 </template>
 
@@ -45,19 +56,23 @@ export default {
         'custIds'
     ],
     created () {
-        this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
+        // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
     },
     data () {
         return {
             selected: '1',
             names: ['客户名称', '客户状态', '所在地区', '详细地址', '电话', '传真', '邮箱', '邮编'],
             loading: false,
-            pageNumber: 1
+            isEnd: false,
+            pageNumber: 0
         }
     },
     computed: mapState({
         recordList: (state) => {
             return state.customer.recordList;
+        },
+        totalPage: (state) => {
+            return state.customer.totalPage;
         }
     }),
     methods: {
@@ -65,9 +80,19 @@ export default {
             'getCustomerFollowData'
         ]),
         loadMore () {
-            console.log(']]]]]]]]]]]]]')
-            this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber++});
+            console.log(']]]]]]]]]]]]]', this.pageNumber, this.totalPage)
             this.loading = true;
+            if (this.pageNumber >= this.totalPage) {
+                this.isEnd = true;
+                this.loading = false;
+            }
+            else {
+                this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+                .then((res) => {
+                    this.loading = true;
+                });
+            }
+
         }
     }
 }
@@ -84,6 +109,13 @@ export default {
 @import '../../styles/common.scss';
 .follow-record {
     height: 100%;
+    padding-bottom: pxToRem(50px);
+    box-sizing: border-box;
+    // overflow: auto;
+    .wrap {
+        height: 100%;
+        overflow: auto;
+    }
     .item {
         // height: pxToRem(50px);
         padding: pxToRem(10px) pxToRem(20px);
@@ -101,6 +133,22 @@ export default {
         .content {
             text-align: left;
             padding: pxToRem(10px) 0;
+        }
+    }
+    .footer {
+        position: fixed;
+        bottom: 0;
+        height: pxToRem(45px);
+        line-height: pxToRem(45px);
+        border-top: 1px solid #BEBEBE;
+        text-align: center;
+        .btn-static {
+            background: #fff;
+        }
+        .btn-fast {
+            height: 100%;
+            background: $blue;
+            color: #fff;
         }
     }
 }

@@ -21,7 +21,9 @@ import {
     Popup,
     IndexList,
     IndexSection,
-    InfiniteScroll
+    InfiniteScroll,
+    Spinner,
+    Checklist
 } from 'mint-ui'
 import { DatetimePlugin } from 'vux';
 import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -55,6 +57,8 @@ Vue.component(Toast.name, Toast);
 Vue.component(Badge.name, Badge);
 Vue.component(IndexList.name, IndexList);
 Vue.component(IndexSection.name, IndexSection);
+Vue.component(Spinner.name, Spinner);
+Vue.component(Checklist.name, Checklist);
 
 // Vue.directive('focus', {
 //   // 当绑定元素插入到 DOM 中。

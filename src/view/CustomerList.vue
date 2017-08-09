@@ -30,7 +30,7 @@
         <mt-index-list>
             <mt-index-section v-for="item in cusNameGrouplist" :index="item.group">
                 <div v-for="child in item.groupChild" @click="itemClick(child.custids)">
-                    <mt-cell :title="child.datatext"></mt-cell>
+                    <mt-cell :title="child.datatext" style="text-align:left;"></mt-cell>
                 </div>
             </mt-index-section>
         </mt-index-list>
@@ -105,6 +105,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.mint-indexsection-index {
+    text-align: left;
+}
 </style>
 <style scoped lang="scss">
 @import '../styles/common.scss';

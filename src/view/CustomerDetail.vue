@@ -14,15 +14,15 @@
                        <div slot="content" class="popover-demo-content">
                            <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1">
                                <i class="iconfont icon-jiahao1 flex-1"/>
-                               <div class="flex-2" style="text-align:left;" @click="openComment">添加计划</div>
+                               <div class="flex-2" style="text-align:left;">添加计划</div>
                            </div>
                            <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1">
                                <i class="iconfont icon-jiahao1 flex-1"/>
-                               <div class="flex-2" style="text-align:left;" @click="openComment">添加联系人</div>
+                               <div class="flex-2" style="text-align:left;">添加联系人</div>
                            </div>
                            <div class="flex-row popmenu" v-if="isCustomerCanDelete">
                                <i class="iconfont icon-jianhao flex-1"/>
-                               <div class="flex-2" style="text-align:left;" @click="openComment">删除</div>
+                               <div class="flex-2" style="text-align:left;">删除</div>
                            </div>
                        </div>
                        <div class="flex-row" style="flex:1;justify-content:flex-start;">
@@ -49,22 +49,13 @@
             </mt-tab-container-item>
             <!-- 详细信息-->
           <mt-tab-container-item id="2">
-              <DetailInfo/>
+              <DetailInfo :custIds="custIds"/>
           </mt-tab-container-item>
           <!-- 协助人 -->
           <mt-tab-container-item id="3">
               <Assistant/>
           </mt-tab-container-item>
         </mt-tab-container>
-
-        <flexbox :gutter="0" class="footer">
-            <flexbox-item :span="1/2">
-                格式化记录
-            </flexbox-item>
-            <flexbox-item :span="1/2" class="btn-fast">
-                快速记录
-            </flexbox-item>
-        </flexbox>
     </div>
 </template>
 
@@ -194,17 +185,6 @@ export default {
             justify-content:center;
             background-color:#FCFCFC;
             color: #000;
-        }
-    }
-    .footer {
-        height: pxToRem(45px);
-        line-height: pxToRem(45px);
-        border-top: 1px solid #BEBEBE;
-        text-align: center;
-        .btn-fast {
-            height: 100%;
-            background: $blue;
-            color: #fff;
         }
     }
 }

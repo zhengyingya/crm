@@ -6,6 +6,7 @@ import Customer from '../view/Customer.vue'
 import CustomerList from '../view/CustomerList.vue'
 import CustomerAdd from '../view/CustomerAdd.vue'
 import CustomerDetail from '../view/CustomerDetail.vue'
+import AddAssistant from '../view/AddAssistant.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
             path: '/customer/detail',
             name: 'CustomerDetail',
             component: CustomerDetail
+        },
+        {
+            path: '/customer/addassistant',
+            name: 'AddAssistant',
+            component: AddAssistant
         }
     ]
 })

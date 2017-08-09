@@ -1,25 +1,28 @@
 <template>
   <div class="assistant">
-      <div v-for="(item, index) in assistantList" >
-          <div class="flex-row item">
-              <flexbox :gutter="0">
-                  <flexbox-item :span="1/6">
-                      <div class="portrait" :style="{background: makeColor(item.color)}">
-                          {{item.shortname}}
-                      </div>
-                  </flexbox-item>
-                  <flexbox-item :span="3/6" class="btn-fast">
-                      <flexbox :gutter="0" style="margin-bottom:5px;">
-                          {{item.names}}
-                      </flexbox>
-                        <flexbox :gutter="0" style="color:#26a2ff">
-                            {{item.mobile}}
-                        </flexbox>
-                  </flexbox-item>
-              </flexbox>
+      <div class="wrap">
+          <div v-for="(item, index) in assistantList" >
+              <div class="flex-row item">
+                  <flexbox :gutter="0">
+                      <flexbox-item :span="1/6">
+                          <div class="portrait" :style="{background: makeColor(item.color)}">
+                              {{item.shortname}}
+                          </div>
+                      </flexbox-item>
+                      <flexbox-item :span="3/6" class="btn-fast">
+                          <flexbox :gutter="0" style="margin-bottom:5px;">
+                              {{item.names}}
+                          </flexbox>
+                            <flexbox :gutter="0" style="color:#26a2ff">
+                                {{item.mobile}}
+                            </flexbox>
+                      </flexbox-item>
+                  </flexbox>
+              </div>
+              <div class="divider" v-if="index !== assistantList.length - 1"/>
           </div>
-          <div class="divider" v-if="index !== assistantList.length - 1"/>
       </div>
+      <div class="btn-add" @click="add">添加协助人</div>
   </div>
 </template>
 
@@ -46,13 +49,15 @@ export default {
     },
     created () {
         http.get(`${URL_ASSISTANT_LIST}?custIds=${this.custIds}`).then((res) => {
-            console.log(']]]]]]]]', res)
             this.assistantList = res;
         })
     },
     methods: {
         makeColor (color) {
             return `rgba(${color})`
+        },
+        add () {
+            this.$router.push({path: `/customer/addassistant?custIds=${this.custIds}`});
         }
     }
 }
@@ -69,8 +74,23 @@ export default {
 @import '../../styles/common.scss';
 .assistant {
     height: 100%;
-
     background: #fff;
+    padding-bottom: pxToRem(50px);
+    box-sizing: border-box;
+    .wrap {
+        height: 100%;
+        overflow: auto;
+    }
+    .btn-add {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: pxToRem(45px);
+        background: $blue;
+        color: #fff;
+        line-height: pxToRem(45px);
+        text-align: center;
+    }
     .item {
         height: pxToRem(60px);
         align-items: center;
