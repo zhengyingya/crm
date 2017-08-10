@@ -22,7 +22,20 @@
                <flexbox :gutter="0">
                    <flexbox-item :span="3/4">
                        <span style="color:#ADADAD;">{{ item.addtime }}</span>
-                       <span style="color:#26a2ff;margin-left:10px;">删除</span>
+                       <span style="color:#26a2ff;margin-left:10px;" @click="deleteRecord(item.ids)">删除</span>
+                   </flexbox-item>
+                   <flexbox-item :span="1/4">
+                       <div style="position:relative;text-align:right;">
+                           <popover placement="left" :gutter="10">
+                              <div slot="content" class="popover-demo-content">
+                                  <div class="flex-row" style="line-height:30px;height:30px;width:80px;justify-content:center;">
+                                      <i class="iconfont icon-pinglun"/>
+                                      <div style="text-align:center;" @click="isCommentShow=true;">评论</div>
+                                  </div>
+                              </div>
+                              <i class="iconfont icon-dia fs-14" style="width:30px;text-align:right;color:#A6A6D2"/>
+                          </popover>
+                       </div>
                    </flexbox-item>
                </flexbox>
           </div>
@@ -37,20 +50,40 @@
               快速记录
           </flexbox-item>
       </flexbox>
+
+      <div class="pop-comment" >
+          <popup v-model="isCommentShow" height="80%">
+            <div style="height:100%;background:#fff;">
+                <mt-header title="写评论">
+                  <!-- <router-link to="/" slot="left">
+                    <mt-button icon="back" @click="isCommentShow=false;"></mt-button>
+                  </router-link> -->
+                  <mt-button slot="right" @click="publish">发布</mt-button>
+                </mt-header>
+                <mt-field placeholder="请输入评论内容" type="textarea" v-model="comment" resize="none"></mt-field>
+            </div>
+          </popup>
+      </div>
+
   </div>
 </template>
 
 <script>
 import Panel from '../Panel.vue';
-import { Spinner, Flexbox, FlexboxItem } from 'vux';
+import { Spinner, Flexbox, FlexboxItem, Popover, Popup } from 'vux';
 import { mapState, mapActions } from 'vuex';
+import http from '../../http/index.js';
+import { URL_DELETE_CUSTOMER_FOLLOW_RECORD } from '../../constant/url.js';
+import { Toast } from 'mint-ui';
 
 export default {
     name: 'followRecord',
     components: {
         Flexbox,
         FlexboxItem,
-        Panel
+        Panel,
+        Popover,
+        Popup
     },
     props: [
         'custIds'
@@ -64,7 +97,9 @@ export default {
             names: ['客户名称', '客户状态', '所在地区', '详细地址', '电话', '传真', '邮箱', '邮编'],
             loading: false,
             isEnd: false,
-            pageNumber: 0
+            pageNumber: 0,
+            isCommentShow: false,                    // 评论弹框是否显示
+            comment: ''
         }
     },
     computed: mapState({
@@ -77,7 +112,8 @@ export default {
     }),
     methods: {
         ...mapActions([
-            'getCustomerFollowData'
+            'getCustomerFollowData',
+            'deleteOneRecord'
         ]),
         loadMore () {
             console.log(']]]]]]]]]]]]]', this.pageNumber, this.totalPage)
@@ -92,16 +128,71 @@ export default {
                     this.loading = true;
                 });
             }
+        },
+        // 删除跟进记录
+        deleteRecord (ids) {
+            http.post(URL_DELETE_CUSTOMER_FOLLOW_RECORD, {
+                body: `custFrIds=${ids}`
+            }).then((res) => {
+                Toast({
+                  message: res.message,
+                  position: 'bottom',
+                  duration: 1000
+                });
+                this.deleteOneRecord({ids});
+            })
+        },
+        show (index) {
+            this.$refs.previewer.show(index)
+        },
+        openComment () {
+
+        },
+        publish () {
 
         }
     }
 }
 </script>
 <style lang="scss">
-.detail-info {
+@import '../../styles/common.scss';
+.follow-record {
     .mint-cell-title {
         text-align: left;
         color: #7B7B7B
+    }
+    .vux-popover {
+        top: -5px!important;
+        left: -30px!important;
+        animation: mymove .3s 1;
+    }
+    @keyframes mymove {
+        from {left:pxToRem(30px);width:pxToRem(10px);}
+        to {left:pxToRem(-30px)!important;width:pxToRem(80px);}
+    }
+    .pop-comment {
+        .mint-header-title {
+            font-size: 16px;
+        }
+        .mint-field, .mint-field-core {
+            margin-top: pxToRem(-30px);
+            padding-top: pxToRem(30px);
+            box-sizing: border-box;
+        }
+        .mint-cell:last-child {
+            background-image: none;
+        }
+        .mint-field, .mint-cell-wrapper, .mint-cell-value, .mint-field-core {
+            height: pxToRem(180px);
+            // padding-top: pxToRem(10px);
+        }
+        .mint-field-core {
+            resize: none;
+        }
+        .mint-header {
+            height: pxToRem(50px);
+            z-index: 10;
+        }
     }
 }
 </style>

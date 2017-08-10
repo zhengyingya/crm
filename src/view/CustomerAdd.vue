@@ -43,7 +43,7 @@
 import Panel from '../components/Panel.vue';
 import { mapActions, mapState } from 'vuex';
 import { getQueryString } from '../utils/commonMethod.js';
-import { Group, Search, XAddress, Spinner, Flexbox, ChinaAddressV3Data, FlexboxItem } from 'vux';
+import { Group, Search, XAddress, Spinner, Flexbox, ChinaAddressV3Data, FlexboxItem, Value2nameFilter as value2name } from 'vux';
 import http from '../http/index.js';
 import { URL_CUSTOMER_DETAIL_VIEW, URL_UPDATE_DETAIL_INFO } from '../constant/url.js';
 import { Toast } from 'mint-ui';
@@ -89,7 +89,7 @@ export default {
         cust: function (state) {
             const cust = state.customer.cust;
             this.custname = cust.custname || '';
-            this.region = [];//cust.region;
+            this.region = cust.region ? cust.region.split(' ') : [];
             this.address = cust.address || '';
             this.telno = cust.telno || '';
             this.fax = cust.fax || '';
@@ -124,11 +124,12 @@ export default {
         },
         // 保存
         submit () {
+            console.log(']]]]]]', this.region)
             let query = '';
             if (this.custIds) {
                 query += `customer.ids=${this.custIds}&`;
             }
-            query += `customer.custname=${this.custname}&customer.region=${this.region.join('')}&customer.address=${this.address}&`;
+            query += `customer.custname=${this.custname}&customer.region=${value2name(this.region, ChinaAddressV3Data)}&customer.address=${this.address}&`;
             query += `customer.telno=${this.telno}&customer.fax=${this.fax}&customer.email=${this.email}&customer.postcode=${this.postcode}&customer.website=${this.website}&`;
             query += `customer.chieftain=${this.chieftain}&customer.scale=${this.scale}&customer.creditlimit=${this.creditlimit}&customer.paymentdays=${this.paymentdays}&customer.business=${this.business}`;
             http.post(`${this.custIds?URL_UPDATE_DETAIL_INFO:URL_UPDATE_DETAIL_INFO}`, {
@@ -139,7 +140,7 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
-                this.$router.push({path: `/customer/detail?custIds=${this.custIds}`})
+                this.$router.push({path: `/customer/detail?custIds=${this.custIds}`});
             })
         }
     }
@@ -168,6 +169,9 @@ export default {
         input:-ms-input-placeholder {
             color: #2c3e50;
         }
+    }
+    .vux-popup-picker-value {
+        color: #000;
     }
     // .custom {
     //     input {

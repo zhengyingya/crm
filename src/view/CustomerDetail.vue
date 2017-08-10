@@ -4,23 +4,23 @@
             <div class="fs-20 name">{{detailViewData.custName}}</div>
             <div class="flex-row" style="margin-bottom: 40px;">
                 <div class="flex-row" style="flex:1;justify-content:flex-end;">
-                    <div class="btn-head" :class="isUserFocusCustomer>=1?'':'btn-more'">
+                    <div class="btn-head" :class="isUserFocusCustomer>=1?'':'btn-more'" @click="focus">
                         <i class="iconfont icon-wujiaoxing fs-12" style="font-weight:900"/>
                         <span>关注</span>
                     </div>
                 </div>
-                <div class="flex-row" style="flex:1;justify-content:flex-start;position:relative">
+                <div class="flex-row more-menu" style="flex:1;justify-content:flex-start;position:relative">
                     <popover placement="bottom" :gutter="-30">
                        <div slot="content" class="popover-demo-content">
                            <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1">
                                <i class="iconfont icon-jiahao1 flex-1"/>
                                <div class="flex-2" style="text-align:left;">添加计划</div>
                            </div>
-                           <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1">
+                           <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1" @click="jump(`/customer/addcontact?custIds=${custIds}&custName=${detailViewData.custName}`)">
                                <i class="iconfont icon-jiahao1 flex-1"/>
                                <div class="flex-2" style="text-align:left;">添加联系人</div>
                            </div>
-                           <div class="flex-row popmenu" v-if="isCustomerCanDelete">
+                           <div class="flex-row popmenu" v-if="isCustomerCanDelete" @click="onDelete">
                                <i class="iconfont icon-jianhao flex-1"/>
                                <div class="flex-2" style="text-align:left;">删除</div>
                            </div>
@@ -34,7 +34,7 @@
                    </popover>
                 </div>
             </div>
-            <TabMenu :detailViewData="detailViewData"/>
+            <TabMenu :detailViewData="detailViewData" :custIds="custIds"/>
         </div>
 
         <mt-navbar v-model="selected">
@@ -69,7 +69,8 @@ import { mapActions } from 'vuex';
 import { Spinner, Flexbox, FlexboxItem, Popover } from 'vux';
 import { getQueryString } from '../utils/commonMethod.js';
 import http from '../http/index.js';
-import { URL_CUSTOMER_DETAIL_VIEW, URL_CUSTOMER_FOLLOW_RECORD } from '../constant/url.js';
+import { URL_CUSTOMER_DETAIL_VIEW, URL_CUSTOMER_FOLLOW_RECORD, URL_CUSTOMER_FOCUS, URL_CUSTOMER_DELETE } from '../constant/url.js';
+import { Toast } from 'mint-ui';
 
 export default {
     name: 'customer',
@@ -97,23 +98,52 @@ export default {
         }
     },
     created () {
-        http.get(`${URL_CUSTOMER_DETAIL_VIEW}?custIds=${this.custIds}`).then((res) => {
-            console.log(res)
-            this.detailViewData = res;
-            this.contactsCount = res.contactsCount;
-            this.isCustomerPrincipal = res.isCustomerPrincipal;
-            this.isUserFocusCustomer = res.isUserFocusCustomer;
-            this.isUserResponsibleOrAssistanceToCustomer = res.isUserResponsibleOrAssistanceToCustomer;
-            this.isCustomerCanDelete = res.isCustomerCanDelete;
-        })
+        this.getDetailView();
     },
     methods: {
         ...mapActions([
             'getAchievementData',
             'getFollowData'
         ]),
+        getDetailView () {
+            http.get(`${URL_CUSTOMER_DETAIL_VIEW}?custIds=${this.custIds}`).then((res) => {
+                console.log(res)
+                this.detailViewData = res;
+                this.contactsCount = res.contactsCount;
+                this.isCustomerPrincipal = res.isCustomerPrincipal;
+                this.isUserFocusCustomer = res.isUserFocusCustomer;
+                this.isUserResponsibleOrAssistanceToCustomer = res.isUserResponsibleOrAssistanceToCustomer;
+                this.isCustomerCanDelete = res.isCustomerCanDelete;
+            })
+        },
         jump (path) {
-            this.$router.push({path: path});
+            this.$router.push({path: encodeURI(encodeURI(path))});
+        },
+        // 关注
+        focus () {
+            http.post(URL_CUSTOMER_FOCUS, {
+                body: `custIds=${this.custIds}`
+            }).then((res) => {
+                Toast({
+                  message: res.message,
+                  position: 'bottom',
+                  duration: 1000
+                });
+                this.getDetailView();
+            })
+        },
+        // 删除跟进记录
+        onDelete () {
+            http.post(URL_CUSTOMER_FOCUS, {
+                body: `custIds=${this.custIds}`
+            }).then((res) => {
+                Toast({
+                  message: res.message,
+                  position: 'bottom',
+                  duration: 1000
+                });
+                this.$router.push({path: '/customer/list'})
+            })
         }
     }
 }
@@ -130,9 +160,11 @@ export default {
     .vux-popover-arrow-up {
         border-bottom: 5px solid #fff;
     }
-    .vux-popover {
-        background-color: #BEBEBE;
-        left: -20px!important;
+    .more-menu {
+        .vux-popover {
+            background-color: #BEBEBE;
+            left: -20px!important;
+        }
     }
 }
 .mint-tab-container {

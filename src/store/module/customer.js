@@ -2,6 +2,7 @@ import http from '../../http';
 import { URL_CUSTOMER_FOLLOW_RECORD, URL_FOLLOW_RECORD, URL_DETAIL_INFO } from '../../constant/url.js';
 const GET_CUSTOMER_FOLLOW_RECORD = 'customer-get_customer_follow_data';
 const GET_CUSTOMER_DETAIL_INFO = 'customer-get_customer_detail_info';
+const DELETE_ONE_RECORD = 'customer-delete_one_record';
 
 const state = {
     recordList: [],
@@ -45,6 +46,13 @@ const actions = {
             commit(GET_CUSTOMER_DETAIL_INFO, { res });
             return res;
         });
+    },
+    /**
+     *  删除一条跟进记录
+     *  @param ids                 记录ids
+     */
+    deleteOneRecord ({ commit, state }, { ids }) {
+        commit(DELETE_ONE_RECORD, { ids });
     }
 }
 
@@ -75,6 +83,11 @@ const mutations = {
         state.custLevelList = custLevelList;
         state.custStatusList = custStatusList;
         state.currencyList = currencyList;
+    },
+    [DELETE_ONE_RECORD]: (state, {ids}) => {
+        state.recordList = state.recordList.filter((item) => {
+            return item.ids !== ids;
+        })
     }
 }
 
