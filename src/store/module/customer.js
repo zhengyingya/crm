@@ -3,8 +3,11 @@ import { URL_CUSTOMER_FOLLOW_RECORD, URL_FOLLOW_RECORD, URL_DETAIL_INFO } from '
 const GET_CUSTOMER_FOLLOW_RECORD = 'customer-get_customer_follow_data';
 const GET_CUSTOMER_DETAIL_INFO = 'customer-get_customer_detail_info';
 const DELETE_ONE_RECORD = 'customer-delete_one_record';
+const ADD_ONE_DISCUSS = 'customer-add_one_discuss';
+const DELETE_ONE_DISCUSS = 'customer-delete_one_discuss';
 
 const state = {
+    cUserIds: 0,
     recordList: [],
     firstRequestTime: null,
     totalPage: Number.MAX_VALUE,            // 跟进记录的页码，初始设为最大值
@@ -30,7 +33,7 @@ const actions = {
         let query = custIds ? `custIds=${custIds}&` : '';
         query += pageNumber ? `pageNumber=${pageNumber}&` : '';
         query += `isPullDownRefresh=${isPullDownRefresh}&`;
-        query += state.firstRequestTime ? `firstRequestTime=${state.firstRequestTime}` : '';
+        query += state.firstRequestTime && pageNumber !== 1 ? `firstRequestTime=${state.firstRequestTime}` : '';
         return http.get(`${URL_CUSTOMER_FOLLOW_RECORD}?${query}`).then((res) => {
             commit(GET_CUSTOMER_FOLLOW_RECORD, { res, pageNumber });
             return res;
@@ -53,6 +56,20 @@ const actions = {
      */
     deleteOneRecord ({ commit, state }, { ids }) {
         commit(DELETE_ONE_RECORD, { ids });
+    },
+    /**
+     *  删除一条跟进记录评论
+     *  @param ids                 记录ids
+     */
+    deleteOneDiscuss ({ commit, state }, { ids, discussIds }) {
+        commit(DELETE_ONE_DISCUSS, { ids, discussIds });
+    },
+    /**
+     *  添加一条跟进记录评论
+     *  @param ids                 记录ids
+     */
+    addOneDiscuss ({ commit, state }, { ids, discussIds, content, names }) {
+        commit(ADD_ONE_DISCUSS, { ids, discussIds, content, names });
     }
 }
 
@@ -60,13 +77,16 @@ const actions = {
 const mutations = {
     [GET_CUSTOMER_FOLLOW_RECORD]: (state, { res, pageNumber }) => {
         if (pageNumber === 1) {
+            state.cUserIds = res.cUserIds;
             state.firstRequestTime = res.splitPage.queryParam.firstRequestTime;
             state.totalPage = res.splitPage.totalPage;
+            state.recordList = res.recordList;
         }
-        state.recordList = state.recordList.concat(res.recordList);
+        else {
+            state.recordList = state.recordList.concat(res.recordList);
+        }
     },
     [GET_CUSTOMER_DETAIL_INFO]: (state, { res }) => {
-        console.log('===============', res)
         state.cust = res.cust;
         const custLevelList = {};
         const custStatusList = {};
@@ -84,9 +104,34 @@ const mutations = {
         state.custStatusList = custStatusList;
         state.currencyList = currencyList;
     },
-    [DELETE_ONE_RECORD]: (state, {ids}) => {
+    [DELETE_ONE_RECORD]: (state, { ids }) => {
         state.recordList = state.recordList.filter((item) => {
             return item.ids !== ids;
+        })
+    },
+    [ADD_ONE_DISCUSS]: (state, { ids, discussIds, content, names }) => {
+        state.recordList = state.recordList.map((item) => {
+            if (item.ids === ids) {
+                item.discusslist.push({
+                    custfrids: ids,
+                    ids: discussIds,
+                    userids: state.cUserIds,
+                    content: content,
+                    names
+                })
+            }
+            return item;
+        })
+    },
+    [DELETE_ONE_DISCUSS]: (state, { ids, discussIds }) => {
+        state.recordList = state.recordList.map((item) => {
+            if (item.ids === ids) {
+                item.discusslist = item.discusslist.filter((one) => {
+                    return one.ids !== discussIds;
+                });
+                console.log(item.discusslist)
+            }
+            return item;
         })
     }
 }

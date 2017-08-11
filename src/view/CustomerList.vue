@@ -93,7 +93,6 @@ export default {
         },
         // 筛选确定按钮点击回调
         onConfirm (param) {
-            console.log('===============================', param)
             this.getCustomerList(param);
             this.isFilterShow = false;
         },

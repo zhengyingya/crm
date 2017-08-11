@@ -30,7 +30,7 @@
                               <div slot="content" class="popover-demo-content">
                                   <div class="flex-row" style="line-height:30px;height:30px;width:80px;justify-content:center;">
                                       <i class="iconfont icon-pinglun"/>
-                                      <div style="text-align:center;" @click="isCommentShow=true;">评论</div>
+                                      <div style="text-align:center;" @click="isCommentShow=true;custfrids=item.ids">评论</div>
                                   </div>
                               </div>
                               <i class="iconfont icon-dia fs-14" style="width:30px;text-align:right;color:#A6A6D2"/>
@@ -38,13 +38,22 @@
                        </div>
                    </flexbox-item>
                </flexbox>
+               <flexbox :gutter="0">
+                   <div v-if="item.discusslist.length > 0" class="discuss-wrap">
+                       <div v-for="one in item.discusslist">
+                           <span style="color: #26a2ff;">{{one.names}}：</span>
+                           <span>{{one.content}}</span>
+                           <span v-if="one.userids===cUserIds" @click="deleteDiscuss(item.ids, one.ids)" class="fs-12" style="float:right;color:#A6A6D2;line-height:19px">删除</span>
+                       </div>
+                   </div>
+               </flexbox>
           </div>
           <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
           <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
       </div>
       <flexbox :gutter="0" class="footer">
           <flexbox-item :span="1/2" class="btn-static">
-              格式化记录
+              <div @click="jump(`/customer/formatrecord?custIds=${custIds}&custName=${custName}`)">格式化记录</div>
           </flexbox-item>
           <flexbox-item :span="1/2" class="btn-fast">
               快速记录
@@ -72,8 +81,9 @@
 import Panel from '../Panel.vue';
 import { Spinner, Flexbox, FlexboxItem, Popover, Popup } from 'vux';
 import { mapState, mapActions } from 'vuex';
+import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
-import { URL_DELETE_CUSTOMER_FOLLOW_RECORD } from '../../constant/url.js';
+import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS } from '../../constant/url.js';
 import { Toast } from 'mint-ui';
 
 export default {
@@ -86,20 +96,26 @@ export default {
         Popup
     },
     props: [
-        'custIds'
+        'custIds',
+        'custName'
     ],
     created () {
         // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
+        if (getQueryString('reload')) {
+            console.log('===========')
+            this.pageNumber = 0;
+            this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+        }
     },
     data () {
         return {
-            selected: '1',
             names: ['客户名称', '客户状态', '所在地区', '详细地址', '电话', '传真', '邮箱', '邮编'],
             loading: false,
             isEnd: false,
             pageNumber: 0,
             isCommentShow: false,                    // 评论弹框是否显示
-            comment: ''
+            comment: '',                             // 评论内容
+            custfrids: ''                            // 当前打开的跟进记录id
         }
     },
     computed: mapState({
@@ -108,15 +124,19 @@ export default {
         },
         totalPage: (state) => {
             return state.customer.totalPage;
+        },
+        cUserIds: (state) => {
+            return state.customer.cUserIds;
         }
     }),
     methods: {
         ...mapActions([
             'getCustomerFollowData',
-            'deleteOneRecord'
+            'deleteOneRecord',
+            'addOneDiscuss',
+            'deleteOneDiscuss'
         ]),
         loadMore () {
-            console.log(']]]]]]]]]]]]]', this.pageNumber, this.totalPage)
             this.loading = true;
             if (this.pageNumber >= this.totalPage) {
                 this.isEnd = true;
@@ -128,6 +148,9 @@ export default {
                     this.loading = true;
                 });
             }
+        },
+        jump (path) {
+            this.$router.push({path: encodeURI(encodeURI(path))});
         },
         // 删除跟进记录
         deleteRecord (ids) {
@@ -149,7 +172,38 @@ export default {
 
         },
         publish () {
-
+            this.isCommentShow = false;
+            http.post(URL_SAVE_CUSTFRDISCUSS, {
+                body: `custFrDiscuss.custfrids=${this.custfrids}&custFrDiscuss.content=${this.comment}`
+            }).then((res) => {
+                // Toast({
+                //   message: res.status===200?'',
+                //   position: 'bottom',
+                //   duration: 1000
+                // });
+                this.addOneDiscuss({
+                    ids: this.custfrids,
+                    content: this.comment,
+                    discussIds: res.discussIds,
+                    names: res.cUserName
+                });
+                this.custfrids = '';
+            })
+        },
+        deleteDiscuss (custfrids, ids) {
+            http.post(URL_DELETE_CUSTFRDISCUSS, {
+                body: `discussIds=${ids}`
+            }).then((res) => {
+                // Toast({
+                //   message: res.message,
+                //   position: 'bottom',
+                //   duration: 1000
+                // });
+                this.deleteOneDiscuss({
+                    ids: custfrids,
+                    discussIds: ids
+                })
+            })
         }
     }
 }
@@ -225,6 +279,14 @@ export default {
             text-align: left;
             padding: pxToRem(10px) 0;
         }
+    }
+    .discuss-wrap {
+        width: 100%;
+        // margin-left: 10%;
+        margin-top: pxToRem(20px);
+        background: #F0F0F0;
+        border-radius: pxToRem(5px);
+        padding: pxToRem(5px) pxToRem(10px);
     }
     .footer {
         position: fixed;

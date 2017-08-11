@@ -20,6 +20,13 @@ export const URL_CUSTOMER_DELETE = cxt + '/crm/customer/hybrid/delete';         
 export const URL_CUSTOMER_FOLLOW_RECORD = cxt + '/crm/customer/hybrid/followRecordApi';  // 客户跟进记录
 export const URL_DELETE_CUSTOMER_FOLLOW_RECORD = cxt + '/crm/custFollowRecord/hybrid/delete'; // 跟进记录删除
 
+export const URL_SAVE_CUSTFRDISCUSS = cxt + '/crm/custFrDiscuss/hybrid/save';           // 跟进记录评论保存
+export const URL_DELETE_CUSTFRDISCUSS = cxt + '/crm/custFrDiscuss/hybrid/delete';       // 跟进记录评论删除
+
+export const URL_GET_PRO_SPECIFICATION = cxt + '/crm/custOtherInfo/hybrid/productSpecificationListApi';       // 客户_格式化信息记录_规格列表
+export const URL_GET_BATCH_NUMBER = cxt + '/crm/product/hybrid/getBatchNumberBySpecification';              // 客户_格式化信息记录_批号列表
+export const URL_SAVE_CUSTOTHERINFO = cxt + '/crm/custOtherInfo/hybrid/save';           // 格式化数据保存
+
 export const URL_DETAIL_INFO = cxt + '/crm/customer/hybrid/detailApi';                  // 详细信息
 export const URL_UPDATE_DETAIL_INFO = cxt + '/crm/customer/hybrid/update';              // 更新客户信息
 

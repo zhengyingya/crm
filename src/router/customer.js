@@ -7,6 +7,7 @@ import ContactList from '../view/ContactList.vue'
 import AddContact from '../view/AddContact.vue'
 import CustCredit from '../view/CustCredit.vue'
 import SalesTrends from '../view/SalesTrends.vue'
+import FormatRecord from '../view/FormatRecord.vue'
 
 export default [
     {
@@ -53,5 +54,10 @@ export default [
         path: '/customer/salestrends',                  // 经营动态
         name: 'SalesTrends',
         component: SalesTrends
+    },
+    {
+        path: '/customer/formatrecord',                 // 格式化记录
+        name: 'FormatRecord',
+        component: FormatRecord
     }
 ]

@@ -97,7 +97,7 @@ export default {
     // padding-top: pxToRem(20px);
     .head {
         height: pxToRem(160px);
-        background: linear-gradient(0deg, $bg-blue, $blue);
+        background: linear-gradient(0deg, $bg-blue, #66B3FF);
         .txt-cust {
             height: pxToRem(80px);
             line-height: pxToRem(80px);

@@ -45,7 +45,7 @@
         <!-- tab 具体内容 -->
         <mt-tab-container v-model="selected" :swipeable="false">
             <mt-tab-container-item id="1">
-                <FollowRecord :custIds="custIds"/>
+                <FollowRecord :custIds="custIds" :custName="detailViewData.custName"/>
             </mt-tab-container-item>
             <!-- 详细信息-->
           <mt-tab-container-item id="2">

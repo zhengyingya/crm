@@ -23,7 +23,8 @@ import {
     IndexSection,
     InfiniteScroll,
     Spinner,
-    Checklist
+    Checklist,
+    MessageBox
 } from 'mint-ui'
 import { DatetimePlugin } from 'vux';
 import ECharts from 'vue-echarts/components/ECharts.vue'
