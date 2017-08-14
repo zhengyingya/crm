@@ -26,6 +26,8 @@ export const URL_DELETE_CUSTFRDISCUSS = cxt + '/crm/custFrDiscuss/hybrid/delete'
 export const URL_GET_PRO_SPECIFICATION = cxt + '/crm/custOtherInfo/hybrid/productSpecificationListApi';       // 客户_格式化信息记录_规格列表
 export const URL_GET_BATCH_NUMBER = cxt + '/crm/product/hybrid/getBatchNumberBySpecification';              // 客户_格式化信息记录_批号列表
 export const URL_SAVE_CUSTOTHERINFO = cxt + '/crm/custOtherInfo/hybrid/save';           // 格式化数据保存
+export const URL_SAVE_CUST_RECORD = cxt + '/crm/custFollowRecord/hybrid/save';                    // 快速记录保存
+export const URL_SAVE_UPLOAD_IMAGE = cxt + '/crm/index/hybrid/uploadImage';             // 快速记录图片上传
 
 export const URL_DETAIL_INFO = cxt + '/crm/customer/hybrid/detailApi';                  // 详细信息
 export const URL_UPDATE_DETAIL_INFO = cxt + '/crm/customer/hybrid/update';              // 更新客户信息

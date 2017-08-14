@@ -19,6 +19,9 @@
                </flexbox>
                <div class="divider"/>
                <div v-html="item.content" class="content"></div>
+               <div v-if="item.images" class="flex-row pic">
+                   <img v-for="(image, index) in JSON.parse(item.images)"  class="img" :class="'img-'+item.custids" :src="window.cxt + '/' + image" @click="show(index)"/>
+               </div>
                <flexbox :gutter="0">
                    <flexbox-item :span="3/4">
                        <span style="color:#ADADAD;">{{ item.addtime }}</span>
@@ -109,6 +112,7 @@ export default {
     },
     data () {
         return {
+            window,
             names: ['客户名称', '客户状态', '所在地区', '详细地址', '电话', '传真', '邮箱', '邮编'],
             loading: false,
             isEnd: false,
@@ -271,6 +275,16 @@ export default {
             line-height: pxToRem(20px);
             margin-bottom: pxToRem(10px);
         }
+        .pic {
+            margin-top: pxToRem(10px);
+            flex-wrap: wrap;
+            .img {
+                width: pxToRem(100px);
+                height: pxToRem(100px);
+                margin-right: pxToRem(10px);
+                margin-bottom: pxToRem(10px);
+            }
+        }
         .divider {
             height: 1px;
             background: #F0F0F0;
@@ -278,6 +292,7 @@ export default {
         .content {
             text-align: left;
             padding: pxToRem(10px) 0;
+            word-break: break-all;
         }
     }
     .discuss-wrap {

@@ -14,5 +14,5 @@ export default new Router({
             component: Home
         }
 
-    ].concat([])
+    ].concat(customer)
 })
