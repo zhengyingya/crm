@@ -77,9 +77,12 @@ export default {
             const monthRecentList = (param && param.monthRecent) || '';
             const custRelationList = (param && param.custRelationCode) || '';
             const custStatusList = (param && param.custStatusCode) || '';
+            const username = (param && param.username) || '';
+            const deptcode = (param && param.deptcode) || '';
             this.isCustomerDataGet = false;
             http.post(URL_CUSTOMER_LIST, {
-                body: `deptids=${departmentList}&userids=${salesmanList}&monthRecent=${monthRecentList}&custRelationCode=${custRelationList}&custStatusCode=${custStatusList}`
+                body: `deptids=${departmentList}&userids=${salesmanList}&monthRecent=${monthRecentList}` +
+                `&custRelationCode=${custRelationList}&custStatusCode=${custStatusList}&username=${username}&deptcode=${deptcode}`
             }).then((res) => {
                 this.isCustomerDataGet = true;
                 this.cusNameGrouplist = res.cusNameGrouplist;

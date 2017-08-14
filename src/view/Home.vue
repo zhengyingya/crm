@@ -40,6 +40,7 @@ export default {
         }
     },
     created () {
+        alert('11')
         // 获取业绩数据
         this.getAchievementData().then((res) => {
             this.isAchievementDataGet = true;

@@ -30,7 +30,7 @@ module.exports = {
     proxyTable: {
         '/crm/': {
             // target: 'http://a20160086-pc:8030/allinrelease/',
-            target: 'http://10.30.2.105:8030/allinrelease/',
+            target: 'http://10.30.2.53:8030/allinrelease/',
             secure: false,
             changeOrigin: true
         },

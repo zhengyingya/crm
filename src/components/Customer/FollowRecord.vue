@@ -56,7 +56,7 @@
               <div @click="jump(`/customer/formatrecord?custIds=${custIds}&custName=${custName}`)">格式化记录</div>
           </flexbox-item>
           <flexbox-item :span="1/2" class="btn-fast">
-              快速记录
+              <div @click="jump(`/customer/fastrecord?custIds=${custIds}`)">快速记录</div>
           </flexbox-item>
       </flexbox>
 

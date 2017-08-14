@@ -8,6 +8,7 @@ import AddContact from '../view/AddContact.vue'
 import CustCredit from '../view/CustCredit.vue'
 import SalesTrends from '../view/SalesTrends.vue'
 import FormatRecord from '../view/FormatRecord.vue'
+import FastRecord from '../view/FastRecord.vue'
 
 export default [
     {
@@ -59,5 +60,10 @@ export default [
         path: '/customer/formatrecord',                 // 格式化记录
         name: 'FormatRecord',
         component: FormatRecord
+    },
+    {
+        path: '/customer/fastrecord',                 // 快速记录
+        name: 'FastRecord',
+        component: FastRecord
     }
 ]

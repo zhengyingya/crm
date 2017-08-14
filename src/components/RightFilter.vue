@@ -22,22 +22,22 @@
                     </div>
 
                     <div v-if="filterActive==='1'" class="filterlay-right">
-                        <div class="item flex-row" @click="chooseDepartment('ALL')">
+                        <div class="item flex-row" @click="chooseDepartment('ALL');filterDeptcode='ALL';">
                             <div style="flex:1">全部</div>
                             <i v-if="filterDepartment==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in departmentList" class="item flex-row"  @click="chooseDepartment(item.deptids)">
+                        <div v-for="item in departmentList" class="item flex-row"  @click="chooseDepartment(item.deptids);filterDeptcode=item.deptcode;">
                             <div style="flex:1">{{item.deptname}}</div>
                             <i v-if="filterDepartment===item.deptids" class="iconfont icon-zhengquewancheng"/>
                         </div>
                     </div>
 
                     <div v-if="filterActive==='2'" class="filterlay-right">
-                        <div class="item flex-row" @click="filterUserIds='ALL'">
+                        <div class="item flex-row" @click="filterUserIds='ALL';filterUserName='ALL'">
                             <div style="flex:1">全部</div>
                             <i v-if="filterUserIds==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in salesmanList" class="item flex-row" @click="filterUserIds=item.userids">
+                        <div v-for="item in salesmanList" class="item flex-row" @click="filterUserIds=item.userids;filterUserName=item.username">
                             <div style="flex:1">{{item.names}}</div>
                             <i v-if="filterUserIds===item.userids" class="iconfont icon-zhengquewancheng"/>
                         </div>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="filterlay-footer flex-row">
-                    <div class="btn-cancel" style="flex:1;" @click="isFilterShow=false;filterType=infoOther.filterType;filterUserIds=infoOther.filterUserIds">取消</div>
+                    <div class="btn-cancel" style="flex:1;" @click="hide">取消</div>
                     <div class="btn-confirm" style="flex:1;" @click="filterConfirm">确定</div>
                 </div>
             </div>
@@ -108,7 +108,9 @@ export default {
             searchValue: '',
             filterActive: '1',
             filterDepartment: 'ALL',
+            filterDeptcode: 'ALL',
             filterUserIds: 'ALL',
+            filterUserName: 'ALL',
             filterMonthRecent: 'ALL',
             filterRelation: 'ALL',
             filterStatus: 'ALL',
@@ -148,9 +150,11 @@ export default {
             this.$emit('onConfirm', {
                 deptids: this.filterDepartment,
                 userids: this.filterUserIds,
+                username: this.filterUserName,
                 monthRecent: this.filterMonthRecent,
                 custRelationCode: this.filterRelation,
-                custStatusCode: this.filterStatus
+                custStatusCode: this.filterStatus,
+                deptcode: this.filterDeptcode
             })
         },
         hide () {
