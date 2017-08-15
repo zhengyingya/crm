@@ -6,50 +6,7 @@
           infinite-scroll-distance="10"
           class="wrap">
           <div v-for="item in recordList" class="item">
-               <flexbox :gutter="0" class="head">
-                   <flexbox-item :span="1/6" style="color:#26a2ff;">
-                       {{ item.names }}
-                   </flexbox-item>
-                   <flexbox-item :span="2/6" style="color:#ADADAD;">
-                       {{ item.typename }}
-                   </flexbox-item>
-                   <!-- <flexbox-item :span="1/4" style="text-align:right">
-                       <i class="iconfont icon-xiangxiazhankai"/>
-                   </flexbox-item> -->
-               </flexbox>
-               <div class="divider"/>
-               <div v-html="item.content" class="content"></div>
-               <div v-if="item.images" class="flex-row pic">
-                   <img v-for="(image, index) in JSON.parse(item.images)"  class="img" :class="'img-'+item.custids" :src="window.cxt + '/' + image" @click="show(index)"/>
-               </div>
-               <flexbox :gutter="0">
-                   <flexbox-item :span="3/4">
-                       <span style="color:#ADADAD;">{{ item.addtime }}</span>
-                       <span style="color:#26a2ff;margin-left:10px;" @click="deleteRecord(item.ids)">删除</span>
-                   </flexbox-item>
-                   <flexbox-item :span="1/4">
-                       <div style="position:relative;text-align:right;">
-                           <popover placement="left" :gutter="10">
-                              <div slot="content" class="popover-demo-content">
-                                  <div class="flex-row" style="line-height:30px;height:30px;width:80px;justify-content:center;">
-                                      <i class="iconfont icon-pinglun"/>
-                                      <div style="text-align:center;" @click="isCommentShow=true;custfrids=item.ids">评论</div>
-                                  </div>
-                              </div>
-                              <i class="iconfont icon-dia fs-14" style="width:30px;text-align:right;color:#A6A6D2"/>
-                          </popover>
-                       </div>
-                   </flexbox-item>
-               </flexbox>
-               <flexbox :gutter="0">
-                   <div v-if="item.discusslist.length > 0" class="discuss-wrap">
-                       <div v-for="one in item.discusslist">
-                           <span style="color: #26a2ff;">{{one.names}}：</span>
-                           <span>{{one.content}}</span>
-                           <span v-if="one.userids===cUserIds" @click="deleteDiscuss(item.ids, one.ids)" class="fs-12" style="float:right;color:#A6A6D2;line-height:19px">删除</span>
-                       </div>
-                   </div>
-               </flexbox>
+               <FollowRecordItem :item="item" @openComment="openComment"/>
           </div>
           <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
           <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
@@ -82,21 +39,26 @@
 
 <script>
 import Panel from '../Panel.vue';
-import { Spinner, Flexbox, FlexboxItem, Popover, Popup } from 'vux';
+import { Spinner, Flexbox, FlexboxItem, Popover, Popup, TransferDom } from 'vux';
 import { mapState, mapActions } from 'vuex';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
 import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS } from '../../constant/url.js';
 import { Toast } from 'mint-ui';
+import FollowRecordItem from './FollowRecordItem.vue';
 
 export default {
     name: 'followRecord',
+    directives: {
+        TransferDom
+    },
     components: {
         Flexbox,
         FlexboxItem,
         Panel,
         Popover,
-        Popup
+        Popup,
+        FollowRecordItem
     },
     props: [
         'custIds',
@@ -122,17 +84,19 @@ export default {
             custfrids: ''                            // 当前打开的跟进记录id
         }
     },
-    computed: mapState({
-        recordList: (state) => {
-            return state.customer.recordList;
-        },
-        totalPage: (state) => {
-            return state.customer.totalPage;
-        },
-        cUserIds: (state) => {
-            return state.customer.cUserIds;
-        }
-    }),
+    computed: {
+        ...mapState({
+            recordList: (state) => {
+                return state.customer.recordList;
+            },
+            totalPage: (state) => {
+                return state.customer.totalPage;
+            },
+            cUserIds: (state) => {
+                return state.customer.cUserIds;
+            }
+        })
+    },
     methods: {
         ...mapActions([
             'getCustomerFollowData',
@@ -156,24 +120,9 @@ export default {
         jump (path) {
             this.$router.push({path: encodeURI(encodeURI(path))});
         },
-        // 删除跟进记录
-        deleteRecord (ids) {
-            http.post(URL_DELETE_CUSTOMER_FOLLOW_RECORD, {
-                body: `custFrIds=${ids}`
-            }).then((res) => {
-                Toast({
-                  message: res.message,
-                  position: 'bottom',
-                  duration: 1000
-                });
-                this.deleteOneRecord({ids});
-            })
-        },
-        show (index) {
-            this.$refs.previewer.show(index)
-        },
-        openComment () {
-
+        openComment (custfrids) {
+            this.isCommentShow = true;
+            this.custfrids = custfrids;
         },
         publish () {
             this.isCommentShow = false;
@@ -192,21 +141,6 @@ export default {
                     names: res.cUserName
                 });
                 this.custfrids = '';
-            })
-        },
-        deleteDiscuss (custfrids, ids) {
-            http.post(URL_DELETE_CUSTFRDISCUSS, {
-                body: `discussIds=${ids}`
-            }).then((res) => {
-                // Toast({
-                //   message: res.message,
-                //   position: 'bottom',
-                //   duration: 1000
-                // });
-                this.deleteOneDiscuss({
-                    ids: custfrids,
-                    discussIds: ids
-                })
             })
         }
     }
@@ -252,6 +186,24 @@ export default {
             z-index: 10;
         }
     }
+}
+.vux-previewer {
+    opacity: 0;
+}
+.pswp--open {
+    opacity: 1!important;
+    animation: pswpOpacity 1s 1;
+}
+.pre-close {
+    animation: pswpOpacityOut .5s 1;
+}
+@keyframes pswpOpacityOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+@keyframes pswpOpacity {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 </style>
 <style scoped lang="scss">

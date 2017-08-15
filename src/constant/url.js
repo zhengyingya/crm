@@ -7,7 +7,10 @@ export const URL_DISCUSS_SAVE = cxt + '/crm/custFrDiscuss/hybrid/save';         
 export const URL_FOLLOW_RECORD_COUNT = cxt + '/crm/index/hybrid/achievement_followRecordCount';     // 未读评论数
 
 export const URL_DELETE_FOLLOW = cxt + '/crm/custFrDiscuss/hybrid/delete';           // 删除评论
-
+/**
+ * 钉钉sdk 相关配置数据获取
+ */
+export const URL_DING_JSAPI_AUTHOR = cxt + '/crm/index/hybrid/dingtalkJsapiAuthor';
 /**
  * 客户
  */
