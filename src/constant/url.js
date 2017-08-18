@@ -29,7 +29,7 @@ export const URL_DELETE_CUSTFRDISCUSS = cxt + '/crm/custFrDiscuss/hybrid/delete'
 export const URL_GET_PRO_SPECIFICATION = cxt + '/crm/custOtherInfo/hybrid/productSpecificationListApi';       // 客户_格式化信息记录_规格列表
 export const URL_GET_BATCH_NUMBER = cxt + '/crm/product/hybrid/getBatchNumberBySpecification';              // 客户_格式化信息记录_批号列表
 export const URL_SAVE_CUSTOTHERINFO = cxt + '/crm/custOtherInfo/hybrid/save';           // 格式化数据保存
-export const URL_SAVE_CUST_RECORD = cxt + '/crm/custFollowRecord/hybrid/save';                    // 快速记录保存
+export const URL_SAVE_CUST_RECORD = cxt + '/crm/custFollowRecord/hybrid/save';          // 快速记录保存
 export const URL_SAVE_UPLOAD_IMAGE = cxt + '/crm/index/hybrid/uploadImage';             // 快速记录图片上传
 
 export const URL_DETAIL_INFO = cxt + '/crm/customer/hybrid/detailApi';                  // 详细信息
@@ -42,3 +42,13 @@ export const URL_CONTACTS_LIST = cxt + '/crm/customer/hybrid/contactsListApi';  
 export const URL_SAVE_CONTACTS = cxt + '/crm/contacts/hybrid/save';                     // 客户联系人保存
 export const URL_CUST_CREDIT = cxt + '/crm/custCredit/hybrid/viewApi';                  // 授信评价
 export const URL_SALES_TRENDS_API = cxt + '/crm/customer/hybrid/salesTrendsApi';        // 客户_经营动态
+
+export const URL_CUSTPOOL_LIST = cxt + '/crm/custpool/hybrid/dataListApi';               // 公海池客户
+export const URL_CUSTPOLL_DETAIL_VIEW = cxt + '/crm/custpool/hybrid/viewApi';            // 公海池客户详情页
+export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSelf';
+/**
+ * 计划
+ */
+export const URL_ADD_CUST_PLAN = cxt + '/crm/plan/hybrid/addCustPlanApi';                // 添加计划基础数据获取
+export const URL_PRODUCT_LIST = cxt + '/crm/plan/hybrid/productListApi';
+export const URL_SAVE_CUST_PLAN = cxt + '/crm/plan/hybrid/saveCustPlan';                 // 保存计划

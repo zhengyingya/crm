@@ -24,7 +24,8 @@ import {
     InfiniteScroll,
     Spinner,
     Checklist,
-    MessageBox
+    MessageBox,
+    CellSwipe
 } from 'mint-ui'
 import { DatetimePlugin } from 'vux';
 import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -60,6 +61,7 @@ Vue.component(IndexList.name, IndexList);
 Vue.component(IndexSection.name, IndexSection);
 Vue.component(Spinner.name, Spinner);
 Vue.component(Checklist.name, Checklist);
+Vue.component(CellSwipe.name, CellSwipe);
 
 // Vue.directive('focus', {
 //   // 当绑定元素插入到 DOM 中。

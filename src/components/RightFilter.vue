@@ -158,7 +158,6 @@ export default {
             })
         },
         hide () {
-            console.log('================')
             this.$emit('onHide');
         },
         chooseDepartment (code) {

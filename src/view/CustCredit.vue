@@ -63,17 +63,18 @@ export default {
     },
     data () {
         return {
-            custIds: '6631B5B27DD44910BF7BDAC2E02F1AD3',//getQueryString('custIds'),
+            custIds: getQueryString('custIds'),//'6631B5B27DD44910BF7BDAC2E02F1AD3',
             custName: decodeURI(decodeURI(getQueryString('custName'))),
             custCredit: {},
-            custcreditnoList: []
+            custcreditnoList: [],
+            creditnoDetailsList: []
         }
     },
     created () {
-        http.get(`${URL_CUST_CREDIT}?custIds=${this.custIds}&monthTime=201707`).then((res) => {
+        http.get(`${URL_CUST_CREDIT}?custIds=${this.custIds}`/*&monthTime=201707*/).then((res) => {
             console.log(res)
             // this.contactsNameGroupList = res.contactsNameGroupList;
-            this.custCredit = res.custCredit;
+            this.custCredit = res.custCredit || {};
             this.custcreditnoList = res.custcreditnoList;
             this.creditnoDetailsList = res.creditnoDetailsList;
         })
@@ -118,7 +119,7 @@ export default {
         color: #fff;
         font-weight: bold;
         background: #C4E1FF;
-        box-shadow: 10px 10px 20px #C4E1FF;
+        box-shadow: 2px 2px 3px #C4E1FF;
     }
     .body {
         // padding: pxToRem(20px) pxToRem(20px);

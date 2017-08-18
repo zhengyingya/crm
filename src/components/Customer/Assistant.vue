@@ -22,7 +22,7 @@
               <div class="divider" v-if="index !== assistantList.length - 1"/>
           </div>
       </div>
-      <div class="btn-add" @click="add">添加协助人</div>
+      <div v-if="!custPoolIds" class="btn-add" @click="add">添加协助人</div>
   </div>
 </template>
 
@@ -43,6 +43,7 @@ export default {
     data () {
         return {
             custIds: getQueryString('custIds'),
+            custPoolIds: getQueryString('custPoolIds'),
             assistantList: [],
             color: ['#FF2D2D', '#02DF82', '#D9B300', '#26a2ff', '#9F35FF']
         }

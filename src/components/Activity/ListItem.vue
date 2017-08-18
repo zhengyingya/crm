@@ -6,7 +6,7 @@
       </div>
       <div>{{itemData.content}}</div>
       <div v-if="images" class="flex-row pic">
-          <img v-for="(image, index) in images"  class="img" :class="'img-'+itemData.custids" :src="window.cxt + '/' + image" @click="show(index)"/>
+          <img v-for="(image, index) in images"  class="img" :class="'img-'+itemData.ids" :src="window.cxt + '/' + image" @click="show(index)"/>
       </div>
 
       <div v-transfer-dom>
@@ -70,7 +70,7 @@ export default {
             options: {
                 // vux preview组件的配置函数，可以参考官网的用法，直接拷贝函数过来就可以了
                 getThumbBoundsFn (index) {
-                  let thumbnail = document.querySelectorAll('.img-'+me.itemData.custids)[index]
+                  let thumbnail = document.querySelectorAll('.img-'+me.itemData.ids)[index]
                   // get window scroll Y
                   let pageYScroll = window.pageYOffset || document.documentElement.scrollTop
                   // optionally get horizontal scroll

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Home from '../view/Home.vue'
 import customer from './customer.js';
+import plan from './plan.js';
 
 Vue.use(Router)
 
@@ -14,5 +15,5 @@ export default new Router({
             component: Home
         }
 
-    ].concat(customer)
+    ].concat(customer, plan)
 })

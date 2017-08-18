@@ -14,7 +14,11 @@
    <div class="divider"/>
    <div v-html="item.content" class="content"></div>
    <div v-if="item.images" class="flex-row pic">
-       <img v-for="(image, index) in item.images.split(',')"  class="img" :class="'img-'+item.custids" :src="window.cxt + '/' + image" @click="show(index, item.custids)"/>
+       <img v-for="(image, index) in item.images.split(',')"  class="img" :class="'img-'+item.ids" :src="window.cxt + '/' + image" @click="show(index, item.custids)"/>
+   </div>
+   <div v-for="media in item.medialist" class="flex-row audio-item" @click="playAudio(media.mediaid)">
+       <i class="iconfont icon-yuyin1"/>
+       <span class="fs-14" style="color:#8E8E8E;margin-left:20px;">{{media.mediaduration}}''</span>
    </div>
 
    <div v-transfer-dom>
@@ -80,12 +84,11 @@ export default {
         'item'
     ],
     created () {
-        // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
-        if (getQueryString('reload')) {
-            console.log('===========')
-            this.pageNumber = 0;
-            this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
-        }
+        // // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
+        // if (getQueryString('reload')) {
+        //     this.pageNumber = 0;
+        //     this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+        // }
     },
     data () {
         const me = this;
@@ -93,13 +96,12 @@ export default {
             options: {
                 // vux preview组件的配置函数，可以参考官网的用法，直接拷贝函数过来就可以了
                 getThumbBoundsFn (index) {
-                  let thumbnail = document.querySelectorAll('.img-'+me.item.custids)[index]
+                  let thumbnail = document.querySelectorAll('.img-'+me.item.ids)[index]
                   // get window scroll Y
                   let pageYScroll = window.pageYOffset || document.documentElement.scrollTop
                   // optionally get horizontal scroll
                   // get position of element relative to viewport
                   let rect = thumbnail.getBoundingClientRect()
-                  console.log('==========', index, rect, index, pageYScroll)
                   // w = width
                   return {x: rect.left, y: rect.top + pageYScroll, w: rect.width}
                 }
@@ -216,6 +218,16 @@ export default {
                     discussIds: ids
                 })
             })
+        },
+        playAudio (mediaid) {
+            dd.device.audio.play({
+                localAudioId: mediaid,
+                onSuccess: function () {
+                },
+                onFail: function (err) {
+                    alert('错误', err)
+                }
+            });
         }
     }
 }
@@ -302,6 +314,20 @@ export default {
             height: pxToRem(100px);
             margin-right: pxToRem(10px);
             margin-bottom: pxToRem(10px);
+        }
+    }
+    .audio-item {
+        position: relative;
+        width: 40%;
+        height: pxToRem(25px);
+        line-height: pxToRem(25px);
+        padding: 0 pxToRem(10px);
+        border-radius: pxToRem(20px);
+        background: #E0E0E0;
+        margin-bottom: pxToRem(10px);
+        > i {
+            color: #8E8E8E;
+            font-size: 14px;
         }
     }
     .divider {

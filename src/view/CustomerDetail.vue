@@ -2,7 +2,7 @@
     <div class="view-customerdetail">
         <div class="header">
             <div class="fs-20 name">{{detailViewData.custName}}</div>
-            <div class="flex-row" style="margin-bottom: 40px;">
+            <div v-if="!custPoolIds" class="flex-row" style="margin-bottom: 40px;">
                 <div class="flex-row" style="flex:1;justify-content:flex-end;">
                     <div class="btn-head" :class="isUserFocusCustomer>=1?'':'btn-more'" @click="focus">
                         <i class="iconfont icon-wujiaoxing fs-12" style="font-weight:900"/>
@@ -12,7 +12,7 @@
                 <div class="flex-row more-menu" style="flex:1;justify-content:flex-start;position:relative">
                     <popover placement="bottom" :gutter="-30">
                        <div slot="content" class="popover-demo-content">
-                           <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1">
+                           <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1" @click="jump(`/plan/create?custIds=${custIds}&custName=${detailViewData.custName}`)">
                                <i class="iconfont icon-jiahao1 flex-1"/>
                                <div class="flex-2" style="text-align:left;">添加计划</div>
                            </div>
@@ -34,7 +34,14 @@
                    </popover>
                 </div>
             </div>
-            <TabMenu :detailViewData="detailViewData" :custIds="custIds"/>
+            <div v-if="custPoolIds" class="" style="margin-bottom: 40px;">
+                前负责人：{{detailViewData.exUserName}}
+                <span class="btn-head btn-more" @click="assignToSelf">
+                    <i class="iconfont icon-dengjifenhuoqujilu fs-12"/>
+                    <span>获取</span>
+                </span>
+            </div>
+            <TabMenu :detailViewData="detailViewData" :custIds="custIds" :custPoolIds="custPoolIds"/>
         </div>
 
         <mt-navbar v-model="selected">
@@ -69,7 +76,7 @@ import { mapActions } from 'vuex';
 import { Spinner, Flexbox, FlexboxItem, Popover } from 'vux';
 import { getQueryString } from '../utils/commonMethod.js';
 import http from '../http/index.js';
-import { URL_CUSTOMER_DETAIL_VIEW, URL_CUSTOMER_FOLLOW_RECORD, URL_CUSTOMER_FOCUS, URL_CUSTOMER_DELETE } from '../constant/url.js';
+import { URL_CUSTOMER_DETAIL_VIEW, URL_CUSTOMER_FOLLOW_RECORD, URL_CUSTOMER_FOCUS, URL_CUSTOMER_DELETE, URL_CUSTPOLL_DETAIL_VIEW, URL_CUSTPOLL_ASSIGNTOSELFT } from '../constant/url.js';
 import { Toast } from 'mint-ui';
 
 export default {
@@ -90,6 +97,7 @@ export default {
             selected: '1',
             isAchievementDataGet: false,
             custIds: getQueryString('custIds'),
+            custPoolIds: getQueryString('custPoolIds'),     // 公海池客户id
             detailViewData: {},
             contactsCount: 0,                               // 联系人个数
             isUserFocusCustomer: 0,                         // 是否关注
@@ -106,15 +114,30 @@ export default {
             'getFollowData'
         ]),
         getDetailView () {
-            http.get(`${URL_CUSTOMER_DETAIL_VIEW}?custIds=${this.custIds}`).then((res) => {
-                console.log(res)
-                this.detailViewData = res;
-                this.contactsCount = res.contactsCount;
-                this.isCustomerPrincipal = res.isCustomerPrincipal;
-                this.isUserFocusCustomer = res.isUserFocusCustomer;
-                this.isUserResponsibleOrAssistanceToCustomer = res.isUserResponsibleOrAssistanceToCustomer;
-                this.isCustomerCanDelete = res.isCustomerCanDelete;
-            })
+            if (this.custPoolIds) {
+                console.log('============')
+                http.get(`${URL_CUSTPOLL_DETAIL_VIEW}?custPoolIds=${this.custPoolIds}`).then((res) => {
+                    console.log(res)
+                    this.detailViewData = {
+                        custName: res.custname,
+                        contactsCount: res.contactsCount,
+                        salesVolume: res.salesVolume,
+                        exUserName: res.exUserName,
+                        latestFollowRecordDate: res.latestFollowRecordDate
+                    }
+                    // this.custIds = res.custIds;
+                })
+            }
+            else {
+                http.get(`${URL_CUSTOMER_DETAIL_VIEW}?custIds=${this.custIds}`).then((res) => {
+                    this.detailViewData = res;
+                    this.contactsCount = res.contactsCount;
+                    this.isCustomerPrincipal = res.isCustomerPrincipal;
+                    this.isUserFocusCustomer = res.isUserFocusCustomer;
+                    this.isUserResponsibleOrAssistanceToCustomer = res.isUserResponsibleOrAssistanceToCustomer;
+                    this.isCustomerCanDelete = res.isCustomerCanDelete;
+                })
+            }
         },
         jump (path) {
             this.$router.push({path: encodeURI(encodeURI(path))});
@@ -143,6 +166,16 @@ export default {
                   duration: 1000
                 });
                 this.$router.push({path: '/customer/list'})
+            })
+        },
+        assignToSelf () {
+            http.get(`${URL_CUSTPOLL_ASSIGNTOSELFT}?custPoolIds=${this.custPoolIds}`)
+            .then((res) => {
+                Toast({
+                  message: res.message,
+                  position: 'bottom',
+                  duration: 1000
+                });
             })
         }
     }
@@ -190,6 +223,7 @@ export default {
         background: #66B3FF;
         padding-top: pxToRem(30px);
         color: #F0F0F0;
+        overflow: hidden;
         .name {
             margin-bottom: pxToRem(10px);
         }

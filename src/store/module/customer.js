@@ -5,6 +5,7 @@ const GET_CUSTOMER_DETAIL_INFO = 'customer-get_customer_detail_info';
 const DELETE_ONE_RECORD = 'customer-delete_one_record';
 const ADD_ONE_DISCUSS = 'customer-add_one_discuss';
 const DELETE_ONE_DISCUSS = 'customer-delete_one_discuss';
+const INIT_FOLLOW_DATA = 'customer-init_follow_data';
 
 const state = {
     cUserIds: 0,
@@ -23,6 +24,9 @@ const getters = {
 
 // actions
 const actions = {
+    initFollowData ({ commit, state }) {
+        commit(INIT_FOLLOW_DATA);
+    },
     /**
      *  获取跟进记录
      *  @param custIds                  客户id
@@ -75,6 +79,11 @@ const actions = {
 
 // mutations
 const mutations = {
+    [INIT_FOLLOW_DATA]: (state) => {
+        state.totalPage = Number.MAX_VALUE;
+        state.recordList = [];
+        state.firstRequestTime = null;
+    },
     [GET_CUSTOMER_FOLLOW_RECORD]: (state, { res, pageNumber }) => {
         if (pageNumber === 1) {
             state.cUserIds = res.cUserIds;

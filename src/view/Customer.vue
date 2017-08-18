@@ -10,8 +10,10 @@
                 </flexbox-item>
                 <div class="divider"/>
                 <flexbox-item>
-                    <div class="icon"><i class="iconfont icon-kehuguanli1 fs-50" style="color: #02DF82"/></div>
-                    <div class="tip">公海池客户</div>
+                    <div @click="jump('/customer/pool')">
+                        <div class="icon"><i class="iconfont icon-kehuguanli1 fs-50" style="color: #02DF82"/></div>
+                        <div class="tip">公海池客户</div>
+                    </div>
                 </flexbox-item>
             </flexbox>
         </Panel>

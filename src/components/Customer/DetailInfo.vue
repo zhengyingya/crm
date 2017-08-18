@@ -1,25 +1,25 @@
 <template>
   <div class="detail-info">
       <div class="wrap">
-          <Panel>
+          <!-- <Panel> -->
               <!-- <mt-field v-for="name in names" :label="name + '：'">ddddddddsssssssss</mt-field> -->
-              <mt-field label="客户名称：" readonly>{{cust.custname}}</mt-field>
-              <mt-field label="客户状态：" readonly>{{custStatusList[cust.custstatus]}}</mt-field>
-              <mt-field label="所在地区：" readonly>{{cust.region}}</mt-field>
-              <mt-field label="详细地址：" readonly>{{cust.address}}</mt-field>
-              <mt-field label="电话：" readonly>{{cust.telno}}</mt-field>
-              <mt-field label="传真：" readonly>{{cust.fax}}</mt-field>
-              <mt-field label="邮箱：" readonly>{{cust.email}}</mt-field>
-              <mt-field label="邮编：" readonly>{{cust.postcode}}</mt-field>
-              <mt-field label="网址：" readonly>{{cust.website}}</mt-field>
-              <mt-field label="法人代表：" readonly>{{cust.chieftain}}</mt-field>
-              <mt-field label="人员规模：" readonly>{{cust.scale}}人</mt-field>
-              <mt-field label="授信额度：" readonly>{{cust.creditlimit}}</mt-field>
-              <mt-field label="帐期天数：" readonly>{{cust.paymentdays}}天</mt-field>
-              <mt-field label="所属行业：" readonly>{{cust.business}}</mt-field>
-              <mt-field label="货币：" readonly>{{currencyList[cust.currency]}}</mt-field>
-              <mt-field label="客户级别：" readonly>{{custLevelList[cust.custlevel]}}</mt-field>
-          </Panel>
+              <div class="item"> <label class="flex-1">客户名称：</label><span class="flex-3">{{cust.custname}}</span></div>
+              <div class="item"> <label class="flex-1">客户状态：</label><span class="flex-3">{{custStatusList[cust.custstatus]}}</span></div>
+              <div class="item"> <label class="flex-1">所在地区：</label><span class="flex-3">{{cust.region}}</span></div>
+              <div class="item"> <label class="flex-1">详细地址：</label><span class="flex-3">{{cust.address}}</span></div>
+              <div class="item"> <label class="flex-1">电话：</label><span class="flex-3">{{cust.telno}}</span></div>
+              <div class="item"> <label class="flex-1">传真：</label><span class="flex-3">{{cust.fax}}</span></div>
+              <div class="item"> <label class="flex-1">邮箱：</label><span class="flex-3">{{cust.email}}</span></div>
+              <div class="item"> <label class="flex-1">邮编：</label><span class="flex-3">{{cust.postcode}}</span></div>
+              <div class="item"> <label class="flex-1">网址：</label><span class="flex-3">{{cust.website}}</span></div>
+              <div class="item"> <label class="flex-1">法人代表：</label><span class="flex-3">{{cust.chieftain}}</span></div>
+              <div class="item"> <label class="flex-1">人员规模：</label><span class="flex-3">{{cust.scale}}人</span></div>
+              <div class="item"> <label class="flex-1">授信额度：</label><span class="flex-3">{{cust.creditlimit}}</span></div>
+              <div class="item"> <label class="flex-1">帐期天数：</label><span class="flex-3">{{cust.paymentdays}}天</span></div>
+              <div class="item"> <label class="flex-1">所属行业：</label><span class="flex-3">{{cust.business}}</span></div>
+              <div class="item"> <label class="flex-1">货币：</label><span class="flex-3">{{currencyList[cust.currency]}}</span></div>
+              <div class="item"> <label class="flex-1">客户级别：</label><span class="flex-3">{{custLevelList[cust.custlevel]}}</span></div>
+          <!-- </Panel> -->
       </div>
       <div class="btn-edit" @click="edit">编辑资料</div>
   </div>
@@ -93,6 +93,16 @@ export default {
     .wrap {
         height: 100%;
         overflow: auto;
+        background: #fff;
+        padding: 0 pxToRem(20px);
+        text-align: left;
+        font-size: 16px;
+        .item {
+            border-bottom: 1px solid #F0F0F0;
+            display: flex;
+            height: pxToRem(50px);
+            line-height: pxToRem(50px);
+        }
     }
     .btn-edit {
         position: fixed;

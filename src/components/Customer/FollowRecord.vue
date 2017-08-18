@@ -10,6 +10,10 @@
           </div>
           <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
           <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
+          <div v-if="isNodata" style="justify-content:center;margin-top:50px;margin-bottom:5px;color:#BEBEBE;text-align:center">
+              <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+              <div class="fs-22">暂无数据</div>
+          </div>
       </div>
       <flexbox :gutter="0" class="footer">
           <flexbox-item :span="1/2" class="btn-static">
@@ -33,7 +37,6 @@
             </div>
           </popup>
       </div>
-
   </div>
 </template>
 
@@ -43,7 +46,7 @@ import { Spinner, Flexbox, FlexboxItem, Popover, Popup, TransferDom } from 'vux'
 import { mapState, mapActions } from 'vuex';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
-import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS } from '../../constant/url.js';
+import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS, URL_DING_JSAPI_AUTHOR } from '../../constant/url.js';
 import { Toast } from 'mint-ui';
 import FollowRecordItem from './FollowRecordItem.vue';
 
@@ -68,9 +71,11 @@ export default {
         // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
         if (getQueryString('reload')) {
             console.log('===========')
+            this.initFollowData();
             this.pageNumber = 0;
             this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
         }
+        this.getDingJsapiAuthor();
     },
     data () {
         return {
@@ -78,6 +83,7 @@ export default {
             names: ['客户名称', '客户状态', '所在地区', '详细地址', '电话', '传真', '邮箱', '邮编'],
             loading: false,
             isEnd: false,
+            isNodata: false,
             pageNumber: 0,
             isCommentShow: false,                    // 评论弹框是否显示
             comment: '',                             // 评论内容
@@ -99,21 +105,52 @@ export default {
     },
     methods: {
         ...mapActions([
+            'initFollowData',
             'getCustomerFollowData',
             'deleteOneRecord',
             'addOneDiscuss',
             'deleteOneDiscuss'
         ]),
+        getDingJsapiAuthor () {
+            http.get(URL_DING_JSAPI_AUTHOR)
+            .then((res) => {
+                dd.config({
+                    agentId: res.agentId +'', // 必填，微应用ID
+                    corpId: res.corpId,//必填，企业ID
+                    timeStamp: res.timeStamp, // 必填，生成签名的时间戳
+                    nonceStr: res.nonceStr, // 必填，生成签名的随机串
+                    signature: res.signature, // 必填，签名
+                    jsApiList: ['ui.pullToRefresh.enable','ui.pullToRefresh.stop','biz.util.openLink','biz.navigation.setLeft','biz.navigation.setTitle','biz.navigation.setRight',
+                                'device.audio.startRecord', 'device.audio.stopRecord', 'dd.device.audio.onRecordEnd','device.audio.play',
+                             'device.audio.download',
+                             'device.audio.pause',
+                             'device.audio.stop'] // 必填，需要使用的jsapi列表
+                });
+                dd.ready(function(){
+                });
+                dd.error(function(error){
+                    alert('dingding error: ' + JSON.stringify(error));
+                });
+            })
+        },
         loadMore () {
+            console.log(']]]]]]]]]]]')
             this.loading = true;
-            if (this.pageNumber >= this.totalPage) {
+            if (this.totalPage === 0) {
+                this.isNodata = true;
+                this.loading = false;
+            }
+            else if (this.pageNumber >= this.totalPage) {
                 this.isEnd = true;
                 this.loading = false;
             }
             else {
                 this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
                 .then((res) => {
-                    this.loading = true;
+                    this.loading = false;
+                    if (res.splitPage && res.splitPage.totalPage === 0) {
+                        this.isNodata = true;
+                    }
                 });
             }
         },

@@ -9,6 +9,7 @@ import CustCredit from '../view/CustCredit.vue'
 import SalesTrends from '../view/SalesTrends.vue'
 import FormatRecord from '../view/FormatRecord.vue'
 import FastRecord from '../view/FastRecord.vue'
+import CustomerPool from '../view/CustomerPool.vue'
 
 export default [
     {
@@ -62,8 +63,13 @@ export default [
         component: FormatRecord
     },
     {
-        path: '/customer/fastrecord',                 // 快速记录
+        path: '/customer/fastrecord',                   // 快速记录
         name: 'FastRecord',
         component: FastRecord
+    },
+    {
+        path: '/customer/pool',                         // 公海池客户
+        name: 'CustomerPool',
+        component: CustomerPool
     }
 ]

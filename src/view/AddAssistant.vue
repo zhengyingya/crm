@@ -50,6 +50,7 @@ export default {
     data () {
         return {
             custIds: getQueryString('custIds'),
+            custPoolIds: getQueryString('custPoolIds'),
             salesmanList: [],
             value: ''
         }
