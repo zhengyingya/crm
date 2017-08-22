@@ -35,13 +35,13 @@
             <div class="btn-save" @click="save">保存</div>
         </Panel>
 
-        <popup v-model="isAudioShow" position="bottom">
+        <popup v-model="isAudioShow" position="bottom" :on-hide="AudioHide">
             <div class="popup-audio">
                 <div v-show="isAudioRecord" class="fs-30" style="position:absolute;top:30px;width:100px;left:50%;margin-left:-50px;color:#26a2ff">{{audioCountMin<10?`0${audioCountMin}`:audioCountMin}}:{{audioCountSec<10?`0${audioCountSec}`:audioCountSec}}</div>
                 <div v-show="!isAudioRecord" class="btn-audio" @click="start">
                     <i v-show="!isAudioRecord" class="iconfont icon-yuyin fs-40"/>
                 </div>
-                <img v-show="isAudioRecord" src="../static/image/timg.gif"/>
+                <img v-show="isAudioRecord" :src="window.cxt + '/jsfile/hybrid/crm/img/timg.cbee0c4.gif'/*../static/image/timg.gif*/"/>
                 <div style="position:absolute;bottom:30px;width:100px;left:50%;margin-left:-50px;">{{audioTip}}</div>
                 <i v-show="isAudioRecord" class="iconfont icon-sucess icon-true" @click="saveAudio"/>
                 <i v-show="isAudioRecord" class="iconfont icon-fail icon-false" @click="saveAudio"/>
@@ -79,6 +79,7 @@ export default {
     },
     data () {
         return {
+            window,
             custIds: getQueryString('custIds'),
             comment: '',                            // 评论内容
             imgs: [],                               // 图片base64数组
@@ -145,29 +146,14 @@ export default {
             const res = await http.post(URL_SAVE_UPLOAD_IMAGE, {
                 body: `baseStr=${baseStr}`
             });
-            this.imagePath.push(res.imagePathName);
+            this.imagePath.push(res.imagePathName);                 // 将地址保存到imagePath数组中
         },
         async save () {
             for (let i=0,len=this.imgs.length; i<len; i++) {
-                await this.uploadServer(this.imgs[i]);
+                await this.uploadServer(this.imgs[i]);              // 同步上传图片到后台，获取返回的图片地址
             }
             let mediaId = [];
             let mediaDuration = [];
-            // for (let i=0,len=this.audioIdList.length; i<len; i++) {
-            //     mediaId.push(this.audioIdList[i].mediaId);
-            //     mediaDuration.push(this.audioIdList[i].duration)
-            //     alert(this.audioIdList[i].duration)
-            // }
-            // let data = new FormData();
-            // data.append('custFollowRecord.custids', this.custIds);
-            // data.append('custFollowRecord.contactsids', '');
-            // data.append('custFollowRecord.followtype', '98');
-            // data.append('custFollowRecord.content', this.comment);
-            // this.imagePath.map((item) => {
-            //     data.append('images', item);
-            // })
-            // data.append('mediaId', mediaId);
-            // data.append('mediaDuration', mediaDuration);
 
             let query = '';
             this.imagePath.map((item) => {
@@ -197,7 +183,6 @@ export default {
         },
         // 开始录音
         start () {
-            console.log('============')
             this.audioTip = '正在录音';
             this.isAudioRecord = true;
             this.timer = setInterval(() => {
@@ -224,7 +209,6 @@ export default {
                 onSuccess: function (res) {
                     // res.mediaId; // 返回音频的MediaID，可用于本地播放和音频下载
                     // res.duration; // 返回音频的时长，单位：秒
-                    console.log(res.mediaId, res.duration);
                     // alert(res.mediaId, res.duration);
                     me.audioIdList.push({
                         mediaId: res.mediaId,
@@ -258,6 +242,15 @@ export default {
             this.audioIdList = this.audioIdList.filter((item) => {
                 return item.mediaId !== mediaId;
             })
+        },
+        AudioHide () {
+            this.init();
+            dd.device.audio.stopRecord({
+                onSuccess: function (res) {
+                },
+                onFail: function (err) {
+                }
+            });
         },
         delImage (index) {
             this.imgs.splice(index, 1);

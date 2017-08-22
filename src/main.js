@@ -25,7 +25,8 @@ import {
     Spinner,
     Checklist,
     MessageBox,
-    CellSwipe
+    CellSwipe,
+    Loadmore
 } from 'mint-ui'
 import { DatetimePlugin } from 'vux';
 import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -45,6 +46,7 @@ Vue.use(InfiniteScroll);
 Vue.config.productionTip = false
 Vue.component('echart', ECharts);
 Vue.component(Popup.name, Popup);
+Vue.component(Loadmore.name, Loadmore);
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(Navbar.name, Navbar);
 Vue.component(TabItem.name, TabItem);

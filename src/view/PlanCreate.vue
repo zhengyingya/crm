@@ -14,7 +14,9 @@
                     计划月份：
                 </FlexboxItem>
                 <FlexboxItem :span="3/4">
-                    <div @click="openPicker">{{plantime}}<i class="iconfont icon-xiangxiazhankai fs-16"/></div>
+                    <div @click="openPicker">{{plantime}}
+                        <i class="iconfont icon-xiangxiazhankai fs-16" style="font-weight:bolder"/>
+                    </div>
                 </FlexboxItem>
             </Flexbox>
             <Flexbox :gutter="0" class="head-line">
@@ -283,17 +285,6 @@ export default {
 </script>
 <style lang="scss">
 @import '../styles/common.scss';
-.mint-cell {
-    min-height: 0;
-    .mint-cell-wrapper {
-        background-image: none;
-        // border-bottom: 1px solid #F0F0F0;
-        height: pxToRem(35px);
-        padding: 0 pxToRem(20px);
-        text-align: left;
-        font-size: 14px;
-    }
-}
 .view-plancreate {
     .weui-cell__ft {
         display: none;
@@ -305,6 +296,17 @@ export default {
         line-height: pxToRem(16px);
         .weui-input {
             height: pxToRem(16px);
+        }
+    }
+    .mint-cell {
+        min-height: 0;
+        .mint-cell-wrapper {
+            background-image: none;
+            // border-bottom: 1px solid #F0F0F0;
+            height: pxToRem(35px);
+            padding: 0 pxToRem(20px);
+            text-align: left;
+            font-size: 14px;
         }
     }
     .plandata-wrap {
@@ -333,10 +335,12 @@ export default {
         position:fixed;
         width:100%;
         margin-top: pxToRem(-120px);
+        background: #66B3FF;
         .head-line {
             height: pxToRem(40px);
             padding: 0 pxToRem(20px);
-            background: #fff;
+            // background: #fff;
+            color: #fff;
             font-size: 14px;
         }
     }
@@ -347,10 +351,10 @@ export default {
         .txt-key {
             height: pxToRem(35px);
             line-height: pxToRem(35px);
-            background: rgba(38,162,255,0.7);
+            background: #E0E0E0;
             text-align: left;
             padding: 0 pxToRem(20px);
-            color: #fff;
+            color: #4F4F4F;
         }
         .row {
             height: pxToRem(35px);

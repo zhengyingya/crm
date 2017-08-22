@@ -6,7 +6,7 @@
                 <mt-field label="客户名称" placeholder="请输入客户名称" v-model="custname"></mt-field>
                 <mt-field label="客户状态" :placeholder="custIds?custStatusList[cust.custstatus]:'潜在客户'" readonly class="readonly"></mt-field>
                 <!-- <mt-field label="所在地区" class="custom"> -->
-                <group >
+                <group>
                     <x-address :title="title" v-model="region" raw-value :list="addressData" value-text-align="left"></x-address>
                 </group>
                 <mt-field label="详细地址" placeholder="请输入详细地址" v-model="address"></mt-field>

@@ -63,7 +63,7 @@ export default {
             isFilterShow: false,
             isCustomerDataGet: false,             // 是否从后台获取到客户列表数据
             cusNameGrouplist: [],
-            cusNameGrouplistCopy: []
+            cusNameGrouplistCopy: []              // 原数据做一个备份
         }
     },
     created () {
@@ -109,11 +109,12 @@ export default {
         },
         // 列表本地搜索
         search () {
-            const _cusNameGrouplist = [];
+            let _cusNameGrouplist = [];
             if (this.searchValue === '') {
-                this.cusNameGrouplist = this.cusNameGrouplistCopy;
+                this.cusNameGrouplist = this.cusNameGrouplistCopy;      // 如果搜索关键字为空，则渲染全部数据
             }
             else {
+                // 循环进行筛选
                 for (let i=0,len=this.cusNameGrouplistCopy.length; i<len; i++) {
                     const groupChild = this.cusNameGrouplistCopy[i].groupChild.filter((data) => {
                         return data.datatext.indexOf(this.searchValue) > -1;
@@ -128,7 +129,6 @@ export default {
                 }
                 this.cusNameGrouplist = _cusNameGrouplist;
             }
-            console.log(this.cusNameGrouplist);
         },
         onCancel () {
             this.cusNameGrouplist = this.cusNameGrouplistCopy;

@@ -9,14 +9,18 @@
               </div>
           </flexbox-item>
           <flexbox-item v-if="!custPoolIds" :span="1/5" class="item" style="border-right:1px solid #d0d0d0;">
-              <i class="iconfont icon-xiaoliangshuliang fs-18"/>
-              <div class="fs-12">历史销量</div>
-              <div>{{detailViewData.salesVolume}}</div>
+              <div @click="openLink(`/crm/report/hybrid/receipt?custIds=${custIds}&custCode=${detailViewData.custCode}`)">
+                <i class="iconfont icon-xiaoliangshuliang fs-18"/>
+                <div class="fs-12">历史销量</div>
+                <div>{{detailViewData.salesVolume}}</div>
+              </div>
           </flexbox-item>
           <flexbox-item :span="custPoolIds?1/4:1/5" class="item" style="border-right:1px solid #d0d0d0;">
-              <i class="iconfont icon-icon-text-fn-historyrecord fs-18"/>
-              <div class="fs-12">计划</div>
-              <div>完成</div>
+              <div @click="openLink(`/crm/report/hybrid/achievementCustomer?custCode=${detailViewData.custCode}`)">
+                <i class="iconfont icon-icon-text-fn-historyrecord fs-18"/>
+                <div class="fs-12">计划</div>
+                <div>完成</div>
+              </div>
           </flexbox-item>
           <flexbox-item :span="custPoolIds?1/4:1/5" class="item" style="border-right:1px solid #d0d0d0;">
               <div @click="jump(`/customer/custcredit?custIds=${custIds}`)">
@@ -62,6 +66,9 @@ export default {
     methods: {
         jump (path) {
             this.$router.push({path});
+        },
+        openLink (link) {
+          location.href = window.cxt + link; 
         }
     }
 }

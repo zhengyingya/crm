@@ -122,13 +122,14 @@ export default {
         }
     },
     created () {
+        this.init();
         http.get(URL_LIST_HEAD).then((res) => {
             this.departmentList = res.departmentList;
             this.salesmanList = res.salesmanList;
             this.monthRecentList = res.monthRecentList;
             this.custRelationList = res.custRelationList;
             this.custStatusList = res.custStatusList;
-        })
+        });
     },
     computed: {
 
@@ -143,6 +144,21 @@ export default {
             'getAchievementData',
             'getFollowData'
         ]),
+        init () {
+            this.filterActive = '1';
+            this.filterDepartment = 'ALL';
+            this.filterDeptcode = 'ALL';
+            this.filterUserIds = 'ALL';
+            this.filterUserName = 'ALL';
+            this.filterMonthRecent = 'ALL';
+            this.filterRelation = 'ALL';
+            this.filterStatus = 'ALL';
+            this.departmentList = [];
+            this.salesmanList = [];
+            this.monthRecentList = [];
+            this.custRelationList = [];
+            this.custStatusList = [];
+        },
         jump (path) {
             this.$router.push({path: path});
         },

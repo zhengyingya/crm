@@ -2,7 +2,7 @@
   <div class="follow-recorditem">
    <flexbox :gutter="0" class="head">
        <flexbox-item :span="1/6" style="color:#26a2ff;">
-           {{ item.names }}
+           <div @click="openLink(`/crm/salesman/hybrid/view?salesManIds=${item.userids}`)">{{ item.names }}</div>
        </flexbox-item>
        <flexbox-item :span="2/6" style="color:#ADADAD;">
            {{ item.typename }}
@@ -63,7 +63,7 @@ import { mapState, mapActions } from 'vuex';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
 import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS } from '../../constant/url.js';
-import { Toast } from 'mint-ui';
+import { Toast, MessageBox } from 'mint-ui';
 
 export default {
     name: 'followRecord',
@@ -164,15 +164,18 @@ export default {
         },
         // 删除跟进记录
         deleteRecord (ids) {
-            http.post(URL_DELETE_CUSTOMER_FOLLOW_RECORD, {
-                body: `custFrIds=${ids}`
-            }).then((res) => {
-                Toast({
-                  message: res.message,
-                  position: 'bottom',
-                  duration: 1000
-                });
-                this.deleteOneRecord({ids});
+            MessageBox.confirm('确定要删除?')
+            .then(action => {
+                http.post(URL_DELETE_CUSTOMER_FOLLOW_RECORD, {
+                    body: `custFrIds=${ids}`
+                }).then((res) => {
+                    Toast({
+                      message: res.message,
+                      position: 'bottom',
+                      duration: 1000
+                    });
+                    this.deleteOneRecord({ids});
+                })
             })
         },
         show (index) {
@@ -205,29 +208,48 @@ export default {
             })
         },
         deleteDiscuss (custfrids, ids) {
-            http.post(URL_DELETE_CUSTFRDISCUSS, {
-                body: `discussIds=${ids}`
-            }).then((res) => {
-                // Toast({
-                //   message: res.message,
-                //   position: 'bottom',
-                //   duration: 1000
-                // });
-                this.deleteOneDiscuss({
-                    ids: custfrids,
-                    discussIds: ids
+            MessageBox.confirm('确定要删除?').then(action => {
+                http.post(URL_DELETE_CUSTFRDISCUSS, {
+                    body: `discussIds=${ids}`
+                }).then((res) => {
+                    // Toast({
+                    //   message: res.message,
+                    //   position: 'bottom',
+                    //   duration: 1000
+                    // });
+                    this.deleteOneDiscuss({
+                        ids: custfrids,
+                        discussIds: ids
+                    })
                 })
             })
         },
         playAudio (mediaid) {
+            // alert(mediaid)
             dd.device.audio.play({
                 localAudioId: mediaid,
                 onSuccess: function () {
                 },
                 onFail: function (err) {
-                    alert('错误', err)
+                    // alert('错误' + JSON.stringify(err))
+                    dd.device.audio.download({
+                        mediaId : mediaid,
+                        onSuccess : function(res) {
+                            dd.device.audio.play({
+                                localAudioId: res.localAudioId,
+                                onFail: function (err) {
+                                    alert('错误' + JSON.stringify(err))
+                                }
+                            });
+                        },
+                        onFail : function (err) {
+                        }
+                    });
                 }
             });
+        },
+        openLink (link) {
+          location.href = window.cxt + link;
         }
     }
 }

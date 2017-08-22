@@ -2,7 +2,7 @@
   <div class="assistant">
       <div class="wrap">
           <div v-for="(item, index) in assistantList" >
-              <div class="flex-row item">
+              <div class="flex-row item" @click="openLink(`/crm/salesman/hybrid/view?salesManIds=${item.userids}`)">
                   <flexbox :gutter="0">
                       <flexbox-item :span="1/6">
                           <div class="portrait" :style="{background: makeColor(item.color)}">
@@ -22,7 +22,7 @@
               <div class="divider" v-if="index !== assistantList.length - 1"/>
           </div>
       </div>
-      <div v-if="!custPoolIds" class="btn-add" @click="add">添加协助人</div>
+      <div v-if="!custPoolIds && isUserResponsibleOrAssistanceToCustomer >= 1" class="btn-add" @click="add">添加协助人</div>
   </div>
 </template>
 
@@ -40,6 +40,9 @@ export default {
         FlexboxItem,
         Panel
     },
+    props: [
+        'isUserResponsibleOrAssistanceToCustomer'
+    ],
     data () {
         return {
             custIds: getQueryString('custIds'),
@@ -59,6 +62,9 @@ export default {
         },
         add () {
             this.$router.push({path: `/customer/addassistant?custIds=${this.custIds}`});
+        },
+        openLink (link) {
+          location.href = window.cxt + link;
         }
     }
 }

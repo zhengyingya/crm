@@ -1,10 +1,12 @@
 <template>
   <div class="follow-record">
-      <div
-          v-infinite-scroll="loadMore"
+      <mt-loadmore :top-method="loadTop" ref="loadmore">
+          <div
+            v-infinite-scroll="loadMore"
           :infinite-scroll-disabled="loading"
-          infinite-scroll-distance="10"
-          class="wrap">
+          infinite-scroll-distance="30"
+          class="wrap"
+          @scroll="onScroll">
           <div v-for="item in recordList" class="item">
                <FollowRecordItem :item="item" @openComment="openComment"/>
           </div>
@@ -15,6 +17,7 @@
               <div class="fs-22">暂无数据</div>
           </div>
       </div>
+      </mt-loadmore>
       <flexbox :gutter="0" class="footer">
           <flexbox-item :span="1/2" class="btn-static">
               <div @click="jump(`/customer/formatrecord?custIds=${custIds}&custName=${custName}`)">格式化记录</div>
@@ -134,7 +137,7 @@ export default {
             })
         },
         loadMore () {
-            console.log(']]]]]]]]]]]')
+            // alert(']]]]]]]]]]]')
             this.loading = true;
             if (this.totalPage === 0) {
                 this.isNodata = true;
@@ -153,6 +156,16 @@ export default {
                     }
                 });
             }
+        },
+        loadTop () {
+            this.initFollowData();
+            this.pageNumber = 0;
+            this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+            .then((res) => {
+                setTimeout(()=>{
+                    this.$refs.loadmore.onTopLoaded();
+                }, 100)
+            });
         },
         jump (path) {
             this.$router.push({path: encodeURI(encodeURI(path))});
@@ -179,6 +192,15 @@ export default {
                 });
                 this.custfrids = '';
             })
+        },
+        onScroll (e) {
+            console.log('00000000000000000', e.target.scrollTop, e.target.offsetHeight, e.target.scrollHeight)
+            if (e.target.scrollTop > 500) {
+                alert(e.target.scrollTop + ' ' +  e.target.offsetHeight + ' ' + e.target.scrollHeight)
+            }
+            if (e.target.scrollTop + e.target.offsetHeight >= e.target.scrollHeight - 10) {
+                alert('end')
+            }
         }
     }
 }
@@ -251,8 +273,8 @@ export default {
     box-sizing: border-box;
     // overflow: auto;
     .wrap {
-        height: 100%;
-        overflow: auto;
+        // height: 100%;
+        // overflow: auto;
     }
     .item {
         // height: pxToRem(50px);

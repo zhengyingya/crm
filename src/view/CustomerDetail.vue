@@ -5,7 +5,7 @@
             <div v-if="!custPoolIds" class="flex-row" style="margin-bottom: 40px;">
                 <div class="flex-row" style="flex:1;justify-content:flex-end;">
                     <div class="btn-head" :class="isUserFocusCustomer>=1?'':'btn-more'" @click="focus">
-                        <i class="iconfont icon-wujiaoxing fs-12" style="font-weight:900"/>
+                        <i class="iconfont icon-wujiaoxing-kong fs-12" style="font-weight:900"/>
                         <span>关注</span>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
           </mt-tab-container-item>
           <!-- 协助人 -->
           <mt-tab-container-item id="3">
-              <Assistant/>
+              <Assistant :isUserResponsibleOrAssistanceToCustomer="isUserResponsibleOrAssistanceToCustomer"/>
           </mt-tab-container-item>
         </mt-tab-container>
     </div>
@@ -123,7 +123,8 @@ export default {
                         contactsCount: res.contactsCount,
                         salesVolume: res.salesVolume,
                         exUserName: res.exUserName,
-                        latestFollowRecordDate: res.latestFollowRecordDate
+                        latestFollowRecordDate: res.latestFollowRecordDate,
+                        custCode: res.custCode
                     }
                     // this.custIds = res.custIds;
                 })

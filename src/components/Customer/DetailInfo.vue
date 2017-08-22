@@ -100,7 +100,7 @@ export default {
         .item {
             border-bottom: 1px solid #F0F0F0;
             display: flex;
-            height: pxToRem(50px);
+            // height: pxToRem(50px);
             line-height: pxToRem(50px);
         }
     }

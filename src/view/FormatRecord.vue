@@ -181,13 +181,13 @@ export default {
             workrate: '',
             isSpecificationsShow: false,
             isBatchShow: false,
-            currentRow: 0,
-            specificationsData: [],
-            specificationsValue: [],
-            batchNumberData: [],
-            batchNumberValue: [],
-            myTableData: [],
-            hisTableData: []
+            currentRow: 0,                          
+            specificationsData: [],                 // 规格列表数据
+            specificationsValue: [],                // 规格选择的数据
+            batchNumberData: [],                    // 批号列表数据
+            batchNumberValue: [],                   // 批号列表数据
+            myTableData: [],                        // 我方数据数组
+            hisTableData: []                        // 竞争对手数据数组
         }
     },
     created () {
@@ -219,6 +219,7 @@ export default {
                 this.batchNumberData[index] = [_a];
             })
         },
+        // 添加我方一行数据
         addMyTableData () {
             this.myTableData.push({
                 inp_specification: '',
@@ -229,6 +230,7 @@ export default {
             });
             this.batchNumberData.push([]);
         },
+        // 添加竞争对手一行数据
         addHisTableData () {
             this.hisTableData.push({
                 inp_competitorName: '',
@@ -237,11 +239,13 @@ export default {
     			inp_unitPrice: ''
             });
         },
+        // 选择规格
         chooseSpecifications () {
             this.isSpecificationsShow = false;
             this.myTableData[this.currentRow].inp_specification = this.specificationsValue.join('');
             this.getBatchNumber(this.currentRow, this.specificationsValue.join(''));
         },
+        // 选择批号
         chooseBatchNumber () {
             this.isBatchShow = false;
             this.myTableData[this.currentRow].inp_batchNumber = this.batchNumberValue.join('');
