@@ -181,7 +181,7 @@ export default {
             workrate: '',
             isSpecificationsShow: false,
             isBatchShow: false,
-            currentRow: 0,                          
+            currentRow: 0,
             specificationsData: [],                 // 规格列表数据
             specificationsValue: [],                // 规格选择的数据
             batchNumberData: [],                    // 批号列表数据
@@ -273,7 +273,7 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
-                this.$router.push({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
+                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
                 // location.href = `#/customer/detail?custIds=${this.custIds}`;
             })
         }

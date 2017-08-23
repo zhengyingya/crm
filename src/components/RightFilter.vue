@@ -4,73 +4,73 @@
             <div class="flex-cloumn height-full">
                 <div class="flex-row" style="width:300px;flex:1">
                     <div class="filterlay-left">
-                        <div class="item" :class="filterActive==='1'?'active':''" @click="filterActive='1'">
+                        <div class="item" :class="filterActive==='1'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '1'})">
                             办事处
                         </div>
-                        <div class="item" :class="filterActive==='2'?'active':''" @click="filterActive='2'">
+                        <div class="item" :class="filterActive==='2'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '2'})">
                             人员
                         </div>
-                        <div class="item" :class="filterActive==='3'?'active':''" @click="filterActive='3'">
+                        <div class="item" :class="filterActive==='3'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '3'})">
                             有交易
                         </div>
-                        <div class="item" :class="filterActive==='4'?'active':''" @click="filterActive='4'">
+                        <div class="item" :class="filterActive==='4'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '4'})">
                             关系类型
                         </div>
-                        <div class="item" :class="filterActive==='5'?'active':''" @click="filterActive='5'">
+                        <div class="item" :class="filterActive==='5'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '5'})">
                             客户状态
                         </div>
                     </div>
 
                     <div v-if="filterActive==='1'" class="filterlay-right">
-                        <div class="item flex-row" @click="chooseDepartment('ALL');filterDeptcode='ALL';">
+                        <div class="item flex-row" @click="setFilter({filterType: 'filterDepartment', filterValue: 'ALL'});setFilter({filterType: 'filterDeptcode', filterValue: 'ALL'});">
                             <div style="flex:1">全部</div>
                             <i v-if="filterDepartment==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in departmentList" class="item flex-row"  @click="chooseDepartment(item.deptids);filterDeptcode=item.deptcode;">
+                        <div v-for="item in departmentList" class="item flex-row"  @click="setFilter({filterType: 'filterDepartment', filterValue: item.deptids});setFilter({filterType: 'filterDeptcode', filterValue: item.deptcode});">
                             <div style="flex:1">{{item.deptname}}</div>
                             <i v-if="filterDepartment===item.deptids" class="iconfont icon-zhengquewancheng"/>
                         </div>
                     </div>
 
                     <div v-if="filterActive==='2'" class="filterlay-right">
-                        <div class="item flex-row" @click="filterUserIds='ALL';filterUserName='ALL'">
+                        <div class="item flex-row" @click="setFilter({filterType: 'filterUserIds', filterValue: 'ALL'});setFilter({filterType: 'filterUserName', filterValue: 'ALL'})">
                             <div style="flex:1">全部</div>
                             <i v-if="filterUserIds==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in salesmanList" class="item flex-row" @click="filterUserIds=item.userids;filterUserName=item.username">
+                        <div v-for="item in salesmanList" class="item flex-row" @click="setFilter({filterType: 'filterUserIds', filterValue: item.userids});setFilter({filterType: 'filterUserName', filterValue: item.username});">
                             <div style="flex:1">{{item.names}}</div>
                             <i v-if="filterUserIds===item.userids" class="iconfont icon-zhengquewancheng"/>
                         </div>
                     </div>
 
                     <div v-if="filterActive==='3'" class="filterlay-right">
-                        <div class="item flex-row" @click="filterMonthRecent='ALL'">
+                        <div class="item flex-row" @click="setFilter({filterType: 'filterMonthRecent', filterValue: 'ALL'});">
                             <div style="flex:1">全部</div>
                             <i v-if="filterMonthRecent==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in monthRecentList" class="item flex-row" @click="filterMonthRecent=item.code">
+                        <div v-for="item in monthRecentList" class="item flex-row" @click="setFilter({filterType: 'filterMonthRecent', filterValue: item.code});">
                             <div style="flex:1">{{item.name}}</div>
                             <i v-if="filterMonthRecent===item.code" class="iconfont icon-zhengquewancheng"/>
                         </div>
                     </div>
 
                     <div v-if="filterActive==='4'" class="filterlay-right">
-                        <div class="item flex-row" @click="filterRelation='ALL'">
+                        <div class="item flex-row" @click="setFilter({filterType: 'filterRelation', filterValue: 'ALL'});">
                             <div style="flex:1">全部</div>
                             <i v-if="filterRelation==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in custRelationList" class="item flex-row" @click="filterRelation=item.childcode">
+                        <div v-for="item in custRelationList" class="item flex-row" @click="setFilter({filterType: 'filterRelation', filterValue: item.childcode});">
                             <div style="flex:1">{{item.childname}}</div>
                             <i v-if="filterRelation===item.childcode" class="iconfont icon-zhengquewancheng"/>
                         </div>
                     </div>
 
                     <div v-if="filterActive==='5'" class="filterlay-right">
-                        <div class="item flex-row" @click="filterStatus='ALL'">
+                        <div class="item flex-row" @click="setFilter({filterType: 'filterStatus', filterValue: 'ALL'});">
                             <div style="flex:1">全部</div>
                             <i v-if="filterStatus==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in custStatusList" class="item flex-row" @click="filterStatus=item.childcode">
+                        <div v-for="item in custStatusList" class="item flex-row" @click="setFilter({filterType: 'filterStatus', filterValue: item.childcode});">
                             <div style="flex:1">{{item.childname}}</div>
                             <i v-if="filterStatus===item.childcode" class="iconfont icon-zhengquewancheng"/>
                         </div>
@@ -88,7 +88,7 @@
 
 <script>
 import Panel from '../components/Panel.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { Popup } from 'vux';
 import http from '../http/index.js';
 import { URL_LIST_HEAD } from '../constant/url.js';
@@ -106,14 +106,6 @@ export default {
         return {
             isShow: false,
             searchValue: '',
-            filterActive: '1',
-            filterDepartment: 'ALL',
-            filterDeptcode: 'ALL',
-            filterUserIds: 'ALL',
-            filterUserName: 'ALL',
-            filterMonthRecent: 'ALL',
-            filterRelation: 'ALL',
-            filterStatus: 'ALL',
             departmentList: [],
             salesmanList: [],
             monthRecentList: [],
@@ -122,7 +114,7 @@ export default {
         }
     },
     created () {
-        this.init();
+        // this.init();
         http.get(URL_LIST_HEAD).then((res) => {
             this.departmentList = res.departmentList;
             this.salesmanList = res.salesmanList;
@@ -132,7 +124,32 @@ export default {
         });
     },
     computed: {
-
+        ...mapState({
+            filterActive: (state) => {
+                return state.customerFilter.filterActive;
+            },
+            filterDepartment: (state) => {
+                return state.customerFilter.filterDepartment;
+            },
+            filterDeptcode: (state) => {
+                return state.customerFilter.filterDeptcode;
+            },
+            filterUserIds: (state) => {
+                return state.customerFilter.filterUserIds;
+            },
+            filterUserName: (state) => {
+                return state.customerFilter.filterUserName;
+            },
+            filterMonthRecent: (state) => {
+                return state.customerFilter.filterMonthRecent;
+            },
+            filterRelation: (state) => {
+                return state.customerFilter.filterRelation;
+            },
+            filterStatus: (state) => {
+                return state.customerFilter.filterStatus;
+            }
+        })
     },
     watch: {
         isFilterShow (newVal) {
@@ -141,7 +158,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'getAchievementData',
+            'setFilter',
             'getFollowData'
         ]),
         init () {
@@ -177,7 +194,7 @@ export default {
             this.$emit('onHide');
         },
         chooseDepartment (code) {
-            this.filterDepartment = code;
+            // this.filterDepartment = code;
         }
     }
 }

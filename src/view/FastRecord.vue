@@ -168,8 +168,7 @@ export default {
                 body: `custFollowRecord.custids=${this.custIds}&custFollowRecord.contactsids=&custFollowRecord.followtype=98&` +
                 `custFollowRecord.content=${this.comment}${query}`
             }).then((res) => {
-                console.log(res);
-                this.$router.push({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
+                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
             })
             // http.post(URL_SAVE_CUST_RECORD, {
             //     // header: {

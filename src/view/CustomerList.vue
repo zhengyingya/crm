@@ -42,7 +42,7 @@
 <script>
 import Panel from '../components/Panel.vue';
 import RightFilter from '../components/RightFilter.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { Search, Spinner, Flexbox, FlexboxItem } from 'vux';
 import http from '../http/index.js';
 import { URL_CUSTOMER_LIST } from '../constant/url.js';
@@ -69,6 +69,34 @@ export default {
     created () {
         this.getCustomerList();
     },
+    computed: {
+        ...mapState({
+            filterActive: (state) => {
+                return state.customerFilter.filterActive;
+            },
+            filterDepartment: (state) => {
+                return state.customerFilter.filterDepartment;
+            },
+            filterDeptcode: (state) => {
+                return state.customerFilter.filterDeptcode;
+            },
+            filterUserIds: (state) => {
+                return state.customerFilter.filterUserIds;
+            },
+            filterUserName: (state) => {
+                return state.customerFilter.filterUserName;
+            },
+            filterMonthRecent: (state) => {
+                return state.customerFilter.filterMonthRecent;
+            },
+            filterRelation: (state) => {
+                return state.customerFilter.filterRelation;
+            },
+            filterStatus: (state) => {
+                return state.customerFilter.filterStatus;
+            }
+        })
+    },
     methods: {
         ...mapActions([
             'getAchievementData',
@@ -82,10 +110,11 @@ export default {
             const custStatusList = (param && param.custStatusCode) || '';
             const username = (param && param.username) || '';
             const deptcode = (param && param.deptcode) || '';
+            this.cusNameGrouplist = [];
             this.isCustomerDataGet = false;
             http.post(URL_CUSTOMER_LIST, {
-                body: `deptids=${departmentList}&userids=${salesmanList}&monthRecent=${monthRecentList}` +
-                `&custRelationCode=${custRelationList}&custStatusCode=${custStatusList}&username=${username}&deptcode=${deptcode}`
+                body: `deptids=${this.filterDepartment}&userids=${this.filterUserIds}&monthRecent=${this.filterMonthRecent}` +
+                `&custRelationCode=${this.filterRelation}&custStatusCode=${this.filterStatus}&username=${this.filterUserName}&deptcode=${this.filterDeptcode}`
             }).then((res) => {
                 this.isCustomerDataGet = true;
                 this.cusNameGrouplist = res.cusNameGrouplist;

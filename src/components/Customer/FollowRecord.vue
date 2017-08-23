@@ -73,7 +73,6 @@ export default {
     created () {
         // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
         if (getQueryString('reload')) {
-            console.log('===========')
             this.initFollowData();
             this.pageNumber = 0;
             this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})

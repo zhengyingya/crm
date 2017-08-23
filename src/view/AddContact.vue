@@ -112,7 +112,7 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
-                this.$router.push({path: `/customer/detail?custIds=${this.custIds}`});
+                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}`});
             })
         }
     }

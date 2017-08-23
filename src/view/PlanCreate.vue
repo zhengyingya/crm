@@ -240,7 +240,6 @@ export default {
                     weightunit: 'KG'
                 })
             })
-            console.log(']]]]]]', this.products)
         },
         chooseQuality () {
             this.products[this.currentKey][this.currentRow].gradecode = this.qualityValue.join('');
@@ -273,12 +272,12 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
+                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
             })
         },
         deleteHandler (key, index) {
-                this.products[key].splice(index, 1);
-                this.products = JSON.parse(JSON.stringify(this.products));
-                console.log(key, this.products[key])
+            this.products[key].splice(index, 1);
+            this.products = JSON.parse(JSON.stringify(this.products));
         }
     }
 }
