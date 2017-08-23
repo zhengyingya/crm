@@ -219,6 +219,8 @@ export default {
     .filterlay-right {
         flex: 3;
         padding: 0 pxToRem(10px);
+        height: 100%;
+        overflow: auto;
         .item {
             height: pxToRem(40px);
             line-height: pxToRem(40px);
