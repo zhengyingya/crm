@@ -9,7 +9,7 @@ const state = {
     filterDeptcode: 'ALL',
     filterUserIds: 'ALL',
     filterUserName: 'ALL',
-    filterMonthRecent: 'ALL',
+    filterMonthRecent: '3',
     filterRelation: 'ALL',
     filterStatus: 'ALL'
 }

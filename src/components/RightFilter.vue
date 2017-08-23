@@ -121,6 +121,10 @@ export default {
             this.monthRecentList = res.monthRecentList;
             this.custRelationList = res.custRelationList;
             this.custStatusList = res.custStatusList;
+            this.setFilter({
+                filterType: 'filterMonthRecent',
+                filterValue: res.monthRecentList[0].code
+            });
         });
     },
     computed: {
@@ -204,7 +208,7 @@ export default {
 <style scoped lang="scss">
 @import '../styles/common.scss';
 .right-filter {
-    height: 100%;
+    // height: 100%;
     .filterlay-left {
         flex: 2;
         border-right: 1px solid #E0E0E0;
