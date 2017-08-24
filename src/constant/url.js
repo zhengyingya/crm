@@ -14,9 +14,9 @@ export const URL_DING_JSAPI_AUTHOR = cxt + '/crm/index/hybrid/dingtalkJsapiAutho
 /**
  * 客户
  */
-export const URL_LIST_HEAD = cxt + '/crm/customer/hybrid/listHeaderApi';              // 筛选条件
-export const URL_CUSTOMER_LIST = cxt + '/crm/customer/hybrid/dataListApi';            // 客户列表
-export const URL_CUSTOMER_DETAIL_VIEW = cxt + '/crm/customer/hybrid/viewApi';         // 客户详情页
+export const URL_LIST_HEAD = cxt + '/crm/customer/hybrid/listHeaderApi';                // 筛选条件
+export const URL_CUSTOMER_LIST = cxt + '/crm/customer/hybrid/dataListApi';              // 客户列表
+export const URL_CUSTOMER_DETAIL_VIEW = cxt + '/crm/customer/hybrid/viewApi';           // 客户详情页
 export const URL_CUSTOMER_FOCUS = cxt + '/crm/customer/hybrid/focus';                   // 关注与取消
 export const URL_CUSTOMER_DELETE = cxt + '/crm/customer/hybrid/delete';                   // 删除客户
 
@@ -52,3 +52,10 @@ export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSe
 export const URL_ADD_CUST_PLAN = cxt + '/crm/plan/hybrid/addCustPlanApi';                // 添加计划基础数据获取
 export const URL_PRODUCT_LIST = cxt + '/crm/plan/hybrid/productListApi';
 export const URL_SAVE_CUST_PLAN = cxt + '/crm/plan/hybrid/saveCustPlan';                 // 保存计划
+export const URL_ADD_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/addCustReceiptPlanApi'; // 添加收款计划基础数据获取
+export const URL_CUST_RECEIPT_PLAN_SAVE = cxt + '/crm/custReceiptPlan/hybrid/save';      // 保存收款计划
+
+export const URL_DEPARTMENT_PLAN_SEARCH = '/crm/plan/hybrid/viewDepartmentPlanApi';      // 办事处发货计划查询
+export const URL_GET_PLAN_POWER = cxt + '/crm/plan/hybrid/indexApi';                     // 获取权限
+export const URL_PLAN_CUSTLIST = cxt + '/crm/plan/hybrid/custListApi';                   // 创建计划 客户列表
+export const URL_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/viewCustReceiptPlanApi';     // 客户计划查询

@@ -21,7 +21,7 @@
           </div>
       </mt-tab-item>
       <mt-tab-item id="/crm/plan/hybrid">
-          <div @click="onClick('/crm/plan/hybrid')">
+          <div @click="onClick('plan')">
             <div class="ico"><i class="iconfont icon-huodongqizi fs-24"/></div>
             <div style="font-size:11px;">计划</div>
           </div>
@@ -49,7 +49,7 @@ export default {
     },
     created () {
         const hash = document.location.hash.replace('#/', '');
-        if (['home', 'customer'].indexOf(hash) > -1 || hash === '') {
+        if (['home', 'customer', 'plan', 'chart'].indexOf(hash) > -1 || hash === '') {
             this.isTabShow = true;
         }
         else {
@@ -59,6 +59,12 @@ export default {
             if (hash.indexOf('customer') > -1) {
                 this.selected = 'customer';
             }
+            else if (hash.indexOf('plan') > -1) {
+                this.selected = 'plan';
+            }
+            else if (hash.indexOf('chart') > -1) {
+                this.selected = 'chart';
+            }
             else {
                 this.selected = hash;
             }
@@ -66,7 +72,7 @@ export default {
     },
     updated () {
         const hash = document.location.hash.replace('#/', '');
-        if (['home', 'customer'].indexOf(hash) > -1 || hash === '') {
+        if (['home', 'customer', 'plan', 'chart'].indexOf(hash) > -1 || hash === '') {
             this.isTabShow = true;
         }
         else {
@@ -86,7 +92,7 @@ export default {
             if (path === 'home') {
                 this.$router.push({path: '/'});
             }
-            else if (['customer'].indexOf(path) > -1) {
+            else if (['customer', 'plan'].indexOf(path) > -1) {
                 this.$router.push({path: '/' + path});
             }
             else {

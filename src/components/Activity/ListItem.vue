@@ -16,7 +16,7 @@
       <div class="txt-footer flex-row">
           <div style="flex: 1">
               {{dateFormat(new Date(transdate(itemData.addtime)), "MM-dd hh:mm")}}
-              <span @click="jump('/crm/customer/hybrid/view', `?custIds=${itemData.custids}`)" style="color:#26a2ff">{{itemData.custname}}</span>
+              <span @click="jumpLocal(`/customer/detail?custIds=${itemData.custids}`)/*jump('/crm/customer/hybrid/view', `?custIds=${itemData.custids}`)*/" style="color:#26a2ff">{{itemData.custname}}</span>
           </div>
           <div style="position:relative">
               <popover placement="left" :gutter="90">
@@ -146,6 +146,9 @@ export default {
         },
         jump (url, ids) {
             location.href = window.cxt + url + ids;
+        },
+        jumpLocal (path) {
+            this.$router.push({path: encodeURI(encodeURI(path))});
         }
     }
 }

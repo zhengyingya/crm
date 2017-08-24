@@ -31,53 +31,53 @@
 
         <div class="wrap plandata-wrap">
             <div v-for="(item, key) in products" style="margin-bottom:10px;">
-                    <div class="txt-key">{{key}}</div>
-                    <div v-for="(one, index) in item">
-                        <mt-cell-swipe
-                            :right="[
-                            {
-                              content: '删除',
-                              style: { width: '50px', background: 'red', color: '#fff',display:'flex',alignItems:'center',justifyContent:'center' },
-                              handler () {
-                                  deleteHandler(key, index)
-                              }
+                <div class="txt-key">{{key}}</div>
+                <div v-for="(one, index) in item">
+                    <mt-cell-swipe
+                        :right="[
+                        {
+                          content: '删除',
+                          style: { width: '50px', background: 'red', color: '#fff',display:'flex',alignItems:'center',justifyContent:'center' },
+                          handler () {
+                              deleteHandler(key, index)
                           }
-                          ]">
-                          <div class="flex-cloumn" style="width:100%;">
-                            <flexbox :gutter="0">
-                                <flexbox-item :span="2/3" class="btn-add">
-                                    <div class="row">
-                                        <span>规格：</span><span>{{one.specification}}</span>
-                                        <span>批号：</span><span>{{one.batchnumber}}</span>
+                      }
+                      ]">
+                      <div class="flex-cloumn" style="width:100%;">
+                        <flexbox :gutter="0">
+                            <flexbox-item :span="2/3" class="btn-add">
+                                <div class="row">
+                                    <span>规格：</span><span>{{one.specification}}</span>
+                                    <span>批号：</span><span>{{one.batchnumber}}</span>
+                                </div>
+                            </flexbox-item>
+                            <flexbox-item :span="1/3" class="btn-add">
+                                <div class="row" @click="isQualityShow=true;currentRow=index;currentKey=key;">
+                                    <div class="text-r" style="color:#26a2ff">
+                                        {{one.gradecode?gradeNameList[one.gradecode]:otherinfo.defaultgradename}} {{one.weightunit}}
+                                        <i class="iconfont icon-xiayiyeqianjinchakangengduo"/>
                                     </div>
-                                </flexbox-item>
-                                <flexbox-item :span="1/3" class="btn-add">
-                                    <div class="row" @click="isQualityShow=true;currentRow=index;currentKey=key;">
-                                        <div class="text-r" style="color:#26a2ff">
-                                            {{one.gradecode?gradeNameList[one.gradecode]:otherinfo.defaultgradename}} {{one.weightunit}}
-                                            <i class="iconfont icon-xiayiyeqianjinchakangengduo"/>
-                                        </div>
-                                    </div>
-                                </flexbox-item>
-                            </flexbox>
-                            <flexbox :gutter="0" class="row row1">
-                                <flexbox-item :span="1/4">
-                                    数量
-                                </flexbox-item>
-                                <flexbox-item :span="3/4">
-                                    <x-input placeholder="" v-model="one.amount"></x-input>
-                                </flexbox-item>
-                            </flexbox>
-                            <flexbox :gutter="0" class="row row1">
-                                <flexbox-item :span="1/4">
-                                    参考价
-                                </flexbox-item>
-                                <flexbox-item :span="3/4">
-                                    <x-input placeholder="" v-model="one.baseprice"></x-input>
-                                </flexbox-item>
-                            </flexbox>
-                          </div>
-                        </mt-cell-swipe>
+                                </div>
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="row row1">
+                            <flexbox-item :span="1/4">
+                                数量
+                            </flexbox-item>
+                            <flexbox-item :span="3/4">
+                                <x-input placeholder="" v-model="one.amount"></x-input>
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="row row1">
+                            <flexbox-item :span="1/4">
+                                参考价
+                            </flexbox-item>
+                            <flexbox-item :span="3/4">
+                                <x-input placeholder="" v-model="one.baseprice"></x-input>
+                            </flexbox-item>
+                        </flexbox>
+                      </div>
+                    </mt-cell-swipe>
                 </div>
             </div>
         </div>

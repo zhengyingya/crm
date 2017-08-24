@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 import Home from '../view/Home.vue'
 import customer from './customer.js';
 import plan from './plan.js';
+import chart from './chart.js';
 
 Vue.use(Router)
 
@@ -15,5 +15,5 @@ export default new Router({
             component: Home
         }
 
-    ].concat(customer, plan)
+    ].concat(customer, plan, chart)
 })

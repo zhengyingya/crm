@@ -75,7 +75,7 @@ export default {
         if (getQueryString('reload')) {
             this.initFollowData();
             this.pageNumber = 0;
-            this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+            // this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
         }
         this.getDingJsapiAuthor();
     },
@@ -136,7 +136,6 @@ export default {
             })
         },
         loadMore () {
-            // alert(']]]]]]]]]]]')
             this.loading = true;
             if (this.totalPage === 0) {
                 this.isNodata = true;
