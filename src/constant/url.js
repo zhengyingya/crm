@@ -49,13 +49,21 @@ export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSe
 /**
  * 计划
  */
-export const URL_ADD_CUST_PLAN = cxt + '/crm/plan/hybrid/addCustPlanApi';                // 添加计划基础数据获取
+export const URL_ADD_CUST_PLAN = cxt + '/crm/plan/hybrid/addCustPlanApi';                   // 添加计划基础数据获取
 export const URL_PRODUCT_LIST = cxt + '/crm/plan/hybrid/productListApi';
-export const URL_SAVE_CUST_PLAN = cxt + '/crm/plan/hybrid/saveCustPlan';                 // 保存计划
-export const URL_ADD_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/addCustReceiptPlanApi'; // 添加收款计划基础数据获取
-export const URL_CUST_RECEIPT_PLAN_SAVE = cxt + '/crm/custReceiptPlan/hybrid/save';      // 保存收款计划
+export const URL_SAVE_CUST_PLAN = cxt + '/crm/plan/hybrid/saveCustPlan';                    // 保存计划
+export const URL_ADD_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/addCustReceiptPlanApi';    // 添加收款计划基础数据获取
+export const URL_CUST_RECEIPT_PLAN_SAVE = cxt + '/crm/custReceiptPlan/hybrid/save';         // 保存收款计划
+export const URL_CUST_RECEIPT_PLAN_DELETE = cxt + '/crm/custReceiptPlan/hybrid/delete';     // 删除收款计划
 
-export const URL_DEPARTMENT_PLAN_SEARCH = '/crm/plan/hybrid/viewDepartmentPlanApi';      // 办事处发货计划查询
+export const URL_DEPARTMENT_PLAN_SEARCH = cxt + '/crm/plan/hybrid/viewDepartmentPlanApi';      // 办事处发货计划查询
+export const URL_SALESMAN_PLAN_SEARCH = cxt + '/crm/plan/hybrid/viewSalesmanPlanApi';          // 业务员发货计划查询
+export const URL_CUST_PLAN_SEARCH = cxt + '/crm/plan/hybrid/viewCustPlanApi';              // 客户发货计划查询
+
+export const URL_DEPARTMENT_RECEIPT_SEARCH = cxt + '/crm/plan/hybrid/viewDepartmentReceiptPlanApi'; // 办事处收款计划查询
+export const URL_SALESMAN_RECEIPT_SEARCH = cxt + '/crm/plan/hybrid/viewSalesmanReceiptPlanApi';     // 业务员收款计划查询
+export const URL_CUST_RECEIPT_SEARCH = cxt + '/crm/plan/hybrid/viewCustReceiptPlanApi';             // 客户收款计划查询
+
 export const URL_GET_PLAN_POWER = cxt + '/crm/plan/hybrid/indexApi';                     // 获取权限
 export const URL_PLAN_CUSTLIST = cxt + '/crm/plan/hybrid/custListApi';                   // 创建计划 客户列表
 export const URL_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/viewCustReceiptPlanApi';     // 客户计划查询

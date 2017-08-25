@@ -57,7 +57,8 @@ export default {
     },
     props: [
         'otherinfo',
-        'changePlantDate'
+        'changePlantDate',
+        'type'
     ],
     data () {
         return {

@@ -272,7 +272,8 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
-                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
+                this.$router.back();
+                // this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
             })
         },
         deleteHandler (key, index) {

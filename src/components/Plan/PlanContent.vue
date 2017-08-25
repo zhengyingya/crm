@@ -7,31 +7,61 @@
         <swiper v-model="tabSelect" :show-dots="false">
             <swiper-item :key="0">
                 <div class="plan-wrap">
-                    <div v-for="item in departmentList" class="plan-item">
-                    <flexbox :gutter="0">
-                        {{item.deptname}}
-                    </flexbox>
-                    <flexbox :gutter="0">
-                        <flexbox-item :span="2/5">
-                            前三个月月均销量
-                        </flexbox-item>
-                        <flexbox-item :span="3/5">
-                            {{item.averageamount}}KG
-                        </flexbox-item>
-                    </flexbox>
-                    <flexbox :gutter="0">
-                        <flexbox-item :span="2/5">
-                            前三个月月均销量
-                        </flexbox-item>
-                        <flexbox-item :span="3/5">
-                            {{item.custplanamount}}KG
-                        </flexbox-item>
-                    </flexbox>
-                </div>
+                    <div v-for="item in salesmanList" class="plan-item" @click="jump(`/plan/custdeliver?userids=${item.userids}`)">
+                        <flexbox :gutter="0">
+                            {{item.names}}
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                前三个月月均销量
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.averageamount}}KG
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                前三个月月均销量
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.custplanamount}}KG
+                            </flexbox-item>
+                        </flexbox>
+                    </div>
                 </div>
             </swiper-item>
             <swiper-item :key="1">
-                <div>2 Container</div>
+                <div class="plan-wrap">
+                    <div v-for="item in productPlanList" class="plan-item">
+                        <flexbox :gutter="0">
+                            {{item.specification}};{{item.batchnumber}}
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                产地：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.originname}}
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                等级：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{gradeNameList[item.grade]}}
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                发货数量：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.amount}}KG
+                            </flexbox-item>
+                        </flexbox>
+                    </div>
+                </div>
             </swiper-item>
         </swiper>
     </div>
@@ -56,8 +86,11 @@ export default {
         SwiperItem
     },
     props: [
-        'departmentList',
-        'productPlanList'
+        'salesmanList',
+        'productPlanList',
+        'gradeNameList',
+        'type',
+        'custids'
     ],
     data () {
         return {
@@ -73,8 +106,8 @@ export default {
     computed: {
     },
     methods: {
-        makeColor (color) {
-            return `rgba(${color})`
+        jump (path) {
+            this.$router.push({path: path});
         }
     }
 }
@@ -89,6 +122,13 @@ export default {
     .vux-tab-ink-bar {
         background-color: $hd-blue;
     }
+    .vux-slider {
+        height: 100%;
+        > .vux-swiper {
+            height: 100%!important;
+            overflow: auto;
+        }
+    }
 }
 </style>
 <style scoped lang="scss">
@@ -96,11 +136,18 @@ export default {
 .plan-content {
     // padding: pxToRem(10px) pxToRem(20px);
     // color: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     .plan-wrap {
         padding: 0 pxToRem(20px);
         .plan-item {
             padding: pxToRem(10px) 0;
             border-bottom: 1px solid #E0E0E0;
+            font-size: 12px;
+            .text {
+                color:#9D9D9D
+            }
         }
     }
 }

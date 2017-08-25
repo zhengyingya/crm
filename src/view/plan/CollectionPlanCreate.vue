@@ -5,7 +5,7 @@
             <flexbox :gutter="0">
                 <flexbox-item :span="4/5">
                     <div @click="openPicker">
-                        收款计划月份：{{plantime}}
+                        收款计划月份：{{otherinfo.plantimecn}}
                         <i class="iconfont icon-xiangxiazhankai fs-16"/>
                     </div>
                 </flexbox-item>
@@ -34,7 +34,7 @@
         </div>
         <flexbox :gutter="0" class="footer">
             <flexbox-item :span="1/2" class="btn-clear">
-                <div>删除</div>
+                <div @click="onDelete">删除</div>
             </flexbox-item>
             <flexbox-item :span="1/2" class="btn-save">
                 <div @click="save">保存</div>
@@ -49,8 +49,8 @@ import { mapActions } from 'vuex';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
 import { Spinner, Flexbox, FlexboxItem, XInput } from 'vux';
-import { URL_ADD_CUST_RECEIPT_PLAN, URL_CUST_RECEIPT_PLAN_SAVE } from '../../constant/url.js';
-import { Toast } from 'mint-ui';
+import { URL_ADD_CUST_RECEIPT_PLAN, URL_CUST_RECEIPT_PLAN_SAVE, URL_CUST_RECEIPT_PLAN_DELETE } from '../../constant/url.js';
+import { Toast, MessageBox } from 'mint-ui';
 
 export default {
     name: 'plan',
@@ -93,7 +93,6 @@ export default {
         // 打开时间选择器
         openPicker () {
             const me = this;
-            console.log(me.plantime)
             this.$vux.datetime.show({
                 cancelText: '取消',
                 confirmText: '确定',
@@ -122,7 +121,26 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
+                this.$router.back();
             })
+        },
+        onDelete () {
+            if (this.custReceiptPlanIds) {
+                MessageBox.confirm('确定要删除?')
+                .then(action => {
+                    http.post(URL_CUST_RECEIPT_PLAN_DELETE, {
+                        body: `ids=${this.custReceiptPlanIds}`
+                    })
+                    .then((res) => {
+                        Toast({
+                            message: res.message,
+                            position: 'bottom',
+                            duration: 1000
+                        });
+                        this.$router.back();
+                    })
+                });
+            }
         }
     }
 }

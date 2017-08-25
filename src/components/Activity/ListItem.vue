@@ -133,15 +133,18 @@ export default {
         ** 删除评论
         **/
         deleteDiscuss (ids) {
-            http.post(URL_DELETE_FOLLOW, {
-                body: `discussIds=${ids}`
-            }).then((res) => {
-                Toast({
-                  message: res.message,
-                  position: 'bottom',
-                  duration: 1000
-                });
-                this.$emit('reloadFollowData');
+            MessageBox.confirm('确定要删除?')
+            .then((action) => {
+                http.post(URL_DELETE_FOLLOW, {
+                    body: `discussIds=${ids}`
+                }).then((res) => {
+                    Toast({
+                      message: res.message,
+                      position: 'bottom',
+                      duration: 1000
+                    });
+                    this.$emit('reloadFollowData');
+                })
             })
         },
         jump (url, ids) {

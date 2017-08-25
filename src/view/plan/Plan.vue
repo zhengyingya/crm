@@ -3,14 +3,14 @@
         <Panel>
             <flexbox>
                 <flexbox-item>
-                    <div @click="jump('/plan/customer?type=1')">
+                    <div @click="jump('/plan/customer?type=' + deliverType)">
                         <div class="icon"><i class="iconfont icon-btn-add fs-48" style="color: #2ec7c9"/></div>
                         <div class="tip">发货计划创建</div>
                     </div>
                 </flexbox-item>
                 <div class="divider"/>
                 <flexbox-item>
-                    <div @click="jump('/plan/deliver?type=1')">
+                    <div @click="jump(deliverType==='1'?'/plan/deptdeliver': deliverType==='2'?'/plan/deliver':'/plan/custdeliver')">
                         <div class="icon"><i class="iconfont icon-yifahuo fs-54" style="color: #b6a2de"/></div>
                         <div class="tip">发货计划查询</div>
                     </div>
@@ -28,7 +28,7 @@
                 </flexbox-item>
                 <div class="divider"/>
                 <flexbox-item>
-                    <div @click="jump('/customer/pool')">
+                    <div @click="jump(receiptType==='1'?'/plan/deptcollection': receiptType==='2'?'/plan/deliver':'/plan/custdeliver')">
                         <div class="icon"><i class="iconfont icon-shoukuanma fs-50" style="color: #ffb980"/></div>
                         <div class="tip">收款计划查询</div>
                     </div>
@@ -39,14 +39,14 @@
         <Panel v-if="tabMenu.length>0">
             <flexbox>
                 <flexbox-item>
-                    <div v-if="tabMenu[0]" @click="jump('/customer/list')">
+                    <div v-if="tabMenu[0]" @click="jump(tabMenu[0].path)">
                         <div class="icon"><i class="iconfont fs-50" :class="tabMenu[0].icon" style="color: #d87a80"/></div>
                         <div class="tip">{{tabMenu[0].text}}</div>
                     </div>
                 </flexbox-item>
                 <div class="divider"/>
                 <flexbox-item>
-                    <div v-if="tabMenu[1]" @click="jump('/customer/pool')">
+                    <div v-if="tabMenu[1]" @click="jump(tabMenu[1].path)">
                         <div class="icon"><i class="iconfont fs-50" :class="tabMenu[1].icon" style="color: #8d98b3"/></div>
                         <div class="tip">{{tabMenu[1].text}}</div>
                     </div>
@@ -74,7 +74,9 @@ export default {
     data () {
         return {
             selected: '1',
-            tabMenu: []
+            tabMenu: [],
+            deliverType: '1',
+            receiptType: '1'
         }
     },
     created () {
@@ -91,15 +93,28 @@ export default {
                     this.tabMenu.push({
                         text: '业务员发货计划查询',
                         icon: 'icon-kehu',
-                        path: ''
+                        path: '/plan/deliver'
                     });
                 }
                 if (this.isViewSalesmanPlan) {
                     this.tabMenu.push({
                         text: '客户发货计划查询',
                         icon: 'icon-kehuguanli1',
-                        path: ''
+                        path: '/plan/custdeliver'
                     });
+                }
+
+                if (this.isViewDepartmentPlan) {
+                    this.deliverType = '1';
+                    this.receiptType = '1';
+                }
+                else if (this.isViewSalesmanPlan) {
+                    this.deliverType = '2';
+                    this.receiptType = '2';
+                }
+                else {
+                    this.deliverType = '3';
+                    this.receiptType = '3';
                 }
             })
         },
