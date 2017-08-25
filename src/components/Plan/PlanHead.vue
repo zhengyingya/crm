@@ -57,7 +57,6 @@ export default {
     },
     props: [
         'otherinfo',
-        'changePlantDate',
         'type'
     ],
     data () {
@@ -83,6 +82,7 @@ export default {
                 format: 'YYYY-MM',                  // 供选择的时间格式
                 value: me.otherinfo.plantimecn.replace('年', '-').replace('月', ''),       // 初始时间
                 onConfirm (val) {
+                    console.log('-------', val)
                     me.$emit('changePlantDate', val.replace('-', ''));
                 },
                 onShow () {

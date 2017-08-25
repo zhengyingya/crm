@@ -1,6 +1,6 @@
 <template>
     <div class="view-collection flex-cloumn">
-        <flexbox :gutter="0" v-if="isDataGet">
+        <flexbox :gutter="0">
             <flexbox-item :span="2/5">
                 计划月份：
             </flexbox-item>

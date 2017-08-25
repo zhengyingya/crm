@@ -1,6 +1,6 @@
 <template>
     <div class="view-deliverplan flex-cloumn">
-        <PlanHead v-if="isDataGet" :otherinfo="otherinfo" @changePlantDate="changePlantDate" :type="type"/>
+        <PlanHead :otherinfo="otherinfo" @changePlantDate="changePlantDate" :type="type"/>
         <PlanContent v-if="isDataGet"
                      :salesmanList="salesmanList"
                      :productPlanList="productPlanList"
@@ -71,7 +71,8 @@ export default {
             this.$router.push({path: path});
         },
         changePlantDate (val) {
-
+            this.plantime = val;
+            this.getPlanData();
         }
     }
 }
