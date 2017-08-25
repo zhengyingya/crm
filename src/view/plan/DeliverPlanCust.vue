@@ -17,7 +17,7 @@
                                     </flexbox>
                                     <flexbox :gutter="0" class="text">
                                         <flexbox-item :span="2/5">
-                                            前三个月月均销量
+                                            前三个月月均销量：
                                         </flexbox-item>
                                         <flexbox-item :span="3/5">
                                             {{item.averageamount}}KG
@@ -25,7 +25,7 @@
                                     </flexbox>
                                     <flexbox :gutter="0" class="text">
                                         <flexbox-item :span="2/5">
-                                            前三个月月均销量
+                                            本月计划发货：
                                         </flexbox-item>
                                         <flexbox-item :span="3/5">
                                             {{item.custplanamount}}KG
