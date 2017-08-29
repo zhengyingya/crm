@@ -46,6 +46,11 @@ export const URL_SALES_TRENDS_API = cxt + '/crm/customer/hybrid/salesTrendsApi';
 export const URL_CUSTPOOL_LIST = cxt + '/crm/custpool/hybrid/dataListApi';               // 公海池客户
 export const URL_CUSTPOLL_DETAIL_VIEW = cxt + '/crm/custpool/hybrid/viewApi';            // 公海池客户详情页
 export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSelf';
+
+/**
+ * 通讯录
+ */
+export const URL_ORGUSER_LIST = cxt + '/crm/salesman/hybrid/orguserListApi';             // 通讯录列表
 /**
  * 计划
  */
