@@ -72,7 +72,6 @@ export default {
     },
     created () {
         http.get(`${URL_CUST_CREDIT}?custIds=${this.custIds}`/*&monthTime=201707*/).then((res) => {
-            console.log(res)
             // this.contactsNameGroupList = res.contactsNameGroupList;
             this.custCredit = res.custCredit || {};
             this.custcreditnoList = res.custcreditnoList;

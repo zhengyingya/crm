@@ -1,5 +1,5 @@
 <template>
-    <div class="view-collection flex-cloumn">
+    <div class="view-collection-cust flex-cloumn">
         <flexbox :gutter="0" class="plan-head">
             <flexbox-item :span="2/5">
                 计划月份：
@@ -13,18 +13,18 @@
         </flexbox>
         <div v-if="isDataGet" class="plan-content">
             <div class="plan-wrap">
-                <div v-for="item in salesmanReceiptList" class="plan-item"  @click="jump(`/plan/custcollection?userids=${item.userids}&plantime=${plantime}`)">
+                <div v-for="(item, index) in custReceiptList" class="plan-item" @click="checkedRow=index;">
                     <flexbox :gutter="0">
                         <flexbox-item :span="9/10">
                             <flexbox :gutter="0">
-                                {{item.names}}
+                                {{item.custname}}
                             </flexbox>
                             <flexbox :gutter="0" class="text">
                                 <flexbox-item :span="2/5">
                                     计划收款金额
                                 </flexbox-item>
                                 <flexbox-item :span="3/5">
-                                    {{item.plansalesmanreceiptamount}}元
+                                    {{item.planreceiptamount}}元
                                 </flexbox-item>
                             </flexbox>
                             <flexbox :gutter="0" class="text">
@@ -32,18 +32,26 @@
                                     实际收款金额
                                 </flexbox-item>
                                 <flexbox-item :span="3/5">
-                                    {{item.fundsalesmanreceiptamount}}元
+                                    {{item.fundreceiptamount}}元
                                 </flexbox-item>
                             </flexbox>
                         </flexbox-item>
                         <flexbox-item :span="1/10">
-                            <i class="iconfont icon-xiayiyeqianjinchakangengduo"/>
+                            <i v-if="otherinfo.isCustPlanCanEdit && checkedRow===index" class="iconfont icon-zhengquewancheng fs-26" style="color:#26a2ff"/>
                         </flexbox-item>
                     </flexbox>
                 </div>
+                <flexbox v-if="otherinfo.isCustPlanCanEdit" :gutter="0" class="footer">
+                    <flexbox-item :span="1/2" class="btn-static">
+                        <div @click="deletePlan" style="background:#d87a80;color:#fff;">删除计划</div>
+                    </flexbox-item>
+                    <flexbox-item :span="1/2" class="btn-fast">
+                        <div @click="editPlan">修改计划</div>
+                    </flexbox-item>
+                </flexbox>
             </div>
         </div>
-        <div v-if="isDataGet && salesmanReceiptList.length===0" style="position:absolute;margin-top:150px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
+        <div v-if="isDataGet && custReceiptList.length===0" style="position:absolute;margin-top:150px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
             <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
             <div class="fs-22">暂无数据</div>
         </div>
@@ -57,12 +65,13 @@ import PlanHead from '../../components/Plan/PlanHead.vue';
 import PlanContent from '../../components/Plan/PlanContent.vue';
 import { getQueryString } from '../../utils/commonMethod.js';
 import { mapActions } from 'vuex';
-import { URL_SALESMAN_RECEIPT_SEARCH } from '../../constant/url.js';
+import { URL_CUST_RECEIPT_SEARCH } from '../../constant/url.js';
 import http from '../../http/index.js';
 import { Spinner, Flexbox, FlexboxItem } from 'vux';
+import { Toast, MessageBox } from 'mint-ui';
 
 export default {
-    name: 'plan',
+    name: 'collectionCust',
     components: {
         Panel,
         PlanHead,
@@ -74,13 +83,14 @@ export default {
     data () {
         return {
             type: getQueryString('type'),
-            deptcode: getQueryString('deptcode'),
+            userids: getQueryString('userids'),
             plantime: getQueryString('plantime') || '',
             isDataGet: false,
             otherinfo: {},
-            salesmanReceiptList: [],
+            custReceiptList: [],
             productPlanList: [],
-            gradeNameList: {}
+            gradeNameList: {},
+            checkedRow: -1
         }
     },
     created () {
@@ -91,12 +101,12 @@ export default {
         ]),
         getPlanData () {
             this.isDataGet = false;
-            http.get(`${URL_SALESMAN_RECEIPT_SEARCH}?plantime=${this.plantime}&deptcode=${this.deptcode||''}`)
+            http.get(`${URL_CUST_RECEIPT_SEARCH}?plantime=${this.plantime}&userids=${this.userids||''}`)
             .then((res) => {
                 console.log(res);
                 this.isDataGet = true;
                 this.otherinfo = res.otherinfo;
-                this.salesmanReceiptList = res.salesmanReceiptList;
+                this.custReceiptList = res.custReceiptList;
             })
         },
         // 打开时间选择器
@@ -127,6 +137,27 @@ export default {
         },
         changePlantDate (val) {
 
+        },
+        deletePlan () {
+            MessageBox.confirm('确定要删除?')
+            .then(action => {
+                http.post(URL_CUST_RECEIPT_PLAN_DELETE, {
+                    body: `ids=${this.custReceiptList[this.checkedRow].ids}`
+                })
+                .then((res) => {
+                    Toast({
+                        message: res.message,
+                        position: 'bottom',
+                        duration: 1000
+                    });
+                    this.$router.back();
+                })
+            });
+        },
+        editPlan () {
+            if (this.checkedRow >= 0) {
+                this.$router.push({path: encodeURI(encodeURI(`/plan/collectioncreate?custIds=${this.custReceiptList[this.checkedRow].custids}&custname=${this.custReceiptList[this.checkedRow].custname}`))})
+            }
         }
     }
 }
@@ -135,7 +166,7 @@ export default {
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';
-.view-collection {
+.view-collection-cust {
     height: 100%;
     overflow: auto;
     // padding-top: pxToRem(20px);
@@ -163,6 +194,23 @@ export default {
                     color:#9D9D9D
                 }
             }
+        }
+    }
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        height: pxToRem(45px);
+        line-height: pxToRem(45px);
+        border-top: 1px solid #BEBEBE;
+        text-align: center;
+        .btn-static {
+            background: #fff;
+        }
+        .btn-fast {
+            height: 100%;
+            background: $blue;
+            color: #fff;
         }
     }
 }

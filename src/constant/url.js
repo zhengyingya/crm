@@ -52,6 +52,7 @@ export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSe
 export const URL_ADD_CUST_PLAN = cxt + '/crm/plan/hybrid/addCustPlanApi';                   // 添加计划基础数据获取
 export const URL_PRODUCT_LIST = cxt + '/crm/plan/hybrid/productListApi';
 export const URL_SAVE_CUST_PLAN = cxt + '/crm/plan/hybrid/saveCustPlan';                    // 保存计划
+export const URL_DELETE_CUST_PLAN = cxt + '/crm/plan/hybrid/deleteCustPlanApi';             // 删除客户计划
 export const URL_ADD_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/addCustReceiptPlanApi';    // 添加收款计划基础数据获取
 export const URL_CUST_RECEIPT_PLAN_SAVE = cxt + '/crm/custReceiptPlan/hybrid/save';         // 保存收款计划
 export const URL_CUST_RECEIPT_PLAN_DELETE = cxt + '/crm/custReceiptPlan/hybrid/delete';     // 删除收款计划

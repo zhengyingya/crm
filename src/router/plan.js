@@ -5,7 +5,9 @@ import DeliverPlan from '../view/plan/DeliverPlan.vue';
 import DeliverPlanCust from '../view/plan/DeliverPlanCust.vue';
 import CollectionPlanCreate from '../view/plan/CollectionPlanCreate.vue';
 import DeliverPlanDeptment from '../view/plan/DeliverPlanDeptment.vue';
+import Collection from '../view/plan/Collection.vue';
 import CollectionDeptment from '../view/plan/CollectionDeptment.vue';
+import CollectionCust from '../view/plan/CollectionCust.vue';
 
 export default [
     {
@@ -45,13 +47,13 @@ export default [
     },
     {
         path: '/plan/collection',
-        name: 'CollectionPlanCreate',
-        component: CollectionPlanCreate
+        name: 'Collection',
+        component: Collection
     },
     {
         path: '/plan/custcollection',
-        name: 'CollectionPlanCreate',
-        component: CollectionPlanCreate
+        name: 'CollectionCust',
+        component: CollectionCust
     },
     {
         path: '/plan/deptcollection',

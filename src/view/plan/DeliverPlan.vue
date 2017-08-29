@@ -5,6 +5,7 @@
                      :salesmanList="salesmanList"
                      :productPlanList="productPlanList"
                      :gradeNameList="gradeNameList"
+                     :plantime="plantime"
                      :type="type"/>
         <div v-if="!isDataGet" style="margin-top:280px;left:50%;margin-left:-20px;position:absolute"><spinner slot="value" type="lines" size="40px"/></div>
     </div>
@@ -33,8 +34,9 @@ export default {
     data () {
         return {
             type: getQueryString('type'),
+            deptcode: getQueryString('deptcode'),
+            plantime: getQueryString('plantime') || '',
             isDataGet: false,
-            plantime: '',
             otherinfo: {},
             salesmanList: [],
             productPlanList: [],
@@ -49,11 +51,7 @@ export default {
         ]),
         getPlanData () {
             this.isDataGet = false;
-            const url = this.type === '1' ? URL_DEPARTMENT_PLAN_SEARCH
-                        : this.type === '2' ? URL_SALESMAN_PLAN_SEARCH
-                        : URL_CUST_PLAN_SEARCH;
-
-            http.get(`${URL_SALESMAN_PLAN_SEARCH}?plantime=${this.plantime}`)
+            http.get(`${URL_SALESMAN_PLAN_SEARCH}?plantime=${this.plantime}&deptcode=${this.deptcode||''}`)
             .then((res) => {
                 console.log(res);
                 this.isDataGet = true;
@@ -78,6 +76,11 @@ export default {
 }
 </script>
 <style lang="scss">
+.view-deliverplan {
+    .mint-tab-item {
+        border-bottom: 1px solid #d0d0d0;
+    }
+}
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';

@@ -1,6 +1,6 @@
 <template>
     <div class="plan-content">
-        <tab v-model="tabSelect">
+        <!-- <tab v-model="tabSelect">
             <tab-item :key="0">业务员计划</tab-item>
             <tab-item :key="1">产品计划</tab-item>
         </tab>
@@ -63,7 +63,81 @@
                     </div>
                 </div>
             </swiper-item>
-        </swiper>
+        </swiper> -->
+
+        <mt-navbar v-model="tabSelect">
+            <mt-tab-item id="1">业务员计划</mt-tab-item>
+            <mt-tab-item id="2">产品计划</mt-tab-item>
+        </mt-navbar>
+        <!-- tab 部门计划 -->
+        <mt-tab-container v-model="tabSelect" :swipeable="false">
+            <mt-tab-container-item id="1" class="plan-wrap">
+                <div v-for="item in salesmanList" class="plan-item" @click="jump(`/plan/custdeliver?userids=${item.userids}&plantime=${plantime}`)">
+                    <flexbox :gutter="0">
+                        <flexbox-item :span="9/10">
+                            <flexbox :gutter="0">
+                                {{item.names}}
+                            </flexbox>
+                            <flexbox :gutter="0" class="text">
+                                <flexbox-item :span="2/5">
+                                    前三个月月均销量
+                                </flexbox-item>
+                                <flexbox-item :span="3/5">
+                                    {{item.averageamount}}KG
+                                </flexbox-item>
+                            </flexbox>
+                            <flexbox :gutter="0" class="text">
+                                <flexbox-item :span="2/5">
+                                    本月计划发货
+                                </flexbox-item>
+                                <flexbox-item :span="3/5">
+                                    {{item.custplanamount}}KG
+                                </flexbox-item>
+                            </flexbox>
+                        </flexbox-item>
+                        <flexbox-item :span="1/10">
+                            <i class="iconfont icon-xiayiyeqianjinchakangengduo"/>
+                        </flexbox-item>
+                    </flexbox>
+                </div>
+            </mt-tab-container-item>
+            <!-- 产品计划-->
+          <mt-tab-container-item id="2" class="plan-wrap">
+              <div v-for="item in productPlanList" class="plan-item">
+                  <flexbox :gutter="0">
+                      {{item.specification}};{{item.batchnumber}}
+                  </flexbox>
+                  <flexbox :gutter="0" class="text">
+                      <flexbox-item :span="2/5">
+                          产地：
+                      </flexbox-item>
+                      <flexbox-item :span="3/5">
+                          {{item.originname}}
+                      </flexbox-item>
+                  </flexbox>
+                  <flexbox :gutter="0" class="text">
+                      <flexbox-item :span="2/5">
+                          等级：
+                      </flexbox-item>
+                      <flexbox-item :span="3/5">
+                          {{gradeNameList[item.grade]}}
+                      </flexbox-item>
+                  </flexbox>
+                  <flexbox :gutter="0" class="text">
+                      <flexbox-item :span="2/5">
+                          发货数量：
+                      </flexbox-item>
+                      <flexbox-item :span="3/5">
+                          {{item.amount}}KG
+                      </flexbox-item>
+                  </flexbox>
+              </div>
+              <div v-if="productPlanList.length===0" style="position:absolute;margin-top:60px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
+                  <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+                  <div class="fs-22">暂无数据</div>
+              </div>
+          </mt-tab-container-item>
+        </mt-tab-container>
     </div>
 </template>
 
@@ -90,13 +164,14 @@ export default {
         'productPlanList',
         'gradeNameList',
         'type',
-        'custids'
+        'custids',
+        'plantime'
     ],
     data () {
         return {
             custIds: getQueryString('custIds'),
             custPoolIds: getQueryString('custPoolIds'),
-            tabSelect: 0
+            tabSelect: '1'
         }
     },
     created () {
@@ -129,6 +204,16 @@ export default {
             overflow: auto;
         }
     }
+    .mint-tab-container {
+        flex: 1;
+        overflow: auto;
+        width: 100%;
+        padding-top: pxToRem(4px);
+        // padding-bottom: pxToRem(60px);
+        .mint-tab-container-wrap, .mint-tab-container-item {
+            height: 100%;
+        }
+    }
 }
 </style>
 <style scoped lang="scss">
@@ -141,6 +226,7 @@ export default {
     flex-direction: column;
     .plan-wrap {
         padding: 0 pxToRem(20px);
+        box-sizing: border-box;
         .plan-item {
             padding: pxToRem(10px) 0;
             border-bottom: 1px solid #E0E0E0;

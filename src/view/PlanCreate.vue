@@ -6,7 +6,7 @@
                     客户：
                 </FlexboxItem>
                 <FlexboxItem :span="3/4">
-                    {{custName}}
+                    {{customer.custname}}
                 </FlexboxItem>
             </Flexbox>
             <Flexbox :gutter="0" class="head-line">
@@ -14,7 +14,7 @@
                     计划月份：
                 </FlexboxItem>
                 <FlexboxItem :span="3/4">
-                    <div @click="openPicker">{{plantime}}
+                    <div @click="openPicker">{{otherinfo.plantimecn}}
                         <i class="iconfont icon-xiangxiazhankai fs-16" style="font-weight:bolder"/>
                     </div>
                 </FlexboxItem>
@@ -24,7 +24,7 @@
                     提示：
                 </FlexboxItem>
                 <FlexboxItem :span="3/4">
-                    来自{{otherinfo.plantime}}计划数据
+                    {{otherinfo.info}}
                 </FlexboxItem>
             </Flexbox>
         </div>
@@ -135,8 +135,9 @@ export default {
     data () {
         return {
             custIds: getQueryString('custIds'),
-            custName: decodeURI(decodeURI(getQueryString('custName'))),
-            plantime: '',
+            plantime: getQueryString('plantime'),
+            // custName: decodeURI(decodeURI(getQueryString('custName'))),
+            customer: {},
             otherinfo: {},
             isPopupShow: false,
             isQualityShow: false,
@@ -163,11 +164,12 @@ export default {
             'getAchievementData',
             'getFollowData'
         ]),
-        getPlanData (plantime) {
-            http.get(`${URL_ADD_CUST_PLAN}?custIds=${this.custIds}&plantime=${plantime||''}`).then((res) => {
+        getPlanData () {
+            http.get(`${URL_ADD_CUST_PLAN}?custIds=${this.custIds}&plantime=${this.plantime||''}`).then((res) => {
                 console.log(res)
                 this.otherinfo = res.otherinfo;
-                this.plantime = res.otherinfo.plantimecn;
+                this.customer = res.customer;
+                this.plantime = res.otherinfo.plantime;
                 this.products = {};
                 let _gradeNameList = {};
                 res.gradeNameList.map((item) => {
@@ -208,10 +210,10 @@ export default {
                 format: 'YYYY-MM',                  // 供选择的时间格式
                 yearRow: '{value}年',
                 monthRow: '{value}月',
-                value: this.otherinfo.plantime,       // 初始时间
+                value: me.otherinfo.plantimecn.replace('年', '-').replace('月', ''),       // 初始时间
                 onConfirm (val) {
-                    me.plantime = val.replace('-', '年') + '月';
-                    me.getPlanData(val.replace('-', ''));
+                    me.plantime = val.replace('-', '');
+                    me.getPlanData();
                 },
                 onShow () {
                   console.log('plugin show')

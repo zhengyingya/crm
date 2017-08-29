@@ -23,9 +23,6 @@
 
               <mt-index-list>
                   <mt-index-section v-for="(item, index) in productGrouplist1" :index="item.group" :key="index">
-                      <!-- <div v-for="child in item.groupChild" :key="child.custids" @click="itemClick(child.custids)">
-
-                      </div> -->
                       <mt-checklist
                         title=""
                         v-model="checkListValue[index]"

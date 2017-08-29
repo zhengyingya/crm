@@ -110,6 +110,7 @@ export default {
                 }
             })
         },
+        // 保存计划
         save () {
             http.post(URL_CUST_RECEIPT_PLAN_SAVE, {
                 body: `custReceiptPlan.planmonth=${this.plantime}&custReceiptPlan.custids=${this.custIds}&` +
@@ -124,6 +125,7 @@ export default {
                 this.$router.back();
             })
         },
+        // 删除计划
         onDelete () {
             if (this.custReceiptPlanIds) {
                 MessageBox.confirm('确定要删除?')

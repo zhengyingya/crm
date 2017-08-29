@@ -2,74 +2,141 @@
     <div class="view-deliverplan-dept flex-cloumn">
         <PlanHead :otherinfo="otherinfo" @changePlantDate="changePlantDate" :type="type"/>
         <div v-if="isDataGet" class="plan-content">
-            <tab v-model="tabSelect">
+            <!-- <tab v-model="tabSelect" >
                 <tab-item :key="0">部门计划</tab-item>
                 <tab-item :key="1">产品计划</tab-item>
-            </tab>
-            <swiper v-model="tabSelect" :show-dots="false">
-                <swiper-item :key="0">
-                    <div class="plan-wrap">
-                        <div v-for="item in departmentList" class="plan-item">
-                            <flexbox :gutter="0">
-                                {{item.deptname}}
-                            </flexbox>
-                            <flexbox :gutter="0" class="text">
-                                <flexbox-item :span="2/5">
-                                    前三个月月均销量：
-                                </flexbox-item>
-                                <flexbox-item :span="3/5">
-                                    {{item.averageamount}}KG
-                                </flexbox-item>
-                            </flexbox>
-                            <flexbox :gutter="0" class="text">
-                                <flexbox-item :span="2/5">
-                                    本月计划发货：
-                                </flexbox-item>
-                                <flexbox-item :span="3/5">
-                                    {{item.custplanamount}}KG
-                                </flexbox-item>
-                            </flexbox>
-                        </div>
+            </tab> -->
+            <mt-navbar v-model="tabSelect">
+                <mt-tab-item id="1">部门计划</mt-tab-item>
+                <mt-tab-item id="2">产品计划</mt-tab-item>
+            </mt-navbar>
+            <!-- tab 部门计划 -->
+            <mt-tab-container v-model="tabSelect" :swipeable="false">
+                <mt-tab-container-item id="1" class="plan-wrap">
+                    <div v-for="item in departmentList" class="plan-item" @click="jump(`/plan/deliver?deptcode=${item.deptcode}&plantime=${plantime}`)">
+                        <flexbox :gutter="0">
+                            <flexbox-item :span="9/10">
+                                <flexbox :gutter="0">
+                                    {{item.deptname}}
+                                </flexbox>
+                                <flexbox :gutter="0" class="text">
+                                    <flexbox-item :span="2/5">
+                                        前三个月月均销量：
+                                    </flexbox-item>
+                                    <flexbox-item :span="3/5">
+                                        {{item.averageamount}}KG
+                                    </flexbox-item>
+                                </flexbox>
+                                <flexbox :gutter="0" class="text">
+                                    <flexbox-item :span="2/5">
+                                        本月计划发货：
+                                    </flexbox-item>
+                                    <flexbox-item :span="3/5">
+                                        {{item.custplanamount}}KG
+                                    </flexbox-item>
+                                </flexbox>
+                            </flexbox-item>
+                            <flexbox-item :span="1/10">
+                                <i class="iconfont icon-xiayiyeqianjinchakangengduo"/>
+                            </flexbox-item>
+                        </flexbox>
                     </div>
-                </swiper-item>
-                <swiper-item :key="1">
-                    <div class="plan-wrap">
-                        <div v-for="item in productPlanList" class="plan-item">
-                            <flexbox :gutter="0">
-                                {{item.specification}};{{item.batchnumber}}
-                            </flexbox>
-                            <flexbox :gutter="0" class="text">
-                                <flexbox-item :span="2/5">
-                                    产地：
-                                </flexbox-item>
-                                <flexbox-item :span="3/5">
-                                    {{item.originname}}
-                                </flexbox-item>
-                            </flexbox>
-                            <flexbox :gutter="0" class="text">
-                                <flexbox-item :span="2/5">
-                                    等级：
-                                </flexbox-item>
-                                <flexbox-item :span="3/5">
-                                    {{gradeNameList[item.grade]}}
-                                </flexbox-item>
-                            </flexbox>
-                            <flexbox :gutter="0" class="text">
-                                <flexbox-item :span="2/5">
-                                    发货数量：
-                                </flexbox-item>
-                                <flexbox-item :span="3/5">
-                                    {{item.amount}}KG
-                                </flexbox-item>
-                            </flexbox>
-                        </div>
-                        <div v-if="productPlanList.length===0" style="position:absolute;margin-top:60px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
-                            <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
-                            <div class="fs-22">暂无数据</div>
-                        </div>
+                </mt-tab-container-item>
+                <!-- 产品计划-->
+                <mt-tab-container-item id="2" class="plan-wrap">
+                    <div v-for="item in productPlanList" class="plan-item">
+                      <flexbox :gutter="0">
+                          {{item.specification}};{{item.batchnumber}}
+                      </flexbox>
+                      <flexbox :gutter="0" class="text">
+                          <flexbox-item :span="2/5">
+                              产地：
+                          </flexbox-item>
+                          <flexbox-item :span="3/5">
+                              {{item.originname}}
+                          </flexbox-item>
+                      </flexbox>
+                      <flexbox :gutter="0" class="text">
+                          <flexbox-item :span="2/5">
+                              等级：
+                          </flexbox-item>
+                          <flexbox-item :span="3/5">
+                              {{gradeNameList[item.grade]}}
+                          </flexbox-item>
+                      </flexbox>
+                      <flexbox :gutter="0" class="text">
+                          <flexbox-item :span="2/5">
+                              发货数量：
+                          </flexbox-item>
+                          <flexbox-item :span="3/5">
+                              {{item.amount}}KG
+                          </flexbox-item>
+                      </flexbox>
                     </div>
-                </swiper-item>
-            </swiper>
+                    <div v-if="productPlanList.length===0" style="position:absolute;margin-top:60px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
+                      <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+                      <div class="fs-22">暂无数据</div>
+                    </div>
+                </mt-tab-container-item>
+            </mt-tab-container>
+            <!-- <div class="plan-wrap" v-if="tabSelect===0">
+                    <div v-for="item in departmentList" class="plan-item" @click="jump(`/plan/custdeliver?userids=${item.userids}`)">
+                        <flexbox :gutter="0">
+                            {{item.deptname}}
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                前三个月月均销量：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.averageamount}}KG
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                本月计划发货：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.custplanamount}}KG
+                            </flexbox-item>
+                        </flexbox>
+                    </div>
+                </div>
+            <div class="plan-wrap" v-if="tabSelect===1">
+                    <div v-for="item in productPlanList" class="plan-item">
+                        <flexbox :gutter="0">
+                            {{item.specification}};{{item.batchnumber}}
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                产地：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.originname}}
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                等级：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{gradeNameList[item.grade]}}
+                            </flexbox-item>
+                        </flexbox>
+                        <flexbox :gutter="0" class="text">
+                            <flexbox-item :span="2/5">
+                                发货数量：
+                            </flexbox-item>
+                            <flexbox-item :span="3/5">
+                                {{item.amount}}KG
+                            </flexbox-item>
+                        </flexbox>
+                    </div>
+                    <div v-if="productPlanList.length===0" style="position:absolute;margin-top:60px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
+                        <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+                        <div class="fs-22">暂无数据</div>
+                    </div>
+                </div> -->
         </div>
         <div v-if="!isDataGet" style="margin-top:280px;left:50%;margin-left:-20px;position:absolute"><spinner slot="value" type="lines" size="40px"/></div>
     </div>
@@ -103,7 +170,7 @@ export default {
         return {
             type: getQueryString('type'),
             isDataGet: false,
-            tabSelect: 0,
+            tabSelect: '1',
             plantime: '',
             otherinfo: {},
             departmentList: [],
@@ -150,6 +217,12 @@ export default {
         color: $hd-blue;
         border-bottom: 3px solid $hd-blue;
     }
+    .vux-tab {
+        // display: inline-block;
+    }
+    .vux-tab-item {
+        height: 44px;
+    }
     .vux-tab-ink-bar {
         background-color: $hd-blue;
     }
@@ -159,6 +232,19 @@ export default {
             height: 100%!important;
             overflow: auto;
         }
+    }
+    .mint-tab-container {
+        flex: 1;
+        overflow: auto;
+        width: 100%;
+        padding-top: pxToRem(4px);
+        // padding-bottom: pxToRem(60px);
+        .mint-tab-container-wrap, .mint-tab-container-item {
+            height: 100%;
+        }
+    }
+    .mint-tab-item {
+        border-bottom: 1px solid #d0d0d0;
     }
 }
 </style>
@@ -175,8 +261,12 @@ export default {
         flex: 1;
         display: flex;
         flex-direction: column;
+        height: 100%;
         .plan-wrap {
             padding: 0 pxToRem(20px);
+            box-sizing: border-box;
+            height: 100%;
+            overflow: auto;
             .plan-item {
                 padding: pxToRem(10px) 0;
                 border-bottom: 1px solid #E0E0E0;

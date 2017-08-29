@@ -6,7 +6,7 @@
           </flexbox-item>
           <flexbox-item :span="3/5">
               <div @click="openPicker">
-                  {{otherinfo.plantime}}
+                  {{otherinfo.plantimecn}}
                   <i class="iconfont icon-xiangxiazhankai fs-16"/>
               </div>
           </flexbox-item>
