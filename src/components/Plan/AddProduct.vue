@@ -1,26 +1,25 @@
 <template>
   <popup v-model="isShow" position="bottom" @on-hide="hide" height="100%">
       <div class="flex-cloumn add-product">
+          <div class="filter flex-row">
+            <flexbox :gutter="0">
+                <flexbox-item :span="1/4">
+                    <div class="btn-filter" @click="isSpecificationsShow=true;"><i class="iconfont icon-shaixuanguolv fs-24"/></div>
+                </flexbox-item>
+                <flexbox-item :span="3/4">
+                    <div class="btn-search">
+                        <search
+                          v-model="searchValue"
+                          auto-scroll-to-top
+                          @on-submit="search"
+                          @on-cancel="onCancel"
+                          ref="search">
+                        </search>
+                    </div>
+                </flexbox-item>
+            </flexbox>
+          </div>
           <div class="wrap">
-              <div class="filter flex-row">
-                <flexbox :gutter="0">
-                    <flexbox-item :span="1/4">
-                        <div class="btn-filter" @click="isSpecificationsShow=true;"><i class="iconfont icon-shaixuanguolv fs-24"/></div>
-                    </flexbox-item>
-                    <flexbox-item :span="3/4">
-                        <div class="btn-search">
-                            <search
-                              v-model="searchValue"
-                              auto-scroll-to-top
-                              @on-submit="search"
-                              @on-cancel="onCancel"
-                              ref="search">
-                            </search>
-                        </div>
-                    </flexbox-item>
-                </flexbox>
-              </div>
-
               <mt-index-list>
                   <mt-index-section v-for="(item, index) in productGrouplist1" :index="item.group" :key="index">
                       <mt-checklist
@@ -31,15 +30,6 @@
                       </mt-checklist>
                   </mt-index-section>
               </mt-index-list>
-
-              <flexbox :gutter="0" class="footer">
-                  <flexbox-item :span="1/2" class="btn-add">
-                      <div @click="hide">取消</div>
-                  </flexbox-item>
-                  <flexbox-item :span="1/2" class="btn-save">
-                      <div @click="save">确认</div>
-                  </flexbox-item>
-              </flexbox>
 
               <!-- 规格选择弹框 -->
               <popup v-model="isSpecificationsShow">
@@ -52,6 +42,15 @@
                   </div>
               </popup>
           </div>
+
+          <flexbox :gutter="0" class="footer">
+              <flexbox-item :span="1/2" class="btn-add">
+                  <div @click="hide">取消</div>
+              </flexbox-item>
+              <flexbox-item :span="1/2" class="btn-save">
+                  <div @click="save">确认</div>
+              </flexbox-item>
+          </flexbox>
       </div>
   </popup>
 </template>
@@ -208,37 +207,38 @@ export default {
     padding-bottom: pxToRem(50px);
     box-sizing: border-box;
     overflow: hidden;
+    .filter {
+        position: absolute;
+        width: 100%;
+        z-index: 1002;
+        // margin-top: pxToRem(-44px);
+        top: pxToRem(0px);
+        .btn-filter {
+            height: pxToRem(44px);
+            line-height: pxToRem(44px);
+            text-align: center;
+            color: #fff;
+            background: $blue;
+        }
+    }
     .wrap {
         height: 100%;
         overflow: auto;
-        .filter {
-            position: fixed;
-            width: 100%;
-            z-index: 100;
-            margin-top: pxToRem(-44px);
-            .btn-filter {
-                height: pxToRem(44px);
-                line-height: pxToRem(44px);
-                text-align: center;
-                color: #fff;
-                background: $blue;
-            }
+    }
+    .footer {
+        position: fixed;
+        bottom: 0;
+        height: pxToRem(45px);
+        line-height: pxToRem(45px);
+        border-top: 1px solid #BEBEBE;
+        text-align: center;
+        .btn-add {
+            background: #fff;
         }
-        .footer {
-            position: fixed;
-            bottom: 0;
-            height: pxToRem(45px);
-            line-height: pxToRem(45px);
-            border-top: 1px solid #BEBEBE;
-            text-align: center;
-            .btn-add {
-                background: #fff;
-            }
-            .btn-save {
-                height: 100%;
-                background: $blue;
-                color: #fff;
-            }
+        .btn-save {
+            height: 100%;
+            background: $blue;
+            color: #fff;
         }
     }
     .mint-indexlist {

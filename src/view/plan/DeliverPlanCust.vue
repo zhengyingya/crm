@@ -90,46 +90,48 @@
                 <mt-tab-item id="2">产品计划</mt-tab-item>
             </mt-navbar>
             <mt-tab-container v-model="tabSelect" :swipeable="false">
-                <mt-tab-container-item id="1" class="plan-wrap">
-                    <div v-for="(item, index) in custList" class="plan-item" @click="checkedRow=index;">
-                        <flexbox :gutter="0">
-                            <flexbox-item :span="9/10">
-                                <flexbox :gutter="0">
-                                    {{item.custname}}
-                                </flexbox>
-                                <flexbox :gutter="0" class="text">
-                                    <flexbox-item :span="2/5">
-                                        前三个月月均销量：
-                                    </flexbox-item>
-                                    <flexbox-item :span="3/5">
-                                        {{item.averageamount}}KG
-                                    </flexbox-item>
-                                </flexbox>
-                                <flexbox :gutter="0" class="text">
-                                    <flexbox-item :span="2/5">
-                                        本月计划发货：
-                                    </flexbox-item>
-                                    <flexbox-item :span="3/5">
-                                        {{item.custplanamount}}KG
-                                    </flexbox-item>
-                                </flexbox>
+                <mt-tab-container-item id="1">
+                    <div class="plan-wrap">
+                        <div v-for="(item, index) in custList" class="plan-item" @click="checkedRow=index;">
+                            <flexbox :gutter="0">
+                                <flexbox-item :span="9/10">
+                                    <flexbox :gutter="0">
+                                        {{item.custname}}
+                                    </flexbox>
+                                    <flexbox :gutter="0" class="text">
+                                        <flexbox-item :span="2/5">
+                                            前三个月月均销量：
+                                        </flexbox-item>
+                                        <flexbox-item :span="3/5">
+                                            {{item.averageamount}}KG
+                                        </flexbox-item>
+                                    </flexbox>
+                                    <flexbox :gutter="0" class="text">
+                                        <flexbox-item :span="2/5">
+                                            本月计划发货：
+                                        </flexbox-item>
+                                        <flexbox-item :span="3/5">
+                                            {{item.custplanamount}}KG
+                                        </flexbox-item>
+                                    </flexbox>
+                                </flexbox-item>
+                                <flexbox-item :span="1/10">
+                                    <i v-if="otherinfo.isCustPlanCanEdit && checkedRow===index" class="iconfont icon-zhengquewancheng fs-26" style="color:#26a2ff"/>
+                                </flexbox-item>
+                            </flexbox>
+                        </div>
+                        <flexbox v-if="otherinfo.isCustPlanCanEdit" :gutter="0" class="footer">
+                            <flexbox-item :span="1/2" class="btn-static">
+                                <div @click="deletePlan" style="background:#d87a80;color:#fff;">删除计划</div>
                             </flexbox-item>
-                            <flexbox-item :span="1/10">
-                                <i v-if="otherinfo.isCustPlanCanEdit && checkedRow===index" class="iconfont icon-zhengquewancheng fs-26" style="color:#26a2ff"/>
+                            <flexbox-item :span="1/2" class="btn-fast">
+                                <div @click="editPlan">修改计划</div>
                             </flexbox-item>
                         </flexbox>
-                    </div>
-                    <flexbox v-if="otherinfo.isCustPlanCanEdit" :gutter="0" class="footer">
-                        <flexbox-item :span="1/2" class="btn-static">
-                            <div @click="deletePlan" style="background:#d87a80;color:#fff;">删除计划</div>
-                        </flexbox-item>
-                        <flexbox-item :span="1/2" class="btn-fast">
-                            <div @click="editPlan">修改计划</div>
-                        </flexbox-item>
-                    </flexbox>
-                    <div v-if="custList.length===0" style="position:absolute;margin-top:60px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
+                        <div v-if="custList.length===0" style="position:absolute;margin-top:60px;left:50%;margin-left:-60px;color:#BEBEBE;text-align:center">
                         <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
                         <div class="fs-22">暂无数据</div>
+                    </div>
                     </div>
                 </mt-tab-container-item>
                 <!-- 产品计划-->
@@ -289,10 +291,14 @@ export default {
         flex: 1;
         overflow: auto;
         width: 100%;
+        height: 100%;
         padding-top: pxToRem(4px);
-        // padding-bottom: pxToRem(60px);
+        box-sizing: border-box;
         .mint-tab-container-wrap, .mint-tab-container-item {
             height: 100%;
+        }
+        .mint-tab-container-wrap {
+            // overflow: auto;
         }
     }
     .mint-tab-item {
@@ -316,6 +322,7 @@ export default {
         height: 100%;
         .plan-wrap {
             padding: 0 pxToRem(20px);
+            padding-bottom: pxToRem(50px);
             box-sizing: border-box;
             .plan-item {
                 padding: pxToRem(10px) 0;
