@@ -1,7 +1,10 @@
 <template>
     <div class="view-group">
         <PathTab :deptpathList="deptpathList"/>
-        <div class="title-bar text-l">部门／公司</div>
+        <div v-if="deptList.length>0" class="title-bar text-l">
+            <i class="iconfont icon-caidan"/>
+            <span>部门／公司</span>
+        </div>
         <div class="list-wrap">
             <flexbox :gutter="0" v-for="item in deptList" class="item">
                 <flexbox-item :span="1/6">
@@ -19,7 +22,10 @@
                 </flexbox-item>
             </flexbox>
         </div>
-        <div class="title-bar text-l">联系人</div>
+        <div class="title-bar text-l">
+            <i class="iconfont icon-caidan"/>
+            <span>联系人</span>
+        </div>
         <div class="list-wrap">
             <flexbox :gutter="0" v-for="item in userList" class="item">
                 <flexbox-item :span="1/6">
@@ -27,13 +33,16 @@
                         {{item.shortname}}
                     </div>
                 </flexbox-item>
-                <flexbox-item :span="3/6" class="btn-fast">
+                <flexbox-item :span="4/6" class="btn-fast">
                     <flexbox :gutter="0" style="margin-bottom:5px;">
                         {{item.names}}
                     </flexbox>
-                      <flexbox :gutter="0" style="color:#26a2ff">
-                          {{item.mobile}}
-                      </flexbox>
+                  <flexbox :gutter="0" style="color:#26a2ff">
+                      {{item.mobile}}
+                  </flexbox>
+                </flexbox-item>
+                <flexbox-item :span="1/6" class="btn-fast text-r">
+                    <i class="iconfont icon-xiayiyeqianjinchakangengduo"/>
                 </flexbox-item>
             </flexbox>
         </div>
@@ -71,7 +80,7 @@ export default {
         ...mapActions([
         ]),
         getGroupData () {
-            http.get(URL_ORGUSER_LIST)
+            http.get(`${URL_ORGUSER_LIST}?departmentid=C101`)
             .then((res) => {
                 console.log(res)
                 this.deptpathList = res.deptpathList;
@@ -96,15 +105,15 @@ export default {
     height: 100%;
     overflow: auto;
     background-color: #ECF5FF;
-    padding-top: pxToRem(20px);
+    // padding-top: pxToRem(20px);
     box-sizing: border-box;
     .title-bar {
         height: pxToRem(30px);
         line-height: pxToRem(30px);
-        background: #E0E0E0;
+        background: #F0F0F0;
         color: #6C6C6C;
         padding: 0 pxToRem(20px);
-        margin-top: pxToRem(20px);
+        margin-top: pxToRem(10px);
     }
     .list-wrap {
         .item {
