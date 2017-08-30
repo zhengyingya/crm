@@ -15,7 +15,7 @@
           </div>
       </mt-tab-item>
       <mt-tab-item id="mail">
-          <div @click="onClick('mail')">
+          <div @click="onClick('/crm/salesman/hybrid')">
             <div class="ico"><i class="iconfont icon-yonghuziliao-xianxing fs-24"/></div>
             <div style="font-size:11px;">通讯录</div>
           </div>

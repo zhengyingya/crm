@@ -50,7 +50,9 @@ export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSe
 /**
  * 通讯录
  */
-export const URL_ORGUSER_LIST = cxt + '/crm/salesman/hybrid/orguserListApi';             // 通讯录列表
+export const URL_ORGUSER_LIST = cxt + '/crm/salesman/hybrid/orguserListApi';                // 通讯录列表
+export const URL_SALESMAN_HEAD = cxt + '/crm/salesman/hybrid/viewApi';                      // 销售人员主页头部数据
+export const URL_SALESMAN_FOLLOW_RECORD = cxt + '/crm/salesman/hybrid/followRecordApi';     // 工作圈记录跟进
 /**
  * 计划
  */

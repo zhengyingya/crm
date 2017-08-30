@@ -3,7 +3,7 @@
         <Panel>
             <flexbox>
                 <flexbox-item>
-                    <div @click="jump('/plan/customer?type=' + deliverType)">
+                    <div @click="jump('/plan/customer?type=1')">
                         <div class="icon"><i class="iconfont icon-btn-add fs-48" style="color: #2ec7c9"/></div>
                         <div class="tip">发货计划创建</div>
                     </div>

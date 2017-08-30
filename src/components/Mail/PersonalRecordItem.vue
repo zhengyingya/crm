@@ -1,5 +1,5 @@
 <template>
-  <div class="follow-recorditem">
+  <div class="personal-recorditem">
    <flexbox :gutter="0" class="head">
        <flexbox-item :span="1/6" style="color:#26a2ff;">
            <div @click="openLink(`/crm/salesman/hybrid/view?salesManIds=${item.userids}`)">{{ item.names }}</div>
@@ -26,9 +26,10 @@
    </div>
 
    <flexbox :gutter="0">
-       <flexbox-item :span="3/4">
+       <flexbox-item :span="3/4" class="fs-12">
            <span style="color:#ADADAD;">{{ item.addtime }}</span>
-           <span style="color:#26a2ff;margin-left:10px;" @click="deleteRecord(item.ids)">删除</span>
+           <span style="color:#26a2ff;">{{ item.custname}}</span>
+           <!-- <span style="color:#26a2ff;margin-left:10px;" @click="deleteRecord(item.ids)">删除</span> -->
        </flexbox-item>
        <flexbox-item :span="1/4">
            <div style="position:relative;text-align:right;">
@@ -119,13 +120,13 @@ export default {
     computed: {
         ...mapState({
             recordList: (state) => {
-                return state.customer.recordList;
+                return state.mail.recordList;
             },
             totalPage: (state) => {
-                return state.customer.totalPage;
+                return state.mail.totalPage;
             },
             cUserIds: (state) => {
-                return state.customer.cUserIds;
+                return state.mail.cUserIds;
             }
         }),
         imagesList () {
@@ -141,9 +142,9 @@ export default {
     methods: {
         ...mapActions([
             'getCustomerFollowData',
-            'deleteOneRecord',
-            'addOneDiscuss',
-            'deleteOneDiscuss'
+            'deleteOneSalesmanDiscuss',
+            'addOneSalesmanDiscuss',
+            'deleteOneSalesmanRecord'
         ]),
         jump (path) {
             this.$router.push({path: encodeURI(encodeURI(path))});
@@ -160,7 +161,7 @@ export default {
                       position: 'bottom',
                       duration: 1000
                     });
-                    this.deleteOneRecord({ids});
+                    this.deleteOneSalesmanRecord({ids});
                 })
             })
         },
@@ -168,7 +169,7 @@ export default {
             this.$refs['previewer'].show(index)
         },
         openComment () {
-            this.$emit('openComment', this.item.ids);           // 通知父组件打开评论弹框，并传custid过去
+            this.$emit('openComment', this.item.ids);               // 通知父组件打开评论弹框，并传custid过去
         },
         // 图片预览关闭
         preViewerClose () {
@@ -184,7 +185,7 @@ export default {
                 //   position: 'bottom',
                 //   duration: 1000
                 // });
-                this.addOneDiscuss({
+                this.addOneSalesmanDiscuss({
                     ids: this.custfrids,
                     content: this.comment,
                     discussIds: res.discussIds,
@@ -203,7 +204,7 @@ export default {
                     //   position: 'bottom',
                     //   duration: 1000
                     // });
-                    this.deleteOneDiscuss({
+                    this.deleteOneSalesmanDiscuss({
                         ids: custfrids,
                         discussIds: ids
                     })
@@ -242,7 +243,7 @@ export default {
 </script>
 <style lang="scss">
 @import '../../styles/common.scss';
-.follow-recorditem {
+.personal-recorditem {
     .mint-cell-title {
         text-align: left;
         color: #7B7B7B
@@ -302,7 +303,7 @@ export default {
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';
-.follow-recorditem {
+.personal-recorditem {
     height: 100%;
     box-sizing: border-box;
     .wrap {

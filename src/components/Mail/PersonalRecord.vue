@@ -1,14 +1,14 @@
 <template>
-  <div class="follow-record">
+  <div class="personal-record">
       <mt-loadmore :top-method="loadTop" ref="loadmore">
           <div
-            v-infinite-scroll="loadMore"
+          v-infinite-scroll="loadMore"
           :infinite-scroll-disabled="loading"
           infinite-scroll-distance="30"
           class="wrap"
           @scroll="onScroll">
           <div v-for="item in recordList" class="item">
-               <FollowRecordItem :item="item" @openComment="openComment"/>
+               <PersonalRecordItem :item="item" @openComment="openComment"/>
           </div>
           <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
           <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
@@ -18,14 +18,6 @@
           </div>
       </div>
       </mt-loadmore>
-      <flexbox :gutter="0" class="footer">
-          <flexbox-item :span="1/2" class="btn-static">
-              <div @click="jump(`/customer/formatrecord?custIds=${custIds}&custName=${custName}`)">格式化记录</div>
-          </flexbox-item>
-          <flexbox-item :span="1/2" class="btn-fast">
-              <div @click="jump(`/customer/fastrecord?custIds=${custIds}`)">快速记录</div>
-          </flexbox-item>
-      </flexbox>
 
       <div class="pop-comment" >
           <popup v-model="isCommentShow" height="80%">
@@ -46,12 +38,12 @@ import { Spinner, Flexbox, FlexboxItem, Popover, Popup, TransferDom } from 'vux'
 import { mapState, mapActions } from 'vuex';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
-import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS, URL_DING_JSAPI_AUTHOR } from '../../constant/url.js';
+import { URL_SALESMAN_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS, URL_DING_JSAPI_AUTHOR } from '../../constant/url.js';
 import { Toast } from 'mint-ui';
-import FollowRecordItem from './FollowRecordItem.vue';
+import PersonalRecordItem from './PersonalRecordItem.vue';
 
 export default {
-    name: 'followRecord',
+    name: 'personalRecord',
     directives: {
         TransferDom
     },
@@ -61,10 +53,10 @@ export default {
         Panel,
         Popover,
         Popup,
-        FollowRecordItem
+        PersonalRecordItem
     },
     props: [
-        'custIds',
+        'userIds',
         'custName'
     ],
     created () {
@@ -79,7 +71,6 @@ export default {
     data () {
         return {
             window,
-            names: ['客户名称', '客户状态', '所在地区', '详细地址', '电话', '传真', '邮箱', '邮编'],
             loading: false,
             isEnd: false,
             isNodata: false,
@@ -92,22 +83,22 @@ export default {
     computed: {
         ...mapState({
             recordList: (state) => {
-                return state.customer.recordList;
+                return state.mail.recordList;
             },
             totalPage: (state) => {
-                return state.customer.totalPage;
+                return state.mail.totalPage;
             },
             cUserIds: (state) => {
-                return state.customer.cUserIds;
+                return state.mail.cUserIds;
             }
         })
     },
     methods: {
         ...mapActions([
-            'initFollowData',
-            'getCustomerFollowData',
+            'initSalesmanFollowData',
+            'getSalesmanFollowData',
             'deleteOneRecord',
-            'addOneDiscuss',
+            'addOneSalesmanDiscuss',
             'deleteOneDiscuss'
         ]),
         getDingJsapiAuthor () {
@@ -143,7 +134,7 @@ export default {
                 this.loading = false;
             }
             else {
-                this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+                this.getSalesmanFollowData({userIds: this.userIds, pageNumber: ++this.pageNumber})
                 .then((res) => {
                     this.loading = false;
                     if (res.splitPage && res.splitPage.totalPage === 0) {
@@ -153,9 +144,9 @@ export default {
             }
         },
         loadTop () {
-            this.initFollowData();
+            this.initSalesmanFollowData();
             this.pageNumber = 0;
-            this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+            this.getSalesmanFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
             .then((res) => {
                 setTimeout(()=>{
                     this.$refs.loadmore.onTopLoaded();
@@ -179,7 +170,7 @@ export default {
                 //   position: 'bottom',
                 //   duration: 1000
                 // });
-                this.addOneDiscuss({
+                this.addOneSalesmanDiscuss({
                     ids: this.custfrids,
                     content: this.comment,
                     discussIds: res.discussIds,
@@ -189,7 +180,6 @@ export default {
             })
         },
         onScroll (e) {
-            console.log('00000000000000000', e.target.scrollTop, e.target.offsetHeight, e.target.scrollHeight)
             if (e.target.scrollTop > 500) {
                 alert(e.target.scrollTop + ' ' +  e.target.offsetHeight + ' ' + e.target.scrollHeight)
             }
@@ -202,7 +192,7 @@ export default {
 </script>
 <style lang="scss">
 @import '../../styles/common.scss';
-.follow-record {
+.personal-record {
     .mint-cell-title {
         text-align: left;
         color: #7B7B7B
@@ -262,7 +252,7 @@ export default {
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';
-.follow-record {
+.personal-record {
     height: 100%;
     padding-bottom: pxToRem(50px);
     box-sizing: border-box;
@@ -308,22 +298,6 @@ export default {
         background: #F0F0F0;
         border-radius: pxToRem(5px);
         padding: pxToRem(5px) pxToRem(10px);
-    }
-    .footer {
-        position: fixed;
-        bottom: 0;
-        height: pxToRem(45px);
-        line-height: pxToRem(45px);
-        border-top: 1px solid #BEBEBE;
-        text-align: center;
-        .btn-static {
-            background: #fff;
-        }
-        .btn-fast {
-            height: 100%;
-            background: $blue;
-            color: #fff;
-        }
     }
 }
 </style>
