@@ -61,7 +61,7 @@
 
             <Panel>
                 <div v-for="(item, index) in infoFollowRecordList.followRecordList">
-                    <ListItem :itemData="item" @openComment="openComment" @reloadFollowData="reloadFollowData"/>
+                    <ListItem :itemData="item" @openComment="openComment" @reloadFollowData="reloadFollowData" :imageIndex="index"/>
                     <div v-if="index < infoFollowRecordList.followRecordList.length-1" class="divider"/>
                 </div>
             </Panel>

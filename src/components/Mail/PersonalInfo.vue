@@ -2,23 +2,23 @@
   <div class="personal-info">
       <div class="line">
           <div class="text-1">邮箱</div>
-          <div class="text-1">{{personalData.email}}</div>
+          <div class="text-2">{{personalInfo.user.email}}</div>
       </div>
       <div class="line">
           <div class="text-1">电话</div>
-          <div></div>
+          <div class="text-2">{{personalInfo.userInfo.telephone}}</div>
       </div>
       <div class="line">
           <div class="text-1">手机</div>
-          <div>{{personalData.mobile}}</div>
+          <div class="text-2">{{personalInfo.user.mobile}}</div>
       </div>
       <div class="line">
           <div class="text-1">自我介绍</div>
-          <div></div>
+          <div class="text-2">{{personalInfo.user.description}}</div>
       </div>
       <div class="line">
           <div class="text-1">业务专长</div>
-          <div></div>
+          <div class="text-2">{{personalInfo.user.speciality}}</div>
       </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
         PersonalRecordItem
     },
     props: [
-        'personalData'
+        'personalInfo'
     ],
     created () {
         // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
@@ -89,6 +89,13 @@ export default {
     .line {
         height: pxToRem(60px);
         border-bottom: 1px solid #E0E0E0;
+        .text-1 {
+            line-height: pxToRem(30px);
+        }
+        .text-2 {
+            line-height: pxToRem(30px);
+            color: #8E8E8E;
+        }
     }
 }
 </style>

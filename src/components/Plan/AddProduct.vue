@@ -196,6 +196,9 @@ export default {
     .weui-search-bar__label {
         line-height: 26px;
     }
+    .mint-indexlist-content {
+        height: 100%!important;
+    }
 }
 </style>
 <style scoped lang="scss">

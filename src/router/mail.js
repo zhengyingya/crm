@@ -1,6 +1,7 @@
 import Mail from '../view/mail/Mail.vue';
 import Group from '../view/mail/Group.vue';
 import Personal from '../view/mail/Personal.vue';
+import Contact from '../view/mail/Contact.vue';
 
 export default [
     {
@@ -17,5 +18,10 @@ export default [
         path: '/mail/personal',
         name: 'Personal',
         component: Personal
+    },
+    {
+        path: '/mail/contact',
+        name: 'Contact',
+        component: Contact
     }
 ]

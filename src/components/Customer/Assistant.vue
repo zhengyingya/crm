@@ -21,6 +21,10 @@
               </div>
               <div class="divider" v-if="index !== assistantList.length - 1"/>
           </div>
+          <div v-if="assistantList.length===0" style="justify-content:center;margin-top:50px;margin-bottom:5px;color:#BEBEBE;text-align:center">
+              <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+              <div class="fs-22">暂无数据</div>
+          </div>
       </div>
       <div v-if="!custPoolIds && isUserResponsibleOrAssistanceToCustomer >= 1" class="btn-add" @click="add">添加协助人</div>
   </div>

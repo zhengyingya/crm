@@ -52,7 +52,11 @@ export const URL_CUSTPOLL_ASSIGNTOSELFT = cxt + '/crm/custpool/hybrid/assignToSe
  */
 export const URL_ORGUSER_LIST = cxt + '/crm/salesman/hybrid/orguserListApi';                // 通讯录列表
 export const URL_SALESMAN_HEAD = cxt + '/crm/salesman/hybrid/viewApi';                      // 销售人员主页头部数据
+export const URL_SALESMAN_DETAILS = cxt + '/crm/salesman/hybrid/detailsApi';                // 销售人员信息详情
 export const URL_SALESMAN_FOLLOW_RECORD = cxt + '/crm/salesman/hybrid/followRecordApi';     // 工作圈记录跟进
+export const URL_BUSINESS_DETAIL = cxt + '/crm/salesman/hybrid/businessDetails';            // 业绩
+
+export const URL_CONTACT_LIST = cxt + '/crm/salesman/hybrid/customerListApi';               // 联系人列表
 /**
  * 计划
  */

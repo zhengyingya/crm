@@ -15,7 +15,7 @@
       <div class="left">
           <div class="it1 fs-14">{{text}}</div>
           <div class="flex-cloumn right">
-              <echart :options="option"></echart>
+              <echart :options="option" ref="map" auto-resize></echart>
           </div>
       </div>
   </div>
@@ -30,25 +30,30 @@ export default {
     },
     props: [
         'text',
-        'percent'
+        'percent',
+        'selected'
     ],
     data () {
         return {
 
         }
     },
+    updated () {
+
+    },
     computed: {
         option: function () {
+            const percent = this.percent.toFixed(2);
             return {
                 title: {
-                    text: this.percent + '%',
+                    text: percent + '%',
                     x: 'center',
                     y: 'center',
                     itemGap: 20,
                     textStyle : {
                         color : '#26a2ff',
                         // fontFamily : '微软雅黑',
-                        fontSize : this.percent && this.percent.toString().length > 4 ? 12 : 16,
+                        fontSize : percent && percent.toString().length > 4 ? 12 : 16,
                         // fontWeight : 'bolder'
                     }
                 },
@@ -94,12 +99,19 @@ export default {
                             }
                         },
                         data:[
-                            {value:this.percent, name:''},
-                            {value:parseInt(this.percent)>100?0:100-parseInt(this.percent), name:''}
+                            {value:percent, name:''},
+                            {value:parseInt(percent)>100?0:100-parseInt(percent), name:''}
                         ]
                     }
                 ]
             }
+        }
+    },
+    watch: {
+        selected () {
+            this.$refs.map.clear();
+            this.$refs.map.resize();
+            this.$refs.map.mergeOptions(this.option);
         }
     }
 }

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
+import VueLazyload from 'vue-lazyload'
 import './styles/global.scss'
 // import './styles/css/mui.min.css'
 import {
@@ -43,6 +44,12 @@ import router from './router'
 Vue.use(Vuex);
 Vue.use(DatetimePlugin);
 Vue.use(InfiniteScroll);
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  attempt: 1,
+  listenEvents: [ 'scroll' ]
+});
+
 Vue.config.productionTip = false
 Vue.component('echart', ECharts);
 Vue.component(Popup.name, Popup);

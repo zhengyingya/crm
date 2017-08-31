@@ -10,7 +10,7 @@
                 </flexbox-item>
                 <div class="divider"/>
                 <flexbox-item>
-                    <div @click="jump(deliverType==='1'?'/plan/deptdeliver': deliverType==='2'?'/plan/deliver':'/plan/custdeliver')">
+                    <div @click="jump('mail/contact')">
                         <div class="icon"><i class="iconfont icon-kehu1 fs-54" style="color: #b6a2de"/></div>
                         <div class="tip">客户联系人</div>
                     </div>

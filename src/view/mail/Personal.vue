@@ -23,11 +23,11 @@
             </mt-tab-container-item>
             <!-- 详细信息-->
             <mt-tab-container-item id="2">
-
+                <PersonalAchievement :userIds="userIds" :selected="selected"/>
             </mt-tab-container-item>
           <!-- 协助人 -->
             <mt-tab-container-item id="3">
-                <PersonalInfo :personalData="personalData"/>
+                <PersonalInfo :personalInfo="personalInfo"/>
             </mt-tab-container-item>
         </mt-tab-container>
     </div>
@@ -38,9 +38,10 @@ import Panel from '../../components/Panel.vue';
 import PathTab from '../../components/Mail/PathTab.vue';
 import PersonalRecord from '../../components/Mail/PersonalRecord.vue';
 import PersonalInfo from '../../components/Mail/PersonalInfo.vue';
+import PersonalAchievement from '../../components/Mail/PersonalAchievement.vue';
 import { mapActions } from 'vuex';
 import { Spinner, Flexbox, FlexboxItem, Blur } from 'vux';
-import { URL_SALESMAN_HEAD } from '../../constant/url.js';
+import { URL_SALESMAN_HEAD, URL_SALESMAN_DETAILS } from '../../constant/url.js';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
 
@@ -54,17 +55,20 @@ export default {
         PathTab,
         Blur,
         PersonalRecord,
-        PersonalInfo
+        PersonalInfo,
+        PersonalAchievement
     },
     data () {
         return {
             userIds: getQueryString('userIds') || '',
             personalData: {},
+            personalInfo: {user:{}, userInfo:{}},
             selected: '1'
         }
     },
     created () {
         this.getHeadData();
+        this.getPersonalInfo();
     },
     methods: {
         ...mapActions([
@@ -74,6 +78,12 @@ export default {
             .then((res) => {
                 console.log(res)
                 this.personalData = res;
+            })
+        },
+        getPersonalInfo () {
+            http.get(`${URL_SALESMAN_DETAILS}?userIds=${this.userIds}`)
+            .then((res) => {
+                this.personalInfo = res;
             })
         },
         refresh (departmentIds) {

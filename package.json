@@ -22,6 +22,7 @@
     "sass-loader": "^6.0.6",
     "vue": "^2.3.3",
     "vue-echarts": "^2.4.0",
+    "vue-lazyload-img": "^2.0.3",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1",
     "vux": "^2.5.3",

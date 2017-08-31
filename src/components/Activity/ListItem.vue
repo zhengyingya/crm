@@ -6,7 +6,10 @@
       </div>
       <div>{{itemData.content}}</div>
       <div v-if="images" class="flex-row pic">
-          <img v-for="(image, index) in images"  class="img" :class="'img-'+itemData.ids" :src="window.cxt + '/' + image" @click="show(index)"/>
+        <div v-for="(image, index) in images">
+            <img v-if="imageIndex <= 4" class="img" :class="'img-'+itemData.ids" :src="window.cxt + '/' + image" @click="show(index)"/>
+            <img v-if="imageIndex > 4" class="img" :class="'img-'+itemData.ids" v-lazy="window.cxt + '/' + image" @click="show(index)"/>
+        </div>
       </div>
 
       <div v-transfer-dom>
@@ -62,7 +65,8 @@ export default {
         Previewer
     },
     props: [
-        'itemData'
+        'itemData',
+        'imageIndex'
     ],
     data () {
         const me = this;
