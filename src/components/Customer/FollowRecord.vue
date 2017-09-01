@@ -2,21 +2,21 @@
   <div class="follow-record">
       <mt-loadmore :top-method="loadTop" ref="loadmore">
           <div
-            v-infinite-scroll="loadMore"
-          :infinite-scroll-disabled="loading"
-          infinite-scroll-distance="30"
-          class="wrap"
-          @scroll="onScroll">
-          <div v-for="item in recordList" class="item">
-               <FollowRecordItem :item="item" @openComment="openComment"/>
+              v-infinite-scroll="loadMore"
+              :infinite-scroll-disabled="loading"
+              infinite-scroll-distance="30"
+              class="wrap"
+              @scroll="onScroll">
+              <div v-for="item in recordList" class="item">
+                   <FollowRecordItem :item="item" @openComment="openComment"/>
+              </div>
+              <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
+              <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
+              <div v-if="isNodata" style="justify-content:center;margin-top:50px;margin-bottom:5px;color:#BEBEBE;text-align:center">
+                  <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+                  <div class="fs-22">暂无数据</div>
+              </div>
           </div>
-          <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
-          <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
-          <div v-if="isNodata" style="justify-content:center;margin-top:50px;margin-bottom:5px;color:#BEBEBE;text-align:center">
-              <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
-              <div class="fs-22">暂无数据</div>
-          </div>
-      </div>
       </mt-loadmore>
       <flexbox :gutter="0" class="footer">
           <flexbox-item :span="1/2" class="btn-static">

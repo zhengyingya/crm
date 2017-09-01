@@ -81,6 +81,7 @@ export default {
         return {
             window,
             custIds: getQueryString('custIds'),
+            contactsIds: getQueryString('contactsIds'),
             comment: '',                            // 评论内容
             imgs: [],                               // 图片base64数组
             imagePath: [],                          // 上传后台返回的地址数组
@@ -165,10 +166,15 @@ export default {
             }
 
             http.post(URL_SAVE_CUST_RECORD, {
-                body: `custFollowRecord.custids=${this.custIds}&custFollowRecord.contactsids=&custFollowRecord.followtype=98&` +
+                body: `custFollowRecord.custids=${this.custIds}&custFollowRecord.contactsids=${this.contactsIds||''}&custFollowRecord.followtype=98&` +
                 `custFollowRecord.content=${this.comment}${query}`
             }).then((res) => {
-                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
+                Toast({
+                  message: res.message,
+                  position: 'bottom',
+                  duration: 1000
+                });
+                this.$router.back();
             })
             // http.post(URL_SAVE_CUST_RECORD, {
             //     // header: {

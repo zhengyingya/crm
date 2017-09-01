@@ -44,11 +44,5 @@ export default {
     padding: pxToRem(20px) pxToRem(20px);
     margin-bottom: pxToRem(10px);
     background: #F0F0F0;
-    .wrap {
-        background: #fff;
-        overflow: hidden;
-        border-radius: pxToRem(5px);
-        box-shadow: pxToRem(0px) pxToRem(0px) pxToRem(4px) #C4E1FF;
-    }
 }
 </style>

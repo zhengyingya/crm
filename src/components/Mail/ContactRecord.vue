@@ -1,5 +1,5 @@
 <template>
-  <div class="personal-record">
+  <div class="contact-record">
       <mt-loadmore :top-method="loadTop" ref="loadmore">
           <div
           v-infinite-scroll="loadMore"
@@ -7,7 +7,7 @@
           infinite-scroll-distance="30"
           class="wrap">
           <div v-for="item in recordList" class="item">
-               <PersonalRecordItem :item="item" @openComment="openComment"/>
+               <ContactRecordItem :item="item" @openComment="openComment"/>
           </div>
           <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
           <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
@@ -17,6 +17,15 @@
           </div>
       </div>
       </mt-loadmore>
+
+      <flexbox :gutter="0" class="footer">
+          <flexbox-item :span="1/2" class="btn-static">
+              <div @click="jump(`/customer/formatrecord?custIds=${custIds}&custName=${custName}&contactsIds=${contactsIds}`)">格式化记录</div>
+          </flexbox-item>
+          <flexbox-item :span="1/2" class="btn-fast">
+              <div @click="jump(`/customer/fastrecord?custIds=${custIds}&contactsIds=${contactsIds}`)">快速记录</div>
+          </flexbox-item>
+      </flexbox>
 
       <div class="pop-comment" >
           <popup v-model="isCommentShow" height="80%">
@@ -39,10 +48,10 @@ import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
 import { URL_SALESMAN_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS, URL_DING_JSAPI_AUTHOR } from '../../constant/url.js';
 import { Toast } from 'mint-ui';
-import PersonalRecordItem from './PersonalRecordItem.vue';
+import ContactRecordItem from './ContactRecordItem.vue';
 
 export default {
-    name: 'personalRecord',
+    name: 'contactRecord',
     directives: {
         TransferDom
     },
@@ -52,16 +61,17 @@ export default {
         Panel,
         Popover,
         Popup,
-        PersonalRecordItem
+        ContactRecordItem
     },
     props: [
-        'userIds',
+        'custIds',
+        'contactsIds',
         'custName'
     ],
     created () {
         // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
         if (getQueryString('reload')) {
-            this.initSalesmanFollowData();
+            this.initContactFollowData();
             this.pageNumber = 0;
             // this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
         }
@@ -82,23 +92,23 @@ export default {
     computed: {
         ...mapState({
             recordList: (state) => {
-                return state.mail.recordList;
+                return state.contactPage.recordList;
             },
             totalPage: (state) => {
-                return state.mail.totalPage;
+                return state.contactPage.totalPage;
             },
             cUserIds: (state) => {
-                return state.mail.cUserIds;
+                return state.contactPage.cUserIds;
             }
         })
     },
     methods: {
         ...mapActions([
-            'initSalesmanFollowData',
-            'getSalesmanFollowData',
-            'deleteOneRecord',
-            'addOneSalesmanDiscuss',
-            'deleteOneDiscuss'
+            'initContactFollowData',
+            'getContactFollowData',
+            'deleteOneContactRecord',
+            'addOneContactDiscuss',
+            'deleteOneContactDiscuss'
         ]),
         getDingJsapiAuthor () {
             http.get(URL_DING_JSAPI_AUTHOR)
@@ -133,7 +143,7 @@ export default {
                 this.loading = false;
             }
             else {
-                this.getSalesmanFollowData({userIds: this.userIds, pageNumber: ++this.pageNumber})
+                this.getContactFollowData({contactsIds: this.contactsIds, pageNumber: ++this.pageNumber})
                 .then((res) => {
                     this.loading = false;
                     if (res.splitPage && res.splitPage.totalPage === 0) {
@@ -143,9 +153,9 @@ export default {
             }
         },
         loadTop () {
-            this.initSalesmanFollowData();
+            this.initContactFollowData();
             this.pageNumber = 0;
-            this.getSalesmanFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
+            this.getContactFollowData({contactsIds: this.contactsIds, pageNumber: ++this.pageNumber})
             .then((res) => {
                 setTimeout(()=>{
                     this.$refs.loadmore.onTopLoaded();
@@ -165,11 +175,11 @@ export default {
                 body: `custFrDiscuss.custfrids=${this.custfrids}&custFrDiscuss.content=${this.comment}`
             }).then((res) => {
                 // Toast({
-                //   message: res.status===200?'',
+                //   message: res.message,
                 //   position: 'bottom',
                 //   duration: 1000
                 // });
-                this.addOneSalesmanDiscuss({
+                this.addOneContactDiscuss({
                     ids: this.custfrids,
                     content: this.comment,
                     discussIds: res.discussIds,
@@ -184,7 +194,7 @@ export default {
 </script>
 <style lang="scss">
 @import '../../styles/common.scss';
-.personal-record {
+.contact-record {
     .mint-cell-title {
         text-align: left;
         color: #7B7B7B
@@ -244,7 +254,7 @@ export default {
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';
-.personal-record {
+.contact-record {
     height: 100%;
     padding-bottom: pxToRem(50px);
     box-sizing: border-box;
@@ -290,6 +300,22 @@ export default {
         background: #F0F0F0;
         border-radius: pxToRem(5px);
         padding: pxToRem(5px) pxToRem(10px);
+    }
+    .footer {
+        position: fixed;
+        bottom: 0;
+        height: pxToRem(45px);
+        line-height: pxToRem(45px);
+        border-top: 1px solid #BEBEBE;
+        text-align: center;
+        .btn-static {
+            background: #fff;
+        }
+        .btn-fast {
+            height: 100%;
+            background: $blue;
+            color: #fff;
+        }
     }
 }
 </style>

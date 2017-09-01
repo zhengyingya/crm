@@ -23,7 +23,7 @@
                 <i class="iconfont icon-caidan"/>
                 <span>联系人</span>
             </div>
-            <div class="list-wrap" v-for="item in userList" @click="jump(`/mail/personal?userIds=${item.ids}`)">
+            <div class="list-wrap" v-for="item in userList" @click="jump(`/mail/personal?reload=true&userIds=${item.ids}`)">
                 <flexbox :gutter="0" class="item">
                     <flexbox-item :span="1/6">
                         <div class="portrait" :style="{background: makeColor(item.color)}">

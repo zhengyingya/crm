@@ -20,7 +20,7 @@
                 其他信息
             </div>
             <div @click="openPicker">
-                <mt-field label="生日" :placeholder="birthday" readonly><i class="iconfont icon-xiayiyeqianjinchakangengduo"/></mt-field>
+                <mt-field label="生日" :placeholder="birthdayPlaceHolder" readonly><i class="iconfont icon-xiayiyeqianjinchakangengduo"/></mt-field>
             </div>
             <mt-field label="兴趣爱好" placeholder="请输入联系人兴趣爱好" v-model="hobbies"></mt-field>
             <mt-field label="教育背景" placeholder="请输入联系人教育背景" v-model="education"></mt-field>
@@ -39,7 +39,7 @@ import Panel from '../components/Panel.vue';
 import { mapActions } from 'vuex';
 import { getQueryString } from '../utils/commonMethod.js';
 import http from '../http/index.js';
-import { URL_CONTACTS_LIST, URL_SAVE_CONTACTS } from '../constant/url.js';
+import { URL_CONTACTS_LIST, URL_SAVE_CONTACTS, URL_CONTACT_DETAILS, URL_CONTACT_UPDATE } from '../constant/url.js';
 import { Spinner, Flexbox, FlexboxItem, Search } from 'vux';
 import { Toast } from 'mint-ui';
 
@@ -56,6 +56,7 @@ export default {
         return {
             custIds: getQueryString('custIds'),
             custName: decodeURI(decodeURI(getQueryString('custName'))),
+            contactsIds: getQueryString('contactsIds'),
             pickerVisible: false,
             name: '',
             position: '',
@@ -63,7 +64,8 @@ export default {
             mobile: '',
             email: '',
             address: '',
-            birthday: '请选择联系人生日',
+            birthday: '',
+            birthdayPlaceHolder: '请选择生日',
             hobbies: '',
             education: '',
             description: ''
@@ -71,18 +73,34 @@ export default {
     },
     created () {
         http.get(`${URL_CONTACTS_LIST}?custIds=${this.custIds}`).then((res) => {
-            console.log(res)
             this.contactsNameGroupList = res.contactsNameGroupList;
-        })
+        });
+        if (this.contactsIds) {
+            this.getContactInfo();
+        }
     },
     methods: {
         ...mapActions([
             'getAchievementData',
             'getFollowData'
         ]),
+        getContactInfo () {
+            http.get(`${URL_CONTACT_DETAILS}?contactsIds=${this.contactsIds}`)
+            .then((res) => {
+                this.name = res.contacts.name;
+                this.position = res.contacts.position;
+                this.telephone = res.contacts.telephone;
+                this.mobile = res.contacts.mobile;
+                this.email = res.contacts.email;
+                this.address = res.contacts.address;
+                this.birthdayPlaceHolder = res.contacts.birthday || '请选择生日';
+                this.hobbies = res.contacts.hobbies;
+                this.education = res.contacts.education;
+                this.description = res.contacts.description;
+            })
+        },
         // 打开时间选择器
         openPicker () {
-            console.log('00000000')
             const me = this;
             this.$vux.datetime.show({
                 cancelText: '取消',
@@ -103,8 +121,11 @@ export default {
         submit () {
             let param = `contacts.custids=${this.custIds}&contacts.name=${this.name}&contacts.position=${this.position}&`;
             param += `contacts.telephone=${this.telephone}&contacts.mobile=${this.mobile}&contacts.email=${this.email}&contacts.address=${this.address}&`;
-            param += `contacts.birthday=${this.birthday}&contacts.hobbies=${this.hobbies}&contacts.education=${this.education}&contacts.description=${this.description}`;
-            http.post(URL_SAVE_CONTACTS, {
+            param += `contacts.birthday=${this.birthday}&contacts.hobbies=${this.hobbies}&contacts.education=${this.education}&contacts.description=${this.description}&`;
+            if (this.contactsIds) {
+                param += `contacts.ids=${this.contactsIds}`;
+            }
+            http.post(`${this.contactsIds?URL_CONTACT_UPDATE:URL_SAVE_CONTACTS}`, {
                 body: param
             }).then((res) => {
                 Toast({
@@ -112,7 +133,7 @@ export default {
                   position: 'bottom',
                   duration: 1000
                 });
-                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}`});
+                this.$router.back();
             })
         }
     }

@@ -2,6 +2,7 @@ import Mail from '../view/mail/Mail.vue';
 import Group from '../view/mail/Group.vue';
 import Personal from '../view/mail/Personal.vue';
 import Contact from '../view/mail/Contact.vue';
+import ContactPage from '../view/mail/ContactPage.vue';
 
 export default [
     {
@@ -23,5 +24,10 @@ export default [
         path: '/mail/contact',
         name: 'Contact',
         component: Contact
+    },
+    {
+        path: '/mail/contactpage',
+        name: 'ContactPage',
+        component: ContactPage
     }
 ]

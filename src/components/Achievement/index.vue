@@ -4,7 +4,9 @@
           <div class="txt-date">今天&nbsp;&nbsp;&nbsp;{{statusInfo.nowDateMMdd}}&nbsp;&nbsp;&nbsp;{{statusInfo.nowDateWeekDay}}</div>
           <div class="txt-name" @click="unReadClick">
               {{statusInfo.userRealName}}
-              <div v-if="count>0" class="p-ab dot" style="margin-left:-5px;"><mt-badge size="small" type="error">{{count}}</mt-badge></div>
+              <div v-if="count>0" class="p-ab dot" style="margin-left:-5px;">
+                  <mt-badge size="small" type="error">{{count}}</mt-badge>
+              </div>
           </div>
       </div>
       <MonthPlan/>
@@ -44,7 +46,8 @@ export default {
     methods: {
         unReadClick () {
             if (this.count > 0) {
-                window.location.href = window.cxt + '/crm/index/hybrid/haveUnReadDiscussFollowRecordList';
+                // window.location.href = window.cxt + '/crm/index/hybrid/haveUnReadDiscussFollowRecordList';
+                this.$router.push({path: '/unread'});
             }
         }
     }

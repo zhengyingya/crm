@@ -1,35 +1,34 @@
+<!-- 联系人详情主页 -->
 <template>
-    <div class="view-personal">
+    <div class="view-contact-page">
         <div class="header">
             <blur class="blur" :blur-amount=40 :url="'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504071583757&di=2048d1398fce014840cc7079990490c2&imgtype=0&src=http%3A%2F%2F2e.zol-img.com.cn%2Fproduct%2F64_280x2000%2F410%2Fceneo4LyDg8c.jpg'">
                 <img src="../../static/image/avatar.jpeg">
-                <div style="margin-top:10px;">{{personalData.names}}</div>
-                <div style="margin-top:10px;">
-                    {{personalData.mobile}}
-                    <a :href="`tel:${personalData.mobile}}`" style="margin-left:5px;color:#fff;">
+                <div style="margin-top:10px;">{{personalData.contactsName}}</div>
+                <div v-if="personalData.contactsMobile" style="margin-top:10px;">
+                    {{personalData.contactsMobile}}
+                    <a :href="`tel:${personalData.contactsMobile}}`" style="margin-left:5px;color:#fff;">
                         <i class="iconfont icon-dianhua"/>
                     </a>
+                </div>
+                <div style="margin-top:10px;">
+                    {{personalData.custName}}
                 </div>
             </blur>
         </div>
 
         <mt-navbar v-model="selected">
-            <mt-tab-item id="1">工作圈</mt-tab-item>
-            <mt-tab-item id="2">业绩</mt-tab-item>
-            <mt-tab-item id="3">资料</mt-tab-item>
+            <mt-tab-item id="1">跟进记录</mt-tab-item>
+            <mt-tab-item id="2">详细信息</mt-tab-item>
         </mt-navbar>
         <!-- tab 具体内容 -->
         <mt-tab-container v-model="selected" :swipeable="false">
             <mt-tab-container-item id="1">
-                <PersonalRecord :userIds="userIds"/>
+                <ContactRecord :custIds="personalData.custIds" :custName="personalData.custName" :contactsIds="contactsIds"/>
             </mt-tab-container-item>
             <!-- 详细信息-->
             <mt-tab-container-item id="2">
-                <PersonalAchievement :userIds="userIds" :selected="selected"/>
-            </mt-tab-container-item>
-          <!-- 协助人 -->
-            <mt-tab-container-item id="3">
-                <PersonalInfo :personalInfo="personalInfo"/>
+                <ContactInfo :contactInfo="contactInfo" :custIds="personalData.custIds" :custName="personalData.custName" :contactsIds="contactsIds"/>
             </mt-tab-container-item>
         </mt-tab-container>
     </div>
@@ -38,17 +37,17 @@
 <script>
 import Panel from '../../components/Panel.vue';
 import PathTab from '../../components/Mail/PathTab.vue';
-import PersonalRecord from '../../components/Mail/PersonalRecord.vue';
-import PersonalInfo from '../../components/Mail/PersonalInfo.vue';
+import ContactRecord from '../../components/Mail/ContactRecord.vue';
+import ContactInfo from '../../components/Mail/ContactInfo.vue';
 import PersonalAchievement from '../../components/Mail/PersonalAchievement.vue';
 import { mapActions } from 'vuex';
 import { Spinner, Flexbox, FlexboxItem, Blur } from 'vux';
-import { URL_SALESMAN_HEAD, URL_SALESMAN_DETAILS } from '../../constant/url.js';
+import { URL_CONTACT_HEAD, URL_CONTACT_DETAILS } from '../../constant/url.js';
 import { getQueryString } from '../../utils/commonMethod.js';
 import http from '../../http/index.js';
 
 export default {
-    name: 'group',
+    name: 'contactPage',
     components: {
         Panel,
         Spinner,
@@ -56,15 +55,15 @@ export default {
         FlexboxItem,
         PathTab,
         Blur,
-        PersonalRecord,
-        PersonalInfo,
+        ContactRecord,
+        ContactInfo,
         PersonalAchievement
     },
     data () {
         return {
-            userIds: getQueryString('userIds') || '',
+            contactsIds: getQueryString('contactsIds') || '',
             personalData: {},
-            personalInfo: {user:{}, userInfo:{}},
+            contactInfo: {},
             selected: '1'
         }
     },
@@ -76,16 +75,16 @@ export default {
         ...mapActions([
         ]),
         getHeadData () {
-            http.get(`${URL_SALESMAN_HEAD}?userIds=${this.userIds}`)
+            http.get(`${URL_CONTACT_HEAD}?contactsIds=${this.contactsIds}`)
             .then((res) => {
                 console.log(res)
                 this.personalData = res;
             })
         },
         getPersonalInfo () {
-            http.get(`${URL_SALESMAN_DETAILS}?userIds=${this.userIds}`)
+            http.get(`${URL_CONTACT_DETAILS}?contactsIds=${this.contactsIds}`)
             .then((res) => {
-                this.personalInfo = res;
+                this.contactInfo = res.contacts;
             })
         },
         refresh (departmentIds) {
@@ -121,7 +120,7 @@ export default {
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';
-.view-personal {
+.view-contact-page {
     height: 100%;
     overflow: auto;
     // background-color: #ECF5FF;
@@ -131,7 +130,7 @@ export default {
     flex-direction: column;
     .header {
         .blur {
-            padding: pxToRem(20px) 0;
+            padding-top: pxToRem(30px);
             box-sizing: border-box;
             color: #fff;
         }

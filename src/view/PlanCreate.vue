@@ -306,7 +306,7 @@ export default {
             background-image: none;
             // border-bottom: 1px solid #F0F0F0;
             height: pxToRem(35px);
-            padding: 0 pxToRem(20px);
+            padding: pxToRem(5px) pxToRem(20px);
             text-align: left;
             font-size: 14px;
         }
@@ -338,6 +338,7 @@ export default {
         width:100%;
         margin-top: pxToRem(-120px);
         background: #66B3FF;
+        z-index: 101;
         .head-line {
             height: pxToRem(40px);
             padding: 0 pxToRem(20px);
@@ -375,6 +376,8 @@ export default {
         height: pxToRem(45px);
         line-height: pxToRem(45px);
         border-top: 1px solid #BEBEBE;
+        border-bottom: 1px solid #BEBEBE;
+        // box-sizing: border-box;
         text-align: center;
         .btn-add {
             background: #fff;

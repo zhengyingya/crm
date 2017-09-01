@@ -1,6 +1,13 @@
 <template>
     <div class="view-contact flex-cloumn">
         <!-- <PathTab :deptpathList="contactsList" @getData="refresh"/> -->
+        <div class="flex-row path-tab">
+            <div :style="{color: otherinfo.custIds !== 'ALL'?'#26a2ff':''}" @click="refresh('')">全部</div>
+            <i v-if="otherinfo.custIds !== 'ALL'" class="iconfont icon-xiayiyeqianjinchakangengduo" style="margin-top:2px;"/>
+            <div v-for="item in custList">
+                <div v-if="item.ids === otherinfo.custIds">{{item.custname}}</div>
+            </div>
+        </div>
         <div class="flex-1 content-wrap">
             <div v-if="custList.length>0" class="title-bar text-l" style="margin-top:0">
                 <i class="iconfont icon-caidan"/>
@@ -23,7 +30,7 @@
                 <i class="iconfont icon-caidan"/>
                 <span>联系人</span>
             </div>
-            <div class="list-wrap" v-for="item in contactsList" @click="jump(`/mail/personal?userIds=${item.ids}`)">
+            <div class="list-wrap" v-for="item in contactsList" @click="jump(`/mail/contactpage?reload=true&contactsIds=${item.ids}`)">
                 <flexbox :gutter="0" class="item">
                     <flexbox-item :span="1/6">
                         <div class="portrait" :style="{background: makeColor(item.color)}">
@@ -70,7 +77,8 @@ export default {
             custIds: getQueryString('custIds') || '',
             custList: [],
             deptList: [],
-            contactsList: []
+            contactsList: [],
+            otherinfo: {custIds: ''}
         }
     },
     created () {
@@ -86,6 +94,7 @@ export default {
                 this.contactsList = res.contactsList;
                 this.custList = res.custList;
                 this.deptList = res.deptList;
+                this.otherinfo = res.otherinfo;
             })
         },
         refresh (custIds) {
@@ -112,6 +121,18 @@ export default {
     background-color: #ECF5FF;
     // padding-top: pxToRem(20px);
     box-sizing: border-box;
+    .path-tab {
+        display: -webkit-box;
+        // display: flex;
+        // display: flex;
+        // position: fixed;
+        width: 100%;
+        overflow: scroll;
+        box-sizing: border-box;
+        padding: pxToRem(20px) pxToRem(20px);
+        margin-bottom: pxToRem(10px);
+        background: #F0F0F0;
+    }
     .title-bar {
         height: pxToRem(30px);
         line-height: pxToRem(30px);

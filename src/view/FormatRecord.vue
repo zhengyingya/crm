@@ -178,6 +178,7 @@ export default {
         return {
             custIds: getQueryString('custIds'),
             custName: decodeURI(decodeURI(getQueryString('custName'))),
+            contactsIds: getQueryString('contactsIds'),
             workrate: '',
             isSpecificationsShow: false,
             isBatchShow: false,
@@ -266,14 +267,15 @@ export default {
         submit () {
             console.log(this.myTableData, this.hisTableData);
             http.post(URL_SAVE_CUSTOTHERINFO, {
-                body: `custIds=${this.custIds}&custOtherInfo.workrate=${this.workrate}&dataWe=${JSON.stringify(this.myTableData)}&dataCompetitor=${JSON.stringify(this.hisTableData)}`
+                body: `custIds=${this.custIds}&custOtherInfo.workrate=${this.workrate}&dataWe=${JSON.stringify(this.myTableData)}&dataCompetitor=${JSON.stringify(this.hisTableData)}&` +
+                      `contactsIds=${this.contactsIds || ''}`
             }).then((res) => {
                 Toast({
                   message: res.message,
                   position: 'bottom',
                   duration: 1000
                 });
-                this.$router.replace({path: `/customer/detail?custIds=${this.custIds}&reload=true`});
+                this.$router.back();
                 // location.href = `#/customer/detail?custIds=${this.custIds}`;
             })
         }

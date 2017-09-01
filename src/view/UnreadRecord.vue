@@ -1,22 +1,14 @@
 <template>
-  <div class="personal-record">
-      <mt-loadmore :top-method="loadTop" ref="loadmore">
-          <div
-          v-infinite-scroll="loadMore"
-          :infinite-scroll-disabled="loading"
-          infinite-scroll-distance="30"
-          class="wrap">
-          <div v-for="item in recordList" class="item">
-               <PersonalRecordItem :item="item" @openComment="openComment"/>
-          </div>
-          <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
-          <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
-          <div v-if="isNodata" style="justify-content:center;margin-top:50px;margin-bottom:5px;color:#BEBEBE;text-align:center">
-              <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
-              <div class="fs-22">暂无数据</div>
-          </div>
+  <div class="view-unread-record">
+      <div v-for="item in followRecordList" class="item">
+           <UnreadRecordItem :item="item" @openComment="openComment"/>
       </div>
-      </mt-loadmore>
+      <div v-if="loading" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;"><mt-spinner type="fading-circle" color="#26a2ff"></mt-spinner></div>
+      <div v-if="isEnd" class="flex-row" style="justify-content:center;margin-top:-10px;margin-bottom:5px;">没有更多数据了</div>
+      <div v-if="isNodata" style="justify-content:center;margin-top:50px;margin-bottom:5px;color:#BEBEBE;text-align:center">
+          <i class="iconfont icon-zanwushuju" style="font-size:120px"/>
+          <div class="fs-22">暂无数据</div>
+      </div>
 
       <div class="pop-comment" >
           <popup v-model="isCommentShow" height="80%">
@@ -32,39 +24,38 @@
 </template>
 
 <script>
-import Panel from '../Panel.vue';
 import { Spinner, Flexbox, FlexboxItem, Popover, Popup, TransferDom } from 'vux';
 import { mapState, mapActions } from 'vuex';
-import { getQueryString } from '../../utils/commonMethod.js';
-import http from '../../http/index.js';
-import { URL_SALESMAN_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS, URL_DING_JSAPI_AUTHOR } from '../../constant/url.js';
+import { getQueryString } from '../utils/commonMethod.js';
+import http from '../http/index.js';
+import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_CUSTFRDISCUSS, URL_DING_JSAPI_AUTHOR, URL_UNREAD_RECORD } from '../constant/url.js';
 import { Toast } from 'mint-ui';
-import PersonalRecordItem from './PersonalRecordItem.vue';
+import UnreadRecordItem from '../components/UnreadRecordItem.vue';
 
 export default {
-    name: 'personalRecord',
+    name: 'unreadRecord',
     directives: {
         TransferDom
     },
     components: {
         Flexbox,
         FlexboxItem,
-        Panel,
         Popover,
         Popup,
-        PersonalRecordItem
+        UnreadRecordItem
     },
     props: [
-        'userIds',
+        'custIds',
         'custName'
     ],
     created () {
         // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
         if (getQueryString('reload')) {
-            this.initSalesmanFollowData();
+            this.initFollowData();
             this.pageNumber = 0;
             // this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
         }
+        this.getUnreadData();
         this.getDingJsapiAuthor();
     },
     data () {
@@ -76,30 +67,37 @@ export default {
             pageNumber: 0,
             isCommentShow: false,                    // 评论弹框是否显示
             comment: '',                             // 评论内容
-            custfrids: ''                            // 当前打开的跟进记录id
+            custfrids: '',                            // 当前打开的跟进记录id
+            followRecordList: []
         }
     },
     computed: {
         ...mapState({
             recordList: (state) => {
-                return state.mail.recordList;
+                return state.customer.recordList;
             },
             totalPage: (state) => {
-                return state.mail.totalPage;
+                return state.customer.totalPage;
             },
             cUserIds: (state) => {
-                return state.mail.cUserIds;
+                return state.customer.cUserIds;
             }
         })
     },
     methods: {
         ...mapActions([
-            'initSalesmanFollowData',
-            'getSalesmanFollowData',
+            'initFollowData',
+            'getCustomerFollowData',
             'deleteOneRecord',
-            'addOneSalesmanDiscuss',
+            'addOneDiscuss',
             'deleteOneDiscuss'
         ]),
+        getUnreadData () {
+            http.get(URL_UNREAD_RECORD)
+            .then((res) => {
+                this.followRecordList = res.followRecordList;
+            })
+        },
         getDingJsapiAuthor () {
             http.get(URL_DING_JSAPI_AUTHOR)
             .then((res) => {
@@ -122,36 +120,6 @@ export default {
                 });
             })
         },
-        loadMore () {
-            this.loading = true;
-            if (this.totalPage === 0) {
-                this.isNodata = true;
-                this.loading = false;
-            }
-            else if (this.pageNumber >= this.totalPage) {
-                this.isEnd = true;
-                this.loading = false;
-            }
-            else {
-                this.getSalesmanFollowData({userIds: this.userIds, pageNumber: ++this.pageNumber})
-                .then((res) => {
-                    this.loading = false;
-                    if (res.splitPage && res.splitPage.totalPage === 0) {
-                        this.isNodata = true;
-                    }
-                });
-            }
-        },
-        loadTop () {
-            this.initSalesmanFollowData();
-            this.pageNumber = 0;
-            this.getSalesmanFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
-            .then((res) => {
-                setTimeout(()=>{
-                    this.$refs.loadmore.onTopLoaded();
-                }, 100)
-            });
-        },
         jump (path) {
             this.$router.push({path: encodeURI(encodeURI(path))});
         },
@@ -164,18 +132,25 @@ export default {
             http.post(URL_SAVE_CUSTFRDISCUSS, {
                 body: `custFrDiscuss.custfrids=${this.custfrids}&custFrDiscuss.content=${this.comment}`
             }).then((res) => {
-                // Toast({
-                //   message: res.status===200?'',
-                //   position: 'bottom',
-                //   duration: 1000
+                // this.addOneDiscuss({
+                //     ids: this.custfrids,
+                //     content: this.comment,
+                //     discussIds: res.discussIds,
+                //     names: res.cUserName
                 // });
-                this.addOneSalesmanDiscuss({
-                    ids: this.custfrids,
-                    content: this.comment,
-                    discussIds: res.discussIds,
-                    names: res.cUserName
-                });
-                this.comment = '';
+                // this.followRecordList = this.followRecordList.map((item) => {
+                //     if (item.ids === this.custfrids) {
+                //         item.discusslist.push({
+                //             custfrids: this.custfrids,
+                //             ids: res.discussIds,
+                //             userids: state.cUserIds,
+                //             content: content,
+                //             names
+                //         })
+                //     }
+                //     return item;
+                // })
+                this.getUnreadData();
                 this.custfrids = '';
             })
         }
@@ -183,8 +158,8 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../styles/common.scss';
-.personal-record {
+@import '../styles/common.scss';
+.view-unread-record {
     .mint-cell-title {
         text-align: left;
         color: #7B7B7B
@@ -243,11 +218,13 @@ export default {
 }
 </style>
 <style scoped lang="scss">
-@import '../../styles/common.scss';
-.personal-record {
+@import '../styles/common.scss';
+.view-unread-record {
     height: 100%;
-    padding-bottom: pxToRem(50px);
+    // padding-bottom: pxToRem(50px);
     box-sizing: border-box;
+    background: $bg-blue;
+    text-align: left;
     // overflow: auto;
     .wrap {
         // height: 100%;
@@ -290,6 +267,22 @@ export default {
         background: #F0F0F0;
         border-radius: pxToRem(5px);
         padding: pxToRem(5px) pxToRem(10px);
+    }
+    .footer {
+        position: fixed;
+        bottom: 0;
+        height: pxToRem(45px);
+        line-height: pxToRem(45px);
+        border-top: 1px solid #BEBEBE;
+        text-align: center;
+        .btn-static {
+            background: #fff;
+        }
+        .btn-fast {
+            height: 100%;
+            background: $blue;
+            color: #fff;
+        }
     }
 }
 </style>
