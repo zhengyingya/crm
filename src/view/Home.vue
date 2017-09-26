@@ -35,8 +35,8 @@ export default {
     },
     data () {
         return {
-            selected: '1',
-            isAchievementDataGet: false
+            selected: '1',                          // tab选中值
+            isAchievementDataGet: false             // 是否已从后台获取业绩数据标记
         }
     },
     created () {

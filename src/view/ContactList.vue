@@ -11,7 +11,7 @@
         </div>
         <mt-index-list>
             <mt-index-section v-for="item in contactsNameGroupList" :index="item.group" :key="item.group">
-                <div v-for="child in item.groupChild" @click="openLink(`/crm/contacts/hybrid/view?contactsIds=${child.contactsids}`)">
+                <div v-for="child in item.groupChild" @click="jump(`/mail/contactpage?reload=true&contactsIds=${child.contactsids}`)">
                     <mt-cell :title="child.datatext" style="text-align:left;"></mt-cell>
                 </div>
             </mt-index-section>
@@ -83,6 +83,9 @@ export default {
         },
         openLink (link) {
           location.href = window.cxt + link;
+        },
+        jump (path) {
+            this.$router.push({path: path});
         }
     }
 }

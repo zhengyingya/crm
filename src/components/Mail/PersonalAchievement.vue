@@ -1,43 +1,43 @@
 <template>
-  <div class="personal-achievement">
-      <flexbox style="position: fixed;border-bottom:1px solid #E0E0E0;">
+  <div class="personal-achievement flex-cloumn">
+      <flexbox style="border-bottom:1px solid #E0E0E0;">
           <flexbox-item :span="1/3" class="text-date">
               <div @click="openPicker">
                   {{currentMonth}}
                   <i class="iconfont icon-xiangxiazhankai"/>
               </div>
           </flexbox-item>
-          <flexbox-item :span="2/3" class="text-c" style="background:#fff;height:50px;line-height:50px;">销售目标完成情况</flexbox-item>
+          <flexbox-item :span="2/3" class="text-c" style="background:#fff;height:50px;line-height:50px;margin-left:0;">销售目标完成情况</flexbox-item>
       </flexbox>
-      <div class="content">
+      <div class="content flex-1">
           <div class="amount">
-          <flexbox style="text-align:center;border-bottom:1px solid #F0F0F0">
-              <flexbox-item>
-                  <div style="margin-bottom:5px;">月销售目标</div>
-                  <div><span style="color:#26a2ff;" :class="planAmount&&planAmount.toString().length>=8?'fs-16':'fs-22'">{{planAmount}}</span>{{unit}}</div>
-              </flexbox-item>
-              <div class="divider"/>
-              <flexbox-item>
-                  <div style="margin-bottom:5px;">月完成总量</div>
-                  <div><span style="color:#26a2ff;" :class="completedAmount&&completedAmount.toString().length>=8?'fs-16':'fs-22'">{{completedAmount}}</span>{{unit}}</div>
-              </flexbox-item>
-          </flexbox>
-          <ChartShow text="完成率" :percent="completedAmount/planAmount" :selected="selected"/>
-      </div>
+              <flexbox style="text-align:center;border-bottom:1px solid #F0F0F0">
+                  <flexbox-item>
+                      <div style="margin-bottom:5px;">月销售目标</div>
+                      <div><span style="color:#26a2ff;" :class="planAmount&&planAmount.toString().length>=8?'fs-16':'fs-22'">{{planAmount}}</span>{{unit}}</div>
+                  </flexbox-item>
+                  <div class="divider"/>
+                  <flexbox-item>
+                      <div style="margin-bottom:5px;">月完成总量</div>
+                      <div><span style="color:#26a2ff;" :class="completedAmount&&completedAmount.toString().length>=8?'fs-16':'fs-22'">{{completedAmount}}</span>{{unit}}</div>
+                  </flexbox-item>
+              </flexbox>
+              <ChartShow text="完成率" :percent="planAmount===0?0:completedAmount*100/planAmount" :selected="selected"/>
+          </div>
           <div class="amount">
-          <flexbox style="text-align:center;border-bottom:1px solid #F0F0F0">
-              <flexbox-item>
-                  <div style="margin-bottom:5px;">年销售目标</div>
-                  <div><span style="color:#26a2ff;" :class="planamountyear&&planamountyear.toString().length>=8?'fs-16':'fs-22'">{{planamountyear}}</span>{{unit}}</div>
-              </flexbox-item>
-              <div class="divider"/>
-              <flexbox-item>
-                  <div style="margin-bottom:5px;">年完成总量</div>
-                  <div><span style="color:#26a2ff;" :class="completedAmount&&completedAmount.toString().length>=8?'fs-16':'fs-22'">{{completedAmount}}</span>{{unit}}</div>
-              </flexbox-item>
-          </flexbox>
-          <ChartShow text="完成率" :percent="completedAmount/planamountyear" :selected="selected"/>
-      </div>
+              <flexbox style="text-align:center;border-bottom:1px solid #F0F0F0">
+                  <flexbox-item>
+                      <div style="margin-bottom:5px;">年销售目标</div>
+                      <div><span style="color:#26a2ff;" :class="planamountyear&&planamountyear.toString().length>=8?'fs-16':'fs-22'">{{planamountyear}}</span>{{unit}}</div>
+                  </flexbox-item>
+                  <div class="divider"/>
+                  <flexbox-item>
+                      <div style="margin-bottom:5px;">年完成总量</div>
+                      <div><span style="color:#26a2ff;" :class="deliveryamountyear&&deliveryamountyear.toString().length>=8?'fs-16':'fs-22'">{{completedAmount}}</span>{{unit}}</div>
+                  </flexbox-item>
+              </flexbox>
+              <ChartShow text="完成率" :percent="planamountyear===0?0:deliveryamountyear*100/planamountyear" :selected="selected"/>
+          </div>
       </div>
   </div>
 </template>
@@ -132,25 +132,25 @@ export default {
 @import '../../styles/common.scss';
 .personal-achievement {
     height: 100%;
-
     // padding-bottom: pxToRem(50px);
-
     background: #fff;
     text-align: left;
     overflow: auto;
     .text-date {
         background: #7e9cc7;
         padding-left:20px;
-        // box-sizing:border-box;
+        box-sizing:border-box;
         font-weight: bolder;
-        height:50px;
+        height: 50px;
         line-height:50px;
         color: #fff;
     }
     .content {
         padding: pxToRem(20px);
-        padding-top: pxToRem(70px);
+        // padding-top: pxToRem(70px);
         box-sizing: border-box;
+        height: 100%;
+        overflow: auto;
     }
     .amount {
         border: 1px solid #8ba8ce;

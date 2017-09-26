@@ -20,7 +20,7 @@
                 其他信息
             </div>
             <div @click="openPicker">
-                <mt-field label="生日" :placeholder="birthdayPlaceHolder" readonly><i class="iconfont icon-xiayiyeqianjinchakangengduo"/></mt-field>
+                <mt-field label="生日" :class="birthday===''?'':'readonly'" :placeholder="birthdayPlaceHolder" readonly><i class="iconfont icon-xiayiyeqianjinchakangengduo"/></mt-field>
             </div>
             <mt-field label="兴趣爱好" placeholder="请输入联系人兴趣爱好" v-model="hobbies"></mt-field>
             <mt-field label="教育背景" placeholder="请输入联系人教育背景" v-model="education"></mt-field>
@@ -93,7 +93,8 @@ export default {
                 this.mobile = res.contacts.mobile;
                 this.email = res.contacts.email;
                 this.address = res.contacts.address;
-                this.birthdayPlaceHolder = res.contacts.birthday || '请选择生日';
+                this.birthdayPlaceHolder = res.contacts.birthday.split(' ')[0] || '请选择生日';
+                this.birthday = res.contacts.birthday.split(' ')[0] || '';
                 this.hobbies = res.contacts.hobbies;
                 this.education = res.contacts.education;
                 this.description = res.contacts.description;
@@ -106,15 +107,16 @@ export default {
                 cancelText: '取消',
                 confirmText: '确定',
                 format: 'YYYY-MM-DD',                  // 供选择的时间格式
-                // value: this.infoOther.yearmonthcn.replace('年', '-').replace('月', ''),       // 初始时间
+                value: me.birthday,       // 初始时间
                 onConfirm (val) {
+                    me.birthdayPlaceHolder = val;
                     me.birthday = val;
                 },
                 onShow () {
-                  console.log('plugin show')
+                //   console.log('plugin show')
                 },
                 onHide () {
-                  console.log('plugin hide')
+                //   console.log('plugin hide')
                 }
             })
         },

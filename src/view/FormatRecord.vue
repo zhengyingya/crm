@@ -193,7 +193,7 @@ export default {
     },
     created () {
         http.get(`${URL_GET_PRO_SPECIFICATION}`).then((res) => {
-            const _a = res.map((item) => {
+            const _a = res.map((item) => {                  // 组装规格批号数据用于显示
                 return {
                     value: item.specification,
                     name: item.specification

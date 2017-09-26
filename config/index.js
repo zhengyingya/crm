@@ -29,16 +29,22 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/crm/': {
-            // target: 'http://a20160086-pc:8030/allinrelease/',
-            target: 'http://10.30.2.62:8030/allinrelease/',
+            target: 'http://a20160086-pc:8030/allinrelease/',
+            // target: 'http://10.30.2.62:8030/allinrelease/',
             // target: 'http://10.30.215.197:9000/allinrelease/',
             secure: false,
             changeOrigin: true
         },
-        '/files/upload/crm/': {
+        '/files/upload/': {
+            target: 'http://a20160086-pc:8030/allinrelease/',
             // target: 'http://mh.huafeng.com:8020/allinrelease/',
-            target: 'http://10.30.2.62:8030/allinrelease/',
+            // target: 'http://10.30.2.62:8030/allinrelease/',
             // target: 'http://10.30.215.197:9000/allinrelease/',
+            secure: false,
+            changeOrigin: true
+        },
+        '/weixinqy/': {
+            target: 'http://a20160086-pc:8030/allinrelease/',
             secure: false,
             changeOrigin: true
         }

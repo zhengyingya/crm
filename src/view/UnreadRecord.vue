@@ -99,7 +99,7 @@ export default {
             })
         },
         getDingJsapiAuthor () {
-            http.get(URL_DING_JSAPI_AUTHOR)
+            http.get(URL_DING_JSAPI_AUTHOR)                 // 获取钉钉jssdk配置参数
             .then((res) => {
                 dd.config({
                     agentId: res.agentId +'', // 必填，微应用ID
@@ -125,7 +125,7 @@ export default {
         },
         openComment (custfrids) {
             this.isCommentShow = true;
-            this.custfrids = custfrids;
+            this.custfrids = custfrids;                 // 设置当前记录id
         },
         publish () {
             this.isCommentShow = false;

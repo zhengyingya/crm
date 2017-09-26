@@ -11,22 +11,22 @@ export default [
         component: Mail
     },
     {
-        path: '/mail/group',
+        path: '/mail/group',                // 集团人员列表
         name: 'Group',
         component: Group
     },
     {
-        path: '/mail/personal',
+        path: '/mail/personal',             // 销售人员主页
         name: 'Personal',
         component: Personal
     },
     {
-        path: '/mail/contact',
+        path: '/mail/contact',              // 联系人列表
         name: 'Contact',
         component: Contact
     },
     {
-        path: '/mail/contactpage',
+        path: '/mail/contactpage',          // 联系人主页
         name: 'ContactPage',
         component: ContactPage
     }

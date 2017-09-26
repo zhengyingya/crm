@@ -4,7 +4,6 @@ const request = (url, data) => {
         return response.json();
     });
 }
-
 export default {
     post: (url, data) => {
         return request(url, {

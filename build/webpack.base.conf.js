@@ -13,7 +13,7 @@ function resolve (dir) {
 var originalConfig =  {
   entry: {
     app: './src/main.js',
-    fetch: ['whatwg-fetch'],
+    fetch: ['whatwg-fetch']
   },
   output: {
     path: config.build.assetsRoot,

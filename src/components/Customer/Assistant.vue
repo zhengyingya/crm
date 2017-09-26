@@ -2,7 +2,7 @@
   <div class="assistant">
       <div class="wrap">
           <div v-for="(item, index) in assistantList" >
-              <div class="flex-row item" @click="openLink(`/crm/salesman/hybrid/view?salesManIds=${item.userids}`)">
+              <div class="flex-row item" @click="jump(`/mail/personal?userIds=${item.userids}`)">
                   <flexbox :gutter="0">
                       <flexbox-item :span="1/6">
                           <div class="portrait" :style="{background: makeColor(item.color)}">
@@ -69,6 +69,9 @@ export default {
         },
         openLink (link) {
           location.href = window.cxt + link;
+        },
+        jump (path) {
+            this.$router.push({path: path});
         }
     }
 }

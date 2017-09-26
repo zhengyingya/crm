@@ -47,13 +47,7 @@ export default {
         'personalInfo'
     ],
     created () {
-        // this.getCustomerFollowData({custIds: this.custIds, pageNumber: this.pageNumber});
-        if (getQueryString('reload')) {
-            this.initFollowData();
-            this.pageNumber = 0;
-            // this.getCustomerFollowData({custIds: this.custIds, pageNumber: ++this.pageNumber})
-        }
-        this.getDingJsapiAuthor();
+        // this.getDingJsapiAuthor();
     },
     data () {
         return {

@@ -12,7 +12,7 @@
                 <div class="flex-row more-menu" style="flex:1;justify-content:flex-start;position:relative">
                     <popover placement="bottom" :gutter="-30">
                        <div slot="content" class="popover-demo-content">
-                           <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1" @click="jump(`/plan/create?custIds=${custIds}&custName=${detailViewData.custName}`)">
+                           <div class="flex-row popmenu" v-if="isUserResponsibleOrAssistanceToCustomer>=1" @click="openLink('/crm/plan/hybrid/addCustPlan?custids=' + custIds)/*jump(`/plan/create?custIds=${custIds}&custName=${detailViewData.custName}`)*/">
                                <i class="iconfont icon-jiahao1 flex-1"/>
                                <div class="flex-2" style="text-align:left;">添加计划</div>
                            </div>
@@ -178,6 +178,9 @@ export default {
                   duration: 1000
                 });
             })
+        },
+        openLink (url) {
+            location.href = window.cxt + url;
         }
     }
 }

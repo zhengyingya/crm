@@ -2,7 +2,7 @@
   <div class="contact-recorditem">
    <flexbox :gutter="0" class="head">
        <flexbox-item :span="1/6" style="color:#26a2ff;">
-           <div @click="openLink(`/crm/salesman/hybrid/view?salesManIds=${item.userids}`)">{{ item.names }}</div>
+           <div @click="jump(`/mail/personal?userIds=${item.userids}`)">{{ item.names }}</div>
        </flexbox-item>
        <flexbox-item :span="2/6" style="color:#ADADAD;">
            {{ item.typename }}
@@ -18,6 +18,7 @@
    </div>
    <div v-for="media in item.medialist" class="flex-row audio-item" @click="playAudio(media.mediaid)">
        <i class="iconfont icon-yuyin1"/>
+       <audio :src="window.cxt + '/' + media.mediapath" controls="controls" preload :id="media.mediaid" hidden/>
        <span class="fs-14" style="color:#8E8E8E;margin-left:20px;">{{media.mediaduration}}''</span>
    </div>
 
@@ -206,28 +207,36 @@ export default {
             })
         },
         playAudio (mediaid) {
+            let audio = document.getElementById(mediaid);
+            if (audio.paused) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+            else {
+                audio.pause();
+            }
             // alert(mediaid)
-            dd.device.audio.play({
-                localAudioId: mediaid,
-                onSuccess: function () {
-                },
-                onFail: function (err) {
-                    // alert('错误' + JSON.stringify(err))
-                    dd.device.audio.download({
-                        mediaId : mediaid,
-                        onSuccess : function(res) {
-                            dd.device.audio.play({
-                                localAudioId: res.localAudioId,
-                                onFail: function (err) {
-                                    alert('错误' + JSON.stringify(err))
-                                }
-                            });
-                        },
-                        onFail : function (err) {
-                        }
-                    });
-                }
-            });
+            // dd.device.audio.play({
+            //     localAudioId: mediaid,
+            //     onSuccess: function () {
+            //     },
+            //     onFail: function (err) {
+            //         // alert('错误' + JSON.stringify(err))
+            //         dd.device.audio.download({
+            //             mediaId : mediaid,
+            //             onSuccess : function(res) {
+            //                 dd.device.audio.play({
+            //                     localAudioId: res.localAudioId,
+            //                     onFail: function (err) {
+            //                         alert('错误' + JSON.stringify(err))
+            //                     }
+            //                 });
+            //             },
+            //             onFail : function (err) {
+            //             }
+            //         });
+            //     }
+            // });
         },
         openLink (link) {
             location.href = window.cxt + link;

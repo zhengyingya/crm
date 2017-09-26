@@ -12,7 +12,8 @@ export const URL_SET_RECORD_READ = cxt + '/crm/index/hybrid/setDiscussReadByFoll
 /**
  * 钉钉sdk 相关配置数据获取
  */
-export const URL_DING_JSAPI_AUTHOR = cxt + '/crm/index/hybrid/dingtalkJsapiAuthor';
+export const URL_DING_JSAPI_AUTHOR = cxt + '/crm/index/hybrid/dingtalkJsapiAuthor';     // 钉钉端
+export const URL_WEIXIN_JSAPI_AUTHOR = cxt + '/weixinqy/jssdk/generateSign';             // 微信端
 /**
  * 客户
  */
@@ -85,3 +86,22 @@ export const URL_CUST_RECEIPT_SEARCH = cxt + '/crm/plan/hybrid/viewCustReceiptPl
 export const URL_GET_PLAN_POWER = cxt + '/crm/plan/hybrid/indexApi';                        // 获取权限
 export const URL_PLAN_CUSTLIST = cxt + '/crm/plan/hybrid/custListApi';                      // 创建计划 客户列表
 export const URL_CUST_RECEIPT_PLAN = cxt + '/crm/plan/hybrid/viewCustReceiptPlanApi';       // 客户计划查询
+
+/**
+ * 图表
+ */
+export const URL_REPORT_INDEX_API = cxt + '/crm/report/hybrid/indexApi';                     // 图表首页api
+export const URL_REPORT_ACHIEVE_CUST = cxt + '/crm/report/hybrid/achievementCustomerApi';    // 月计划完成 客户
+export const URL_REPORT_ACHIEVE_PRODUCT = cxt + '/crm/report/hybrid/achievementProductApi';  // 月计划完成 产品
+export const URL_REPORT_ACHIEVE_CREDIT = cxt + '/crm/report/hybrid/achievementCreditNoApi';  // 月计划完成 信贷号
+export const URL_REPORT_ACHIEVE_DEPARTMENT = cxt + '/crm/report/hybrid/achievementDepartmentApi';     // 月计划完成 办事处
+export const URL_REPORT_ACHIEVE_MAN = cxt + '/crm/report/hybrid/achievementSalesmanApi';     // 月计划完成 人员
+
+export const URL_FT_DEPARTMENT = cxt + '/crm/report/hybrid/frDepartmentApi'                  // 活动记录 办事处
+export const URL_FT_SALESMAN = cxt + '/crm/report/hybrid/frSalesmanApi'                      // 活动记录 人员
+export const URL_RECEIPT_COUNT = cxt + '/crm/report/hybrid/receiptApi';                      // 发货收款统计
+
+export const URL_SHIPMENTS_HEAD = cxt + '/crm/report/hybrid/shipmentsHeaderApi';             // 未发货跟踪头部信息
+export const URL_SHIPMENT_DATA = cxt + '/crm/report/hybrid/shipmentsApi';                    // 未发货跟踪数据
+export const URL_ORDERS_LIST = cxt + '/crm/report/hybrid/ordersApi';                         // 订单数据列表
+export const URL_ORDERS_DETAILS = cxt + '/crm/report/hybrid/orderDetailsApi';                // 订单详情数据

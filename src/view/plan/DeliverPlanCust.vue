@@ -296,6 +296,7 @@ export default {
         box-sizing: border-box;
         .mint-tab-container-wrap, .mint-tab-container-item {
             height: 100%;
+            background: #fff;
         }
         .mint-tab-container-wrap {
             // overflow: auto;

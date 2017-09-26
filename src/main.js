@@ -30,13 +30,14 @@ import {
     Loadmore
 } from 'mint-ui'
 import { DatetimePlugin } from 'vux';
+
 import ECharts from 'vue-echarts/components/ECharts.vue'
 import 'echarts/lib/chart/bar'
-// import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
+
 import 'fetch-polyfill'                             // 引入fetch兼容库，低版本webkit需要
 import store from './store';
 import router from './router'
@@ -44,10 +45,10 @@ import router from './router'
 Vue.use(Vuex);
 Vue.use(DatetimePlugin);
 Vue.use(InfiniteScroll);
-Vue.use(VueLazyload, {
+Vue.use(VueLazyload, {                              // 图片懒加载库配置
   preLoad: 1.3,
-  attempt: 1,
-  listenEvents: [ 'scroll' ]
+  attempt: 3,                                       // 图片加载尝试次数
+  listenEvents: [ 'scroll', 'touchmove', 'wheel', 'mousewheel', 'resize']   // 懒加载触发事件注册
 });
 
 Vue.config.productionTip = false

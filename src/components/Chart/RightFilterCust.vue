@@ -1,5 +1,5 @@
 <template>
-    <div class="right-filter">
+    <div class="right-filter-cust">
         <popup v-model="isShow" position="right" @on-hide="hide">
             <div class="flex-cloumn height-full">
                 <div class="flex-row" style="width:300px;flex:1">
@@ -11,13 +11,13 @@
                             人员
                         </div>
                         <div class="item" :class="filterActive==='3'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '3'})">
-                            有交易
+                            规格批号
                         </div>
                         <div class="item" :class="filterActive==='4'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '4'})">
-                            关系类型
+                            信贷号
                         </div>
                         <div class="item" :class="filterActive==='5'?'active':''" @click="setFilter({filterType: 'filterActive', filterValue: '5'})">
-                            客户状态
+                            客户编码
                         </div>
                     </div>
 
@@ -44,36 +44,22 @@
                     </div>
 
                     <div v-if="filterActive==='3'" class="filterlay-right">
-                        <div class="item flex-row" @click="setFilter({filterType: 'filterMonthRecent', filterValue: 'ALL'});">
+                        <div class="item flex-row" @click="setFilter({filterType: 'filterBatchnumber', filterValue: 'ALL'});">
                             <div style="flex:1">全部</div>
-                            <i v-if="filterMonthRecent==='ALL'" class="iconfont icon-zhengquewancheng"/>
+                            <i v-if="filterBatchnumber==='ALL'" class="iconfont icon-zhengquewancheng"/>
                         </div>
-                        <div v-for="item in monthRecentList" class="item flex-row" @click="setFilter({filterType: 'filterMonthRecent', filterValue: item.code});">
-                            <div style="flex:1">{{item.name}}</div>
-                            <i v-if="filterMonthRecent===item.code" class="iconfont icon-zhengquewancheng"/>
+                        <div v-for="item in productList" class="item flex-row" @click="setFilter({filterType: 'filterBatchnumber', filterValue: item.batchnumber});">
+                            <div class="one-line" style="flex:1">规格：{{item.specification}}批号：{{item.batchnumber}}</div>
+                            <i v-if="filterBatchnumber===item.batchnumber" class="iconfont icon-zhengquewancheng"/>
                         </div>
                     </div>
 
                     <div v-if="filterActive==='4'" class="filterlay-right">
-                        <div class="item flex-row" @click="setFilter({filterType: 'filterRelation', filterValue: 'ALL'});">
-                            <div style="flex:1">全部</div>
-                            <i v-if="filterRelation==='ALL'" class="iconfont icon-zhengquewancheng"/>
-                        </div>
-                        <div v-for="item in custRelationList" class="item flex-row" @click="setFilter({filterType: 'filterRelation', filterValue: item.childcode});">
-                            <div style="flex:1">{{item.childname}}</div>
-                            <i v-if="filterRelation===item.childcode" class="iconfont icon-zhengquewancheng"/>
-                        </div>
+                        <x-input placeholder="请输入客户信贷号" v-model="creditno"></x-input>
                     </div>
 
                     <div v-if="filterActive==='5'" class="filterlay-right">
-                        <div class="item flex-row" @click="setFilter({filterType: 'filterStatus', filterValue: 'ALL'});">
-                            <div style="flex:1">全部</div>
-                            <i v-if="filterStatus==='ALL'" class="iconfont icon-zhengquewancheng"/>
-                        </div>
-                        <div v-for="item in custStatusList" class="item flex-row" @click="setFilter({filterType: 'filterStatus', filterValue: item.childcode});">
-                            <div style="flex:1">{{item.childname}}</div>
-                            <i v-if="filterStatus===item.childcode" class="iconfont icon-zhengquewancheng"/>
-                        </div>
+                        <x-input placeholder="请输入客户编号" v-model="custcode"></x-input>
                     </div>
                 </div>
 
@@ -87,73 +73,41 @@
 </template>
 
 <script>
-import Panel from '../components/Panel.vue';
 import { mapActions, mapState } from 'vuex';
-import { Popup } from 'vux';
-import http from '../http/index.js';
-import { URL_LIST_HEAD } from '../constant/url.js';
+import { Popup, XInput } from 'vux';
+import http from '../../http/index.js';
+import { URL_LIST_HEAD } from '../../constant/url.js';
 
 export default {
-    name: 'rightFilter',
+    name: 'rightFilterCust',
     components: {
-        Popup
+        Popup,
+        XInput
     },
     props: [
         'isFilterShow',
-        'onHide'
+        'onHide',
+        'departmentList',
+        'salesmanList',
+        'productList'
     ],
     data () {
         return {
             isShow: false,
-            searchValue: '',
-            departmentList: [],
-            salesmanList: [],
-            monthRecentList: [],
-            custRelationList: [],
-            custStatusList: []
+            creditno: '',                    // 信贷号
+            custcode: '',                     // 客户编码
+
+            filterActive: '1',
+            filterDepartment: 'ALL',
+            filterDeptcode: 'ALL',
+            filterUserIds: 'ALL',
+            filterBatchnumber:  'ALL',
+
         }
     },
     created () {
-        // this.init();
-        http.get(URL_LIST_HEAD).then((res) => {
-            this.departmentList = res.departmentList;
-            this.salesmanList = res.salesmanList;
-            this.monthRecentList = res.monthRecentList;
-            this.custRelationList = res.custRelationList;
-            this.custStatusList = res.custStatusList;
-            this.setFilter({
-                filterType: 'filterMonthRecent',
-                filterValue: res.monthRecentList[0].code
-            });
-        });
     },
     computed: {
-        ...mapState({
-            filterActive: (state) => {
-                return state.customerFilter.filterActive;
-            },
-            filterDepartment: (state) => {
-                return state.customerFilter.filterDepartment;
-            },
-            filterDeptcode: (state) => {
-                return state.customerFilter.filterDeptcode;
-            },
-            filterUserIds: (state) => {
-                return state.customerFilter.filterUserIds;
-            },
-            filterUserName: (state) => {
-                return state.customerFilter.filterUserName;
-            },
-            filterMonthRecent: (state) => {
-                return state.customerFilter.filterMonthRecent;
-            },
-            filterRelation: (state) => {
-                return state.customerFilter.filterRelation;
-            },
-            filterStatus: (state) => {
-                return state.customerFilter.filterStatus;
-            }
-        })
     },
     watch: {
         isFilterShow (newVal) {
@@ -162,7 +116,6 @@ export default {
     },
     methods: {
         ...mapActions([
-            'setFilter',
             'getFollowData'
         ]),
         init () {
@@ -180,18 +133,20 @@ export default {
             this.custRelationList = [];
             this.custStatusList = [];
         },
+        setFilter ({ filterType, filterValue }) {
+            this[filterType] = filterValue;
+        },
         jump (path) {
             this.$router.push({path: path});
         },
         filterConfirm () {
             this.$emit('onConfirm', {
-                deptids: this.filterDepartment,
-                userids: this.filterUserIds,
-                username: this.filterUserName,
-                monthRecent: this.filterMonthRecent,
-                custRelationCode: this.filterRelation,
-                custStatusCode: this.filterStatus,
-                deptcode: this.filterDeptcode
+                username: this.filterUserIds,
+                // username: this.filterUserName,
+                batchnumber: this.filterBatchnumber,
+                deptcode: this.filterDeptcode,
+                creditno: this.creditno,
+                custcode: this.custcode
             })
         },
         hide () {
@@ -201,10 +156,24 @@ export default {
 }
 </script>
 <style lang="scss">
+@import '../../styles/common.scss';
+.right-filter-cust {
+    .weui-cell {
+        border: 1px solid #E0E0E0;
+        border-radius: pxToRem(5px);
+        padding: pxToRem(5px) pxToRem(15px);
+        margin-top: pxToRem(5px);
+        line-height: pxToRem(16px);
+        background: #fff;
+        .weui-input {
+            height: pxToRem(16px);
+        }
+    }
+}
 </style>
 <style scoped lang="scss">
-@import '../styles/common.scss';
-.right-filter {
+@import '../../styles/common.scss';
+.right-filter-cust {
     // height: 100%;
     .filterlay-left {
         flex: 2;

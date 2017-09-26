@@ -6,21 +6,21 @@
             </div>
             <flexbox :gutter="0" style="border-bottom:1px solid #E0E0E0;">
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/plan/customer')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/monthlyplancust')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-kehuguanli1 fs-40" style="color: #2ec7c9"/></div>
                         <div class="tip">客户</div>
                     </div>
                 </flexbox-item>
                 <!-- <div class="divider"/> -->
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/customer/pool')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/monthlyplanproduct')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-chanpinleibie fs-40" style="color: #b6a2de"/></div>
                         <div class="tip">产品</div>
                     </div>
                 </flexbox-item>
                 <!-- <div class="divider"/> -->
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/customer/pool')">
+                    <div @click="jump('/chart/monthlyplancredit')">
                         <div class="icon"><i class="iconfont icon-fabuxindaichanpin fs-44" style="color: #5ab1ef;line-height:72px"/></div>
                         <div class="tip">信贷号</div>
                     </div>
@@ -28,14 +28,14 @@
             </flexbox>
             <flexbox :gutter="0">
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/plan/customer')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/monthlyplanman')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-kehu fs-40" style="color: #ffb980"/></div>
                         <div class="tip">人员</div>
                     </div>
                 </flexbox-item>
                 <!-- <div class="divider"/> -->
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/customer/pool')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/monthlyplandepartment')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-fangwuxiezhen fs-44" style="color: #d87a80"/></div>
                         <div class="tip">办事处</div>
                     </div>
@@ -49,14 +49,14 @@
             </div>
             <flexbox :gutter="0" style="border-bottom:1px solid #E0E0E0;">
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/plan/customer')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump(isViewDepartmentFollowRecord?'/chart/recordcountdepartment':'/chart/recordcountman')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-pingjiajilu fs-40" style="color: #8d98b3"/></div>
                         <div class="tip">活动记录</div>
                     </div>
                 </flexbox-item>
                 <!-- <div class="divider"/> -->
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/customer/pool')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/receiptcount')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-shoukuan fs-40" style="color: #e5cf0d"/></div>
                         <div class="tip">发货收款</div>
                     </div>
@@ -70,13 +70,13 @@
             </div>
             <flexbox :gutter="0" style="border-bottom:1px solid #E0E0E0;">
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/plan/customer')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/shipment')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-xlqxwwc fs-40" style="color: #97b552"/></div>
                         <div class="tip">未发货跟踪</div>
                     </div>
                 </flexbox-item>
                 <flexbox-item :span="1/3">
-                    <div @click="jump('/customer/pool')" style="border-right:1px solid #E0E0E0;">
+                    <div @click="jump('/chart/orderlist')" style="border-right:1px solid #E0E0E0;">
                         <div class="icon"><i class="iconfont icon-dingdan fs-46" style="color: #95706d;line-height:72px"/></div>
                         <div class="tip">订单查询</div>
                     </div>
@@ -90,6 +90,8 @@
 import Panel from '../../components/Panel.vue';
 import { mapActions } from 'vuex';
 import { Spinner, Flexbox, FlexboxItem } from 'vux';
+import http from '../../http';
+import { URL_REPORT_INDEX_API } from '../../constant/url';
 
 export default {
     name: 'plan',
@@ -102,16 +104,24 @@ export default {
     data () {
         return {
             selected: '1',
-            isAchievementDataGet: false
+            isAchievementDataGet: false,
+            isViewDepartmentFollowRecord: false
         }
     },
     created () {
+        this.getIndexApi()
     },
     methods: {
         ...mapActions([
             'getAchievementData',
             'getFollowData'
         ]),
+        getIndexApi () {
+            http.get(URL_REPORT_INDEX_API)
+            .then((res) => {
+                this.isViewDepartmentFollowRecord = res.isViewDepartmentFollowRecord;
+            })
+        },
         jump (path) {
             this.$router.push({path: path});
         }

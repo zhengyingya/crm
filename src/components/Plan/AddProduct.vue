@@ -88,7 +88,8 @@ export default {
             isSpecificationsShow: false,
             specificationsValue: [],
             productGrouplist1: {},
-            checkListValue: []
+            checkListValue: [],
+            checkListValueInit: []
         }
     },
     created () {
@@ -96,12 +97,21 @@ export default {
     watch: {
         isPopupShow (newVal) {
             this.isShow = newVal;
+            if (newVal) {
+                for (let i=0,len=this.checkListValue.length; i<len; i++) {
+                    if (this.checkListValue[i].length > 0) {
+                        this.checkListValue[i] = [];
+                    }
+                }
+                // this.checkListValues.splice(0, this.checkListValues.length);
+            }
         },
         productGrouplist (newVal) {
             this.productGrouplist1 = newVal;
             this.checkListValue = newVal.map((item) => {
                 return new Array;
-            })
+            });
+            this.checkListValueInit = this.checkListValue;
         }
     },
     computed: {
@@ -125,9 +135,11 @@ export default {
             this.$emit('onHide');
         },
         save () {
-            console.log(this.checkListValue)
+            // console.log(this.checkListValue)
+            this.hide();
             let data = [];
             for (let i=0,len=this.checkListValue.length; i<len; i++) {
+                // console.log('-----------')
                 if (this.checkListValue[i].length > 0) {
                     this.checkListValue[i].map((item) => {
                         console.log(item.split(' | '))
@@ -137,14 +149,17 @@ export default {
                             batchnumber: item.split(' | ')[0],
                             weightunit: 'KG'
                         })
-                    })
+                    });
+                    // this.checkListValue[i] = []
                 }
             }
-            this.checkListValue = this.productGrouplist.map((item) => {
-                return new Array;
-            })
+            // this.checkListValue = this.checkListValue.map((item) => {
+            //     return [];
+            // })
             this.$emit('addProduct', data);
-            this.hide();
+            // console.log('---------------------')
+            // alert('---------')
+            // this.hide();
         },
         filter (val) {
             val = val.toUpperCase();

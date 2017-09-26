@@ -45,13 +45,13 @@
                       ]">
                       <div class="flex-cloumn" style="width:100%;">
                         <flexbox :gutter="0">
-                            <flexbox-item :span="2/3" class="btn-add">
-                                <div class="row">
-                                    <span>规格：</span><span>{{one.specification}}</span>
-                                    <span>批号：</span><span>{{one.batchnumber}}</span>
+                            <flexbox-item :span="3/4" class="btn-add">
+                                <div class="flex-row row">
+                                    <div class="one-line flex-2">规格：{{one.specification}}</div>
+                                    <div class="one-line flex-3">批号：{{one.batchnumber}}</div>
                                 </div>
                             </flexbox-item>
-                            <flexbox-item :span="1/3" class="btn-add">
+                            <flexbox-item :span="1/4" class="btn-add">
                                 <div class="row" @click="isQualityShow=true;currentRow=index;currentKey=key;">
                                     <div class="text-r" style="color:#26a2ff">
                                         {{one.gradecode?gradeNameList[one.gradecode]:otherinfo.defaultgradename}} {{one.weightunit}}
@@ -242,6 +242,7 @@ export default {
                     weightunit: 'KG'
                 })
             })
+            console.log('===================')
         },
         chooseQuality () {
             this.products[this.currentKey][this.currentRow].gradecode = this.qualityValue.join('');

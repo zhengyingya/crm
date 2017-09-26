@@ -131,7 +131,7 @@ export default {
         box-sizing: border-box;
         padding: pxToRem(20px) pxToRem(20px);
         margin-bottom: pxToRem(10px);
-        background: #F0F0F0;
+        background: #fff;
     }
     .title-bar {
         height: pxToRem(30px);

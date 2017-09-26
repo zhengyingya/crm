@@ -110,7 +110,6 @@ export default {
         return {
             filterActive: '1',                        // 筛选选中项
             pickerVisible: '',
-            value1: '2015-11',
             isFilterShow: false,
             filterType: 'ALL',
             filterUserIds: 'ALL',
@@ -154,10 +153,10 @@ export default {
                     me.getFollowData({filterTime: val.replace('-', ''), filterType: this.filterType, filterUserIds: this.filterUserIds});
                 },
                 onShow () {
-                  console.log('plugin show')
+                    console.log('plugin show')
                 },
                 onHide () {
-                  console.log('plugin hide')
+                    console.log('plugin hide')
                 }
             })
         },
@@ -170,15 +169,19 @@ export default {
         chooseUser (val) {
             this.filterUserIds = val;
         },
+        // 筛选框确定
         filterConfirm () {
+            // 根据筛选条件重新获取数据
             this.getFollowData({filterTime: this.infoOther.filterTime, filterType: this.filterType, filterUserIds: this.filterUserIds});
             this.isFilterShow = false;
         },
+        // 打开评论窗口
         openComment (custids) {
             this.isCommentShow = true;
             this.custids = custids;
             document.querySelector('.pop-comment .mint-field-core').focus();
         },
+        // 发布评论
         publish () {
             http.post(`${URL_DISCUSS_SAVE}`, {
                     body: `custFrDiscuss.custfrids=${this.custids}&custFrDiscuss.content=${this.comment}`
@@ -189,6 +192,7 @@ export default {
                       position: 'bottom',
                       duration: 1000
                     });
+                    // 重新获取数据
                     this.getFollowData({filterTime: this.infoOther.filterTime, filterType: this.filterType, filterUserIds: this.filterUserIds});
                 }
             });
@@ -220,7 +224,6 @@ export default {
     }
     .mint-field, .mint-cell-wrapper, .mint-cell-value, .mint-field-core {
         height: pxToRem(180px);
-        // padding-top: pxToRem(10px);
     }
     .mint-field-core {
         resize: none;

@@ -21,12 +21,12 @@
           </div>
       </mt-tab-item>
       <mt-tab-item id="plan">
-          <div @click="onClick('plan')">
+          <div @click="onClick('/crm/plan/hybrid')">
             <div class="ico"><i class="iconfont icon-huodongqizi fs-24"/></div>
             <div style="font-size:11px;">计划</div>
           </div>
       </mt-tab-item>
-      <mt-tab-item id="/crm/report/hybrid">
+      <mt-tab-item id="chart">
           <div @click="onClick('/crm/report/hybrid')">
               <div class="ico"><i class="iconfont icon-zhexiantu-xianxing fs-24"/></div>
               <div style="font-size:11px;">图表</div>
@@ -43,12 +43,13 @@ export default {
     name: 'app',
     data () {
         return {
-            selected: 'home',
-            isTabShow: true
+            selected: 'home',           // 当前激活的菜单
+            isTabShow: true             // 用于标记底部菜单栏是否显示
         }
     },
     created () {
         const hash = document.location.hash.replace('#/', '');
+        // 如果是模块主页面，则显示底部菜单
         if (['home', 'customer', 'plan', 'chart', 'mail'].indexOf(hash) > -1 || hash === '') {
             this.isTabShow = true;
         }
@@ -56,6 +57,7 @@ export default {
             this.isTabShow = false;
         }
         if (hash !== '') {
+            // 处理当前激活的菜单
             if (hash.indexOf('customer') > -1) {
                 this.selected = 'customer';
             }
@@ -82,20 +84,13 @@ export default {
             this.isTabShow = false;
         }
     },
-    computed: {
-    },
-    watch: {
-        // selected (newVal) {
-        //
-        //
-        // }
-    },
     methods: {
+        // 切换菜单
         onClick (path) {
             if (path === 'home') {
                 this.$router.push({path: '/'});
             }
-            else if (['customer', 'plan', 'mail'].indexOf(path) > -1) {
+            else if (['customer', 'plan', 'mail', 'chart'].indexOf(path) > -1) {
                 this.$router.push({path: '/' + path});
             }
             else {

@@ -34,7 +34,7 @@ export default {
         }
     },
     created () {
-        http.get(`${URL_FOLLOW_RECORD_COUNT}`).then((res) => {
+        http.get(`${URL_FOLLOW_RECORD_COUNT}`).then((res) => {          // 获取未读数
             this.count = res.count;
         })
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="follow-recorditem">
+  <div class="contact-recorditem">
    <flexbox :gutter="0" class="head">
        <flexbox-item :span="1/6" style="color:#26a2ff;">
            <div @click="jump(`/mail/personal?userIds=${item.userids}`)">{{ item.names }}</div>
@@ -10,49 +10,6 @@
        <!-- <flexbox-item :span="1/4" style="text-align:right">
            <i class="iconfont icon-xiangxiazhankai"/>
        </flexbox-item> -->
-   </flexbox>
-   <div class="divider"/>
-   <div v-html="item.content" class="content"></div>
-   <div v-if="item.images" class="flex-row pic">
-       <img v-for="(image, index) in item.images.split(',')"  class="img" :class="'img-'+item.ids" :src="window.cxt + '/' + image" @click="show(index, item.custids)"/>
-   </div>
-   <div v-for="media in item.medialist" class="flex-row audio-item" @click="playAudio(media.mediaid)">
-       <i class="iconfont icon-yuyin1"/>
-       <audio :src="window.cxt + '/' + media.mediapath" controls="controls" preload :id="media.mediaid" hidden/>
-       <span class="fs-14" style="color:#8E8E8E;margin-left:20px;">{{media.mediaduration}}''</span>
-   </div>
-
-   <div v-transfer-dom>
-       <previewer :id="'pre'+previewerId" :list="imagesList" ref="previewer" :options="options" @on-close="preViewerClose"></previewer>
-   </div>
-
-   <flexbox :gutter="0">
-       <flexbox-item :span="3/4">
-           <span style="color:#ADADAD;">{{ item.addtime }}</span>
-           <span style="color:#26a2ff;margin-left:10px;" @click="deleteRecord(item.ids)">删除</span>
-       </flexbox-item>
-       <flexbox-item :span="1/4">
-           <div style="position:relative;text-align:right;">
-               <popover placement="left" :gutter="10">
-                  <div slot="content" class="popover-demo-content">
-                      <div class="flex-row" style="line-height:30px;height:30px;width:80px;justify-content:center;">
-                          <i class="iconfont icon-pinglun"/>
-                          <div style="text-align:center;" @click="openComment">评论</div>
-                      </div>
-                  </div>
-                  <i class="iconfont icon-dia fs-14" style="width:30px;text-align:right;color:#A6A6D2"/>
-              </popover>
-           </div>
-       </flexbox-item>
-   </flexbox>
-   <flexbox :gutter="0">
-       <div v-if="item.discusslist.length > 0" class="discuss-wrap">
-           <div v-for="one in item.discusslist">
-               <span style="color: #26a2ff;">{{one.names}}：</span>
-               <span>{{one.content}}</span>
-               <span v-if="one.userids===cUserIds" @click="deleteDiscuss(item.ids, one.ids)" class="fs-12" style="float:right;color:#A6A6D2;line-height:19px">删除</span>
-           </div>
-       </div>
    </flexbox>
   </div>
 </template>
@@ -67,7 +24,7 @@ import { URL_DELETE_CUSTOMER_FOLLOW_RECORD, URL_SAVE_CUSTFRDISCUSS, URL_DELETE_C
 import { Toast, MessageBox } from 'mint-ui';
 
 export default {
-    name: 'followRecord',
+    name: 'shipmentItem',
     directives: {
         TransferDom
     },
@@ -111,22 +68,16 @@ export default {
             loading: false,
             isEnd: false,
             pageNumber: 0,
-            isCommentShow: false,                    // 评论弹框是否显示
-            comment: '',                             // 评论内容
-            custfrids: '',                            // 当前打开的跟进记录id
+            isCommentShow: false,                       // 评论弹框是否显示
+            comment: '',                                // 评论内容
+            custfrids: '',                              // 当前打开的跟进记录id
             previewerId: new Date().valueOf()           // 根据时间戳生成id，防止重复
         }
     },
     computed: {
         ...mapState({
-            recordList: (state) => {
-                return state.customer.recordList;
-            },
-            totalPage: (state) => {
-                return state.customer.totalPage;
-            },
             cUserIds: (state) => {
-                return state.customer.cUserIds;
+                return state.contactPage.cUserIds;
             }
         }),
         imagesList () {
@@ -141,10 +92,10 @@ export default {
     },
     methods: {
         ...mapActions([
-            'getCustomerFollowData',
-            'deleteOneRecord',
-            'addOneDiscuss',
-            'deleteOneDiscuss'
+            'getContactFollowData',
+            'deleteOneContactRecord',
+            'addOneContactDiscuss',
+            'deleteOneContactDiscuss'
         ]),
         jump (path) {
             this.$router.push({path: encodeURI(encodeURI(path))});
@@ -161,96 +112,22 @@ export default {
                       position: 'bottom',
                       duration: 1000
                     });
-                    this.deleteOneRecord({ids});
+                    this.deleteOneContactRecord({ids});
                 })
             })
         },
         show (index) {
             this.$refs['previewer'].show(index)
         },
-        openComment () {
-            this.$emit('openComment', this.item.ids);           // 通知父组件打开评论弹框，并传custid过去
-        },
-        // 图片预览关闭
-        preViewerClose () {
-            $('#pre' + this.previewerId).addClass('pre-close');     // 加上一个class，此class包含相关的关闭动画
-        },
-        publish () {
-            this.isCommentShow = false;
-            http.post(URL_SAVE_CUSTFRDISCUSS, {
-                body: `custFrDiscuss.custfrids=${this.custfrids}&custFrDiscuss.content=${this.comment}`
-            }).then((res) => {
-                // Toast({
-                //   message: res.status===200?'',
-                //   position: 'bottom',
-                //   duration: 1000
-                // });
-                this.addOneDiscuss({
-                    ids: this.custfrids,
-                    content: this.comment,
-                    discussIds: res.discussIds,
-                    names: res.cUserName
-                });
-                this.custfrids = '';
-            })
-        },
-        deleteDiscuss (custfrids, ids) {
-            MessageBox.confirm('确定要删除?').then(action => {
-                http.post(URL_DELETE_CUSTFRDISCUSS, {
-                    body: `discussIds=${ids}`
-                }).then((res) => {
-                    // Toast({
-                    //   message: res.message,
-                    //   position: 'bottom',
-                    //   duration: 1000
-                    // });
-                    this.deleteOneDiscuss({
-                        ids: custfrids,
-                        discussIds: ids
-                    })
-                })
-            })
-        },
-        playAudio (mediaid) {
-            let audio = document.getElementById(mediaid);
-            if (audio.paused) {
-                audio.currentTime = 0;
-                audio.play();
-            }
-            else {
-                audio.pause();
-            }
-            // alert(mediaid)
-            // dd.device.audio.play({
-            //     localAudioId: mediaid,
-            //     onSuccess: function () {
-            //     },
-            //     onFail: function (err) {            // 如果播放失败，说明本地没有此语音，先进行下载
-            //         dd.device.audio.download({
-            //             mediaId : mediaid,
-            //             onSuccess : function(res) {
-            //                 dd.device.audio.play({
-            //                     localAudioId: res.localAudioId,
-            //                     onFail: function (err) {
-            //                         alert('错误' + JSON.stringify(err))
-            //                     }
-            //                 });
-            //             },
-            //             onFail : function (err) {
-            //             }
-            //         });
-            //     }
-            // });
-        },
         openLink (link) {
-          location.href = window.cxt + link;
+            location.href = window.cxt + link;
         }
     }
 }
 </script>
 <style lang="scss">
 @import '../../styles/common.scss';
-.follow-recorditem {
+.contact-recorditem {
     .mint-cell-title {
         text-align: left;
         color: #7B7B7B
@@ -310,7 +187,7 @@ export default {
 </style>
 <style scoped lang="scss">
 @import '../../styles/common.scss';
-.follow-recorditem {
+.contact-recorditem {
     height: 100%;
     box-sizing: border-box;
     .wrap {

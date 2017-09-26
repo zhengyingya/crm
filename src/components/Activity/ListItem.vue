@@ -1,7 +1,7 @@
 <template>
   <div class="list-item">
       <div class="txt-name">
-          <span @click="jump('/crm/salesman/hybrid/view', `?saleManIds=${itemData.userids}`)">{{itemData.names}}</span>
+          <span @click="jumpLocal(`/mail/personal?userIds=${itemData.userids}`)">{{itemData.names}}</span>
           <span style="color: #BEBEBE;font-size:12px">{{itemData.typename}}</span>
       </div>
       <div>{{itemData.content}}</div>
@@ -10,6 +10,12 @@
             <img v-if="imageIndex <= 4" class="img" :class="'img-'+itemData.ids" :src="window.cxt + '/' + image" @click="show(index)"/>
             <img v-if="imageIndex > 4" class="img" :class="'img-'+itemData.ids" v-lazy="window.cxt + '/' + image" @click="show(index)"/>
         </div>
+      </div>
+
+      <div v-for="media in itemData.medialist" class="flex-row audio-item" @click="playAudio(media.mediaid)">
+          <i class="iconfont icon-yuyin1"/>
+          <audio :src="window.cxt + '/' + media.mediapath" controls="controls" preload :id="media.mediaid" hidden/>
+          <span class="fs-14" style="color:#8E8E8E;margin-left:20px;">{{media.mediaduration}}''</span>
       </div>
 
       <div v-transfer-dom>
@@ -133,6 +139,16 @@ export default {
         preViewerClick (e) {
             // $('#' + this.itemData.custids).addClass('pre-close');
         },
+        playAudio (mediaid) {
+            let audio = document.getElementById(mediaid);
+            if (audio.paused) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+            else {
+                audio.pause();
+            }
+        },
         /*
         ** 删除评论
         **/
@@ -225,6 +241,20 @@ export default {
     // max-height: 100%;
             margin-right: pxToRem(10px);
             margin-bottom: pxToRem(10px);
+        }
+    }
+    .audio-item {
+        position: relative;
+        width: 40%;
+        height: pxToRem(25px);
+        line-height: pxToRem(25px);
+        padding: 0 pxToRem(10px);
+        border-radius: pxToRem(20px);
+        background: #E0E0E0;
+        margin-bottom: pxToRem(10px);
+        > i {
+            color: #8E8E8E;
+            font-size: 14px;
         }
     }
     .txt-footer {

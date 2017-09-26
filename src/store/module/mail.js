@@ -1,6 +1,7 @@
 import http from '../../http';
 import { URL_SALESMAN_FOLLOW_RECORD, URL_FOLLOW_RECORD, URL_DETAIL_INFO } from '../../constant/url.js';
 const GET_SALESMAN_FOLLOW_RECORD = 'mail-get_salesman_follow_data';
+const ADD_SALESMAN_FOLLOW_RECORD_FRONT = 'mail-add_salesman_follow_data_front';
 const GET_CUSTOMER_DETAIL_INFO = 'customer-get_customer_detail_info';
 const DELETE_ONE_SALESMAN_RECORD = 'mail-delete_one_salesman_record';
 const ADD_ONE_SALESMAN_DISCUSS = 'mail-add_one_salesman_discuss';
@@ -11,6 +12,7 @@ const state = {
     cUserIds: 0,
     recordList: [],
     firstRequestTime: null,
+    latestRecordRequestTime: null,
     totalPage: Number.MAX_VALUE,            // 跟进记录的页码，初始设为最大值
     cust: {},
     custLevelList: {},
@@ -37,9 +39,19 @@ const actions = {
         let query = userIds ? `userIds=${userIds}&` : '';
         query += pageNumber ? `pageNumber=${pageNumber}&` : '';
         query += `isPullDownRefresh=${isPullDownRefresh}&`;
-        query += state.firstRequestTime && pageNumber !== 1 ? `firstRequestTime=${state.firstRequestTime}` : '';
+        if (isPullDownRefresh) {
+            query += state.latestRecordRequestTime && pageNumber !== 1 ? `latestRecordRequestTime=${state.latestRecordRequestTime}` : '';
+        }
+        else {
+            query += state.firstRequestTime && pageNumber !== 1 ? `firstRequestTime=${state.firstRequestTime}` : '';
+        }
         return http.get(`${URL_SALESMAN_FOLLOW_RECORD}?${query}`).then((res) => {
-            commit(GET_SALESMAN_FOLLOW_RECORD, { res, pageNumber });
+            if (isPullDownRefresh) {
+                commit(ADD_SALESMAN_FOLLOW_RECORD_FRONT, { res, pageNumber });
+            }
+            else {
+                commit(GET_SALESMAN_FOLLOW_RECORD, { res, pageNumber });
+            }
             return res;
         });
     },
@@ -85,16 +97,19 @@ const mutations = {
         state.firstRequestTime = null;
     },
     [GET_SALESMAN_FOLLOW_RECORD]: (state, { res, pageNumber }) => {
-        console.log(res)
         if (pageNumber === 1) {
             state.cUserIds = res.cUserIds;
             state.firstRequestTime = res.splitPage.queryParam.firstRequestTime;
+            state.latestRecordRequestTime = res.splitPage.queryParam.latestRecordRequestTime;
             state.totalPage = res.splitPage.totalPage;
             state.recordList = res.recordList;
         }
         else {
             state.recordList = state.recordList.concat(res.recordList);
         }
+    },
+    [ADD_SALESMAN_FOLLOW_RECORD_FRONT]: (state, { res, pageNumber }) => {
+        state.recordList = res.recordList.concat(state.recordList);
     },
     [GET_CUSTOMER_DETAIL_INFO]: (state, { res }) => {
         state.cust = res.cust;

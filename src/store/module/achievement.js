@@ -3,6 +3,7 @@ import { URL_ACHIEVEMENT_DATA, URL_FOLLOW_RECORD } from '../../constant/url.js';
 const GET_ACHIEVEMENT_DATA = 'archievement-get_archievement_data';
 const GET_FOLLOW_RECORD = 'archievement-get_follow_data';
 
+// 这个模块的state，定义并进行初始化
 const state = {
     monthlyAssistantPlanInfo: {},
     monthlyPrincipalPlanInfo: {},
@@ -20,7 +21,7 @@ const state = {
 const getters = {
 }
 
-// actions
+// actions，供view层调用来修改state
 const actions = {
     /**
      *  获取业绩数据
@@ -47,7 +48,7 @@ const actions = {
     }
 }
 
-// mutations
+// mutations，根据不同的action，对state进行处理并更新
 const mutations = {
     [GET_ACHIEVEMENT_DATA]: (state, { res }) => {
         state.monthlyAssistantPlanInfo = res.monthlyAssistantPlanInfo;
@@ -64,6 +65,7 @@ const mutations = {
     }
 }
 
+// 导出
 export default {
     state,
     getters,

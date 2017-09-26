@@ -40,7 +40,7 @@
                   <div class="flex-cloumn right">
                       <div class="it1 fs-14">数据时点</div>
                       <div class="it2 fs-22">
-                          <span style="color:#26a2ff" class="fs-22">{{monthlyPrincipalPlanInfo.dealtime.split(' ')[1]}}</span>
+                          <span style="color:#26a2ff" class="fs-22">{{monthlyPrincipalPlanInfo.dealtime?monthlyPrincipalPlanInfo.dealtime.split(' ')[1]:''}}</span>
                       </div>
                   </div>
               </div>

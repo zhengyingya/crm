@@ -3,7 +3,7 @@
     <div class="view-contact-page">
         <div class="header">
             <blur class="blur" :blur-amount=40 :url="'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504071583757&di=2048d1398fce014840cc7079990490c2&imgtype=0&src=http%3A%2F%2F2e.zol-img.com.cn%2Fproduct%2F64_280x2000%2F410%2Fceneo4LyDg8c.jpg'">
-                <img src="../../static/image/avatar.jpeg">
+                <img :src="window.cxt + '/jsfile/hybrid/crm/img/avatar.jpeg'/*../../static/image/avatar.jpeg*/">
                 <div style="margin-top:10px;">{{personalData.contactsName}}</div>
                 <div v-if="personalData.contactsMobile" style="margin-top:10px;">
                     {{personalData.contactsMobile}}
@@ -61,6 +61,7 @@ export default {
     },
     data () {
         return {
+            window,
             contactsIds: getQueryString('contactsIds') || '',
             personalData: {},
             contactInfo: {},

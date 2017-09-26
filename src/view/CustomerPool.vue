@@ -42,14 +42,13 @@ export default {
     },
     data () {
         return {
-            searchValue: '',
+            searchValue: '',                      // 搜索框输入值
             isCustomerDataGet: false,             // 是否从后台获取到客户列表数据
             cusNameGrouplist: [],
             cusNameGrouplistCopy: []
         }
     },
     created () {
-        console.log(']]]]]]')
         this.getCustomerList();
     },
     methods: {
@@ -73,28 +72,28 @@ export default {
         // 列表本地搜索
         search () {
             const _cusNameGrouplist = [];
-            if (this.searchValue === '') {
+            if (this.searchValue === '') {                          // 如果搜索输入为空，还原全值
                 this.cusNameGrouplist = this.cusNameGrouplistCopy;
             }
             else {
                 for (let i=0,len=this.cusNameGrouplistCopy.length; i<len; i++) {
+                    // 根据搜索值进行筛选
                     const groupChild = this.cusNameGrouplistCopy[i].groupChild.filter((data) => {
                         return data.datatext.indexOf(this.searchValue) > -1;
                     });
                     if (groupChild.length > 0) {
+                        // 组装数据
                         _cusNameGrouplist.push({
                             group: this.cusNameGrouplistCopy[i].group,
                             groupChild: groupChild
                         })
                     }
-
                 }
                 this.cusNameGrouplist = _cusNameGrouplist;
             }
-            console.log(this.cusNameGrouplist);
         },
         onCancel () {
-            this.cusNameGrouplist = this.cusNameGrouplistCopy;
+            this.cusNameGrouplist = this.cusNameGrouplistCopy;      // 取消搜索，数据还原
         }
     }
 }
